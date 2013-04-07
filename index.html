@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html ng:app="FoursquareApp">
+	<head>
+		<meta charset="utf-8" />
+		
+		
+		<title>Foursquare</title>
+		
+		
+		<meta name="viewport" content="width=device-width">
+		
+		<script type="text/javascript" src="/components/angular/angular.js"></script>
+		<script type="text/javascript" src="/components/angular-resource/angular-resource.js"></script>
+		<script type="text/javascript" src="/components/angularjs-foursquare/angularjs-foursquare.js"></script>
+		<script type="text/javascript" src="/components/angularjs-webapp/angularjs-webapp.js"></script>
+		
+		<script type="text/javascript" src="/index.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="/index.css"></link>
+	</head>
+	<body ng:controller="FoursquareApp" role="application">
+		
+		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
+			<header>
+				<button screen="#settings"><span class="icon icon-menu">Settings</span></button>
+				<menu type="toolbar">
+					<button screen="#search"><span class="icon icon-search">Search</span></button>
+				</menu>
+				<h1>Foursquare</h1>
+			</header>
+			
+			<p>
+				<fsq:login ng:show="!fsq.logged" fsq:display="touch" fsq:color="blue"></fsq:login>
+			</p>
+			
+			<p ng:show="loading">Loading recent checkins…</p>
+			<p ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
+			<ul ng:show="checkins.length">
+				<li ng:repeat="checkin in checkins">
+					<a screen="#checkin" screen:model="checkin">
+						<img fsq:photo="checkin.user.photo" fsq:photo-size="cap60" />
+						<dl>
+							<dt>
+								<em>{{ checkin.user.firstName }}</em> at {{ checkin.venue.name }}
+							</dt>
+							<dd>
+								{{ checkin.createdAt*1000 | date }}
+							</dd>
+						</dl>
+					</a>
+				</li>
+			</ul>
+			
+		</section>
+		
+		<section role="region" ng:controller="FoursquareSearch" id="search" class="from-right">
+			<header>
+				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<h1>Foursquare</h1>
+			</header>
+			
+			<input type="search" ng:model="place" ng:model-delay ng:init="place = 'sévrier'"/>
+			<input type="search" ng:model="query" ng:model-delay/>
+			
+			<div ng:show="query && place">
+				<p ng-show="loading">Looking for {{ query }}</p>
+				<p ng-show="!loading && !geocode">Cannot find {{ place }}</p>
+				<p ng-show="!loading && geocode && !venues.length">no results for {{ query }} near {{ geocode.displayName }}</p>
+				<p ng-show="venues.length">{{ venues.length }} result(s) for {{ query }} near {{ geocode.displayName }}</p>
+				
+				<ol ng-show="venues.length">
+					<li ng:repeat="venue in venues">
+						<button screen="#venue" screen:model="venue">{{ venue.name }}</button>
+					</li>
+				</ol>
+			</div>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareCheckin" id="checkin" ng:model="checkin" class="from-right">
+			<header>
+				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<h1>{{ checkin.user.firstName || 'Someone' }} at {{ checkin.venue.name }}</h1>
+			</header>
+			<progress ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]" max="100" value="80"></progress>
+			
+			<p>{{ checkin.user.firstName || 'Someone' }} was at <a href screen="#venue" screen:model="checkin.venue">{{ checkin.venue.name }}</a></p>
+			<blockquote>{{ checkin.shout }}</blockquote>
+			<p role="status" ng:show="loading">
+				<progress></progress>
+				<span ng:show="">Loading comments & photos…</span>
+			</p>
+			<ul ng:show="checkin.comments.count">
+				<li ng:repeat="comment in checkin.comments.items">
+					<img fsq:photo="comment.user.photo" fsq:photo-size="cap60" />
+					<dl>
+						<dt>
+							{{ comment.text }}
+						</dt>
+						<dd>
+							<em>{{ comment.user.firstName }}</em> - {{ checkin.createdAt*1000 | date }}
+						</dd>
+					</dl>
+				</li>
+			</ul>
+			<ol ng:show="checkin.photos.count">
+				<li ng:repeat="photo in checkin.photos.items">
+					<img ng:src="{{photo.prefix}}cap100{{photo.suffix}}"/>
+					<dl>
+						<dt>
+							{{ photo.user.firstName }}
+						</dt>
+						<dd>
+							<date>{{ photo.createdAt*1000 | date }}</date>
+						</dd>
+					</dl>
+				</li>
+			</ol>
+			<pre style="white-space: pre-wrap;">{{checkin}}</pre>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareVenue" id="venue" ng:model="venue" class="from-right">
+			<header>
+				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<menu type="toolbar">
+					<button screen="checkin_form?"><span class="icon icon-add">Checkin</span></button>
+				</menu>
+				<h1>Venue {{ venue.name }}</h1>
+			</header>
+			
+			<p ng:show="loading">loading photos…</p>
+			<p ng:show="!loading && !venue.photos.count">no photo</p>
+			<ol ng:show="!loading && venue.photos.count">
+				<li ng:repeat="group in venue.photos.groups">
+					<h2>{{ group.name }}</h2>
+					<ol>
+						<li ng:repeat="photo in group.items">
+							<img ng:src="{{photo.prefix}}cap100{{photo.suffix}}"/>
+							<dl>
+								<dt>
+									{{ photo.user.firstName }}
+								</dt>
+								<dd>
+									<date>{{ photo.createdAt*1000 | date }}</date>
+								</dd>
+							</dl>
+						</li>
+					</ol>
+				</li>
+			</ol>
+			
+			<pre>{{ venue | json }}</pre>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareSettings" id="settings" class="from-left skin-organic">
+			<header>
+				<button screen="$backOrHome"><span class="icon icon-close">Close</span></button>
+				<h1>Settings</h1>
+			</header>
+			
+			<button ng:click="fsq.logout()" screen="$home" ng:show="fsq.logged">log out</button>
+		</section>
+	</body>
+</html>
