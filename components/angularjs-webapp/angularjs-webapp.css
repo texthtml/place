@@ -1,13 +1,13 @@
 html, body {
 	margin: 0;
+	padding: 0;
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
 }
 
-section {
+section[role=region] {
 	position: absolute;
-	display: none;
 	width: 100%;
 	height: 100%;
 	background: white;
@@ -15,23 +15,40 @@ section {
 	overflow: auto;
 }
 
-section#home {
-	display: block;
+section[role=region] > header:first-child + [role=main], 
+section[role=region] > header:first-child + progress + [role=main] {
+	position: absolute;
+	width: 100%;
+	top: 5rem;
+	bottom: 0;
+	overflow: auto;
+}
+
+section[role=region] > header:first-child + progress + [role=main] {
+	top: 5.3rem;
+}
+
+section[role=region]#home {
 	z-index: 0;
 }
 
-section.from-left {
-	display: block;
-	transform: translate(-100%,0);
+section[role=region][data-viewport="left"] {
+	transform: translateX(-100%);
 }
 
-section.from-right {
-	display: block;
-	transform: translate(100%,0);
+section[role=region][data-viewport="right"] {
+	transform: translateX(100%);
 }
 
-section.current {
-	display: block;
+section[role=region][data-viewport="top"] {
+	transform: translateY(-100%);
+}
+
+section[role=region][data-viewport="bottom"] {
+	transform: translateY(100%);
+}
+
+section[role=region].active {
 	z-index: 1;
 	transform: translate(0,0);
 }

@@ -1,5 +1,16 @@
 @import "components/angularjs-webapp/angularjs-webapp.css";
-@import "components/gaia-ui-building-blocks/widgets/headers.css";
-@import "components/gaia-ui-building-blocks/widgets/lists/style.css";
-@import "components/gaia-ui-building-blocks/widgets/progress_activity/style.css";
-html{font-size:10px;}
+@import "components/gaia-ui-building-blocks/stable/headers.css";
+@import "components/gaia-ui-building-blocks/stable/input_areas.css";
+@import "components/gaia-ui-building-blocks/stable/buttons.css";
+@import "components/gaia-ui-building-blocks/unstable/lists.css";
+@import "components/gaia-ui-building-blocks/unstable/progress_activity.css";
+html,body{font:10px/1em "MozTT",Sans-serif;}
+ul.categories{float:left;}
+ul.categories li{display:inline-block;list-style:none;margin-right:3px;}
+#checkin ul.categories+h2{float:left;margin:10px 0;}
+#checkin ul.categories+h2 a{line-height:34px;display:block;}
+#home [screen="$home"]{display:none;}
+#settings{width:80%;z-index:0;}
+#settings.active+#home{transform:translateX(80%);}
+#settings.active+#home [screen="$home"]{display:block;}
+#settings.active+#home [screen="#settings"]{display:none;}

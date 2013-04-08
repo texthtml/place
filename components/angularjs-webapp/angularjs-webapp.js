@@ -190,7 +190,7 @@ angular.module('WebApp', [])
 		return {
 			controller: function($attrs) {
 				ScreenManager.config(
-					$attrs.screenClass || 'current', 
+					$attrs.screenClass || 'active', 
 					$attrs.firstScreen || '#home'
 				);
 				ScreenManager.start();
