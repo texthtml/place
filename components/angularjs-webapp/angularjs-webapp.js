@@ -145,6 +145,18 @@ angular.module('WebApp', [])
 		}
 		
 		var ScreenManager = {
+			replace: function(screen, model) {
+				if(screen[0] !== current[0]) {
+					return false;
+				}
+				
+				History.replace({
+					model: model, 
+					selector: History.state().selector
+				});
+				
+				return true;
+			}, 
 			go: function(screen, model) {
 				if(screen === '$backOrHome') {
 					screen = History.position() === 0 ? '$home' : '$back';
@@ -205,7 +217,18 @@ angular.module('WebApp', [])
 			}
 		};
 	})
-	.directive('screen', function screenFactory(History, ScreenManager) {
+	.directive('ngModel', function screenFactory(History, ScreenManager) {
+		return {
+			restrict: 'A', 
+			link: function modelReplaceStateFactory(scope, element, attrs) {
+				scope.replaceState = function() {
+					var model = scope.$eval(attrs.ngModel);
+					ScreenManager.replace(element, model);
+				}
+			}
+		};
+	})
+	.directive('screen', function screenFactory(ScreenManager) {
 		return {
 			restrict: 'A', 
 			link: function screenAttributeLink(scope, element, attrs) {

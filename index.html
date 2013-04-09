@@ -106,7 +106,7 @@
 				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<h1>{{ checkin.user.firstName || 'Someone' }} at {{ checkin.venue.name }}</h1>
 			</header>
-			<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
+			<progress ng:show="loading || checkingin" class="pack-activity" value="0" max="100"></progress>
 			
 			<div role="main">
 				<ul ng:show="checkin.venue.categories.length" class="categories">
@@ -116,14 +116,14 @@
 				</ul>
 				<h2><a screen="#venue" screen:model="checkin.venue">{{ checkin.venue.name }}</a></h2>
 				
-				<button ng:show="!checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})">Like</button>
-				<button ng:show="checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})">Unlike</button>
+				<button ng:show="checkin.id && !checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})">Like</button>
+				<button ng:show="checkin.id && checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})">Unlike</button>
 				<p ng:show="checkin.likes.count">❤ {{ checkin.likes.summary }} like this</p>
 				
 				<p role="status" ng:show="loading">
 					<span ng:show="">Loading comments & photos…</span>
 				</p>
-				<div data-type="list" ng:show="checkin.comments.count">
+				<div data-type="list" ng:show="checkin.shout || checkin.comments.count">
 					<ul>
 						<li ng:show="checkin.shout">
 							<aside class="pack-end">
@@ -134,6 +134,7 @@
 							</p>
 							<p>
 								<em>{{ checkin.user.firstName }}</em> - {{ checkin.createdAt*1000 | date }}
+								<progress ng:show="checkingin" class="pack-activity" value="0" max="100"></progress>
 							</p>
 						</li>
 						<li ng:repeat="comment in checkin.comments.items">
@@ -145,14 +146,21 @@
 							</p>
 							<p>
 								<em>{{ comment.user.firstName }}</em> - {{ comment.createdAt*1000 | date }}
+								<progress ng:show="!comment.id" class="pack-activity" value="0" max="100"></progress>
 							</p>
 						</li>
 					</ul>
 				</div>
-				<form>
+				<form ng:show="checkin.id" ng:submit="postComment()">
 					<p>
-						<input type="text" ng:model="new_comment"/>
-						<button type="submit">Post comment</button>
+						<input type="text" ng:model="new_comment" required ng:disabled="posting"/>
+						<button type="submit" ng:disabled="posting">Post comment</button>
+					</p>
+				</form>
+				<form ng:show="!checkin.id" ng:submit="checkIn()">
+					<p>
+						<input type="text" ng:model="new_shout" ng:disabled="checkingin" autofocus placeholder="What are you doing?"/>
+						<button type="submit" ng:disabled="checkingin" class="recommend">Check in!</button>
 					</p>
 				</form>
 				
@@ -171,8 +179,6 @@
 						</li>
 					</ul>
 				</div>
-				
-				<!-- <pre>{{ checkin | json }}</pre> -->
 			</div>
 		</section>
 		
@@ -180,7 +186,7 @@
 			<header>
 				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<menu type="toolbar">
-					<button screen="checkin_form?"><span class="icon icon-add">Checkin</span></button>
+					<button screen="#checkin" screen:model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>
@@ -206,8 +212,6 @@
 						</li>
 					</ul>
 				</div>
-				
-				<!-- <pre>{{ venue | json }}</pre> -->
 			</div>
 		</section>
 	</body>

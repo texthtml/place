@@ -35,6 +35,15 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 		$scope.setVenue = function(venue) {
 			$rootScope.$broadcast('venue', venue);
 		};
+		
+		$scope.$watch('fsq.logged', function(logged) {
+			if(logged) {
+				$scope.me = Foursquare.api.users();
+			}
+			else {
+				delete $scope.me;
+			}
+		});
 	})
 	.controller('FoursquareHome', function FoursquareHome($scope, Foursquare) {
 		$scope.loading = false;
@@ -54,14 +63,66 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.controller('FoursquareCheckin', function FoursquareCheckin($scope) {
 		$scope.loading = false;
 		$scope.$watch('checkin', function() {
-			if($scope.checkin !== undefined && $scope.checkin.user === undefined && $scope.checkin.id !== undefined) {
+			if(
+				$scope.checkin !== undefined && 
+				$scope.checkin.id !== undefined && 
+				($scope.checkin.user === undefined || $scope.checkin.comments === undefined)
+			) {
 				$scope.loading = true;
 				Foursquare.api.checkins({checkin_id: $scope.checkin.id}).then(function(response) {
 					$scope.checkin = response.data;
 					$scope.loading = false;
+					$scope.replaceState();
 				});
 			}
 		});
+		
+		$scope.posting = false;
+		$scope.postComment = function() {
+			if($scope.checkin.comments === undefined) {
+				$scope.checkin.comments = {
+					count: 1, 
+					items: []
+				}
+			}
+			var comment = {
+				text: $scope.new_comment, 
+				user: $scope.me, 
+				createdAt: Date.now()/1000
+			};
+			
+			var i = $scope.checkin.comments.items.push(comment) - 1;
+			
+			$scope.posting = true;
+			Foursquare.api.checkins.addcomment({
+				checkin_id: $scope.checkin.id, 
+				text: $scope.new_comment
+			}).then(function(response) {
+				$scope.posting = false;
+				$scope.new_comment = '';
+				$scope.checkin.comments.items[i] = response.data;
+				$scope.replaceState();
+			});
+		};
+		
+		$scope.checkingin = false;
+		$scope.checkIn = function() {
+			$scope.checkingin = true;
+			$scope.checkin.shout = $scope.new_shout;
+			$scope.checkin.createdAt = Date.now()/1000;
+			
+			var checkin = {
+				venueId: $scope.checkin.venue.id, 
+				shout: $scope.new_shout
+			};
+			
+			Foursquare.api.checkins.add(checkin).then(function(response) {
+				$scope.checkingin = false;
+				$scope.new_shout = '';
+				$scope.checkin = response.data.checkin;
+				$scope.replaceState();
+			});
+		}
 	})
 	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, $rootScope, Foursquare) {
 		$scope.venues = [];
@@ -109,19 +170,13 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.controller('FoursquareVenue', function FoursquareVenue($scope, $timeout, Foursquare) {
 		$scope.loading = false;
 		
-		var venue_id;
-		
 		$scope.$watch('venue', function(venue) {
-			if(venue !== undefined && venue_id === undefined) {
-				venue_id = venue.id;
+			if(venue !== undefined && venue.id !== undefined && venue.photos === undefined) {
 				$scope.loading = true;
 				Foursquare.api.venues({venueId: venue.id}).then(function(response) {
-					// unset venue_id after end of digest cycle to avoid infinite loop
-					$timeout(function() {
-						venue_id = undefined;
-					}, 0);
 					$scope.venue = response.data;
 					$scope.loading = false;
+					$scope.replaceState();
 				});
 			}
 			else {
