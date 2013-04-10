@@ -11,3 +11,4 @@ ul.categories{float:left;}ul.categories li{display:inline-block;list-style:none;
 #home [screen="$home"]{display:none;}
 #settings{width:90%;z-index:0;}#settings.active+#home{transform:translateX(90%);}#settings.active+#home [screen="$home"]{display:block;}
 #settings.active+#home [screen="#settings"]{display:none;}
+section[role="region"]>header:first-child .icon.icon-search{background-image:url("images/icons/search.png");}
