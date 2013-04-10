@@ -12,21 +12,29 @@ html, body {
 
 ul.categories {
 	float: left;
-}
-
-ul.categories li {
-	display: inline-block;
-	list-style: none;
-	margin-right: 3px;
+	
+	li {
+		display: inline-block;
+		list-style: none;
+		margin-right: 3px;
+	}
 }
 
 #checkin ul.categories + h2 {
 	margin: 10px 0;
+	
+	& a {
+		line-height: 34px;
+		display: block;
+	}
 }
 
-#checkin ul.categories + h2 a {
-	line-height: 34px;
-	display: block;
+#home p {
+	text-align: center;
+	
+	input[type=image] {
+		height: 3em;
+	}
 }
 
 #home [screen="$home"] {
@@ -36,15 +44,15 @@ ul.categories li {
 #settings {
 	width: 90%;
 	z-index: 0;
-}
-
-#settings.active + #home {
-	transform: translateX(90%);
-}
-
-#settings.active + #home [screen="$home"] {
-	display: block;
-}
-#settings.active + #home [screen="#settings"] {
-	display: none;
+	
+	&.active + #home {
+		transform: translateX(90%);
+		
+		[screen="$home"] {
+			display: block;
+		}
+		[screen="#settings"] {
+			display: none;
+		}
+	}
 }

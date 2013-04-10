@@ -186,7 +186,7 @@
 			<header>
 				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<menu type="toolbar">
-					<button screen="#checkin" screen:model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
+					<button ng:disabled="!me" screen="#checkin" screen:model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>
