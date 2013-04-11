@@ -52,7 +52,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 			$scope.checkins = [];
 			if(logged) {
 				$scope.loading = true;
-				Foursquare.api.checkins.recent().then(function(response) {
+				Foursquare.api.checkins.recent(function(response) {
 					$scope.checkins = [];
 					[].push.apply($scope.checkins, response.data);
 					$scope.loading = false;
@@ -69,7 +69,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 				($scope.checkin.user === undefined || $scope.checkin.comments === undefined)
 			) {
 				$scope.loading = true;
-				Foursquare.api.checkins({checkin_id: $scope.checkin.id}).then(function(response) {
+				Foursquare.api.checkins({checkin_id: $scope.checkin.id}, function(response) {
 					$scope.checkin = response.data;
 					$scope.loading = false;
 					$scope.replaceState();
@@ -97,7 +97,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 			Foursquare.api.checkins.addcomment({
 				checkin_id: $scope.checkin.id, 
 				text: $scope.new_comment
-			}).then(function(response) {
+			}, function(response) {
 				$scope.posting = false;
 				$scope.new_comment = '';
 				$scope.checkin.comments.items[i] = response.data;
@@ -116,7 +116,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 				shout: $scope.new_shout
 			};
 			
-			Foursquare.api.checkins.add(checkin).then(function(response) {
+			Foursquare.api.checkins.add(checkin, function(response) {
 				$scope.checkingin = false;
 				$scope.new_shout = '';
 				$scope.checkin = response.data.checkin;
@@ -143,7 +143,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 					Foursquare.api.venues.search({
 						query: $scope.query, 
 						near: $scope.place
-					}).then(function(response) {
+					}, function(response) {
 						if(request !== request_id) return;
 						
 						$scope.loading = false;
@@ -173,7 +173,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 		$scope.$watch('venue', function(venue) {
 			if(venue !== undefined && venue.id !== undefined && venue.photos === undefined) {
 				$scope.loading = true;
-				Foursquare.api.venues({venueId: venue.id}).then(function(response) {
+				Foursquare.api.venues({venueId: venue.id}, function(response) {
 					$scope.venue = response.data;
 					$scope.loading = false;
 					$scope.replaceState();
