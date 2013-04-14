@@ -21,15 +21,53 @@
 	<body ng:controller="FoursquareApp" role="application">
 		
 		
-		<section role="region" ng:controller="FoursquareSettings" id="settings" class="skin-organic">
+		<section role="region" ng:controller="FoursquareSettings" screen:on-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
-				<button screen="$backOrHome"><span class="icon icon-close">Close</span></button>
 				<h1>Settings</h1>
 			</header>
 			
-			<div role="main">
-				<button ng:click="fsq.logout()" screen="$home" ng:show="fsq.logged">log out</button>
-			</div>
+			<nav>
+				<progress class="pack-activity" value="0" max="100" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
+				<h2 ng:show="settings.twitter">Twitter options</h2>
+				<ul ng:show="settings.twitter">
+					<li>
+						<label>
+							<input type="checkbox"  ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
+							<span>Send badges to Twitter</span>
+						</label>
+					</li>
+					<li>
+						<label>
+							<input type="checkbox"  ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
+							<span>Send mayorships to Twitter</span>
+						</label>
+					</li>
+				</ul>
+				<h2 ng:show="settings.facebook">Facebook options</h2>
+				<ul ng:show="settings.facebook">
+					<li>
+						<label>
+							<input type="checkbox"  ng:model="settings.sendBadgesToFacebook" ng:disabled="!settings.facebook"/>
+							<span>Send badges</span>
+						</label>
+					</li>
+					<li>
+						<label>
+							<input type="checkbox"  ng:model="settings.sendMayorshipsToFacebook" ng:disabled="!settings.facebook"/>
+							<span>Send mayorships</span>
+						</label>
+					</li>
+				</ul>
+				<h2>Account</h2>
+				<ul>
+					<li>
+						<button class="danger" ng:click="fsq.logout()" screen="$home" ng:show="fsq.logged">log out</button>
+					</li>
+					<li>
+						{{ loading }}
+					</li>
+				</ul>
+			</nav>
 		</section>
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
@@ -41,9 +79,10 @@
 				</menu>
 				<h1>Foursquare</h1>
 			</header>
-			<progress ng:show="loading" value="0" max="100" class="pack-activity"></progress>
 			
 			<div role="main">
+				<progress ng:show="loading" value="0" max="100" class="pack-activity"></progress>
+				
 				<p>
 					<fsq:login ng:show="!fsq.logged" fsq:display="touch" fsq:color="blue"></fsq:login>
 				</p>
@@ -106,9 +145,9 @@
 				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<h1>{{ checkin.user.firstName || 'Someone' }} at {{ checkin.venue.name }}</h1>
 			</header>
-			<progress ng:show="loading || checkingin" class="pack-activity" value="0" max="100"></progress>
 			
 			<div role="main">
+				<progress ng:show="loading || checkingin" class="pack-activity" value="0" max="100"></progress>
 				<ul ng:show="checkin.venue.categories.length" class="categories">
 					<li ng:repeat="category in checkin.venue.categories">
 						<img fsq:photo="category.icon" fsq:photo-size="bg_32" alt="{{ category.name }}" title="{{ category.name }}"/>
@@ -190,9 +229,9 @@
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>
-			<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
 			
 			<div role="main">
+				<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
 				<p ng:show="loading">loading photos…</p>
 				<p ng:show="!loading && !venue.photos.count">no photo</p>
 				

@@ -4,11 +4,15 @@
 @import "components/gaia-ui-building-blocks/stable/buttons.css";
 @import "components/gaia-ui-building-blocks/unstable/lists.css";
 @import "components/gaia-ui-building-blocks/unstable/progress_activity.css";
+@import "drawer.css";
 html,body{font:10px/1em "MozTT",Sans-serif;}
 ul.categories{float:left;}ul.categories li{display:inline-block;list-style:none;margin-right:3px;}
 #checkin ul.categories+h2{margin:10px 0;}#checkin ul.categories+h2 a{line-height:34px;display:block;}
-#home p{text-align:center;}#home p input[type=image]{height:3em;}
+#home [role=main]>p{text-align:center;}#home [role=main]>p input[type=image]{height:3em;}
 #home [screen="$home"]{display:none;}
-#settings{width:90%;z-index:0;}#settings.active+#home{transform:translateX(90%);}#settings.active+#home [screen="$home"]{display:block;}
+#settings{z-index:0;}#settings.active+#home [screen="$home"]{display:block;}
 #settings.active+#home [screen="#settings"]{display:none;}
 section[role="region"]>header:first-child .icon.icon-search{background-image:url("images/icons/search.png");}
+section[role="region"][data-type=sidebar] [role="main"]{background:none;}
+#settings label:not([for]) input+span{left:3rem;line-height:2rem;}
+#settings button{text-align:center;}

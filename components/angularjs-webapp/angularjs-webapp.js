@@ -110,13 +110,18 @@ angular.module('WebApp', [])
 		function applyState(state) {
 			if(state === null) return;
 			
-			var el    = setupScreen(state);
-			var scope = el.scope();
+			var el         = setupScreen(state);
+			var scope      = el.scope();
+			var onActivate = el.attr('screen:on-activate') || el.attr('screen:onActivate') || el.attr('screen-on-activate') || el.attr('screenOnActivate');
 			
 			Router.parse(el.attr('route'), $window.location.pathname, scope);
 			
 			if(scope.$$phase === null) {
 				scope.$apply();
+			}
+			
+			if(onActivate !== undefined) {
+				scope.$eval(onActivate);
 			}
 		}
 		
@@ -124,7 +129,7 @@ angular.module('WebApp', [])
 			var selector  = state.selector;
 			var model     = state.model;
 			var el        = typeof state.selector === 'string' ? angular.element($window.document.querySelector(selector)) : selector;
-			var modelName = el.attr('ng:model') || el.attr('ngModel') || el.attr('ngModel');
+			var modelName = el.attr('ng:model') || el.attr('ng-model') || el.attr('ngModel');
 			
 			if(current !== undefined) {
 				current.removeClass(currentClass);
@@ -137,7 +142,6 @@ angular.module('WebApp', [])
 					scope.$apply();
 				}
 			}
-			
 			el.addClass(currentClass);
 			current = el;
 			

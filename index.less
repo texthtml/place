@@ -4,7 +4,7 @@
 @import "components/gaia-ui-building-blocks/stable/buttons.css";
 @import "components/gaia-ui-building-blocks/unstable/lists.css";
 @import "components/gaia-ui-building-blocks/unstable/progress_activity.css";
-// @import "components/gaia-ui-building-blocks/unstable/drawer.css";
+@import "drawer.css";
 
 html, body {
 	font: 10px/1em "MozTT", Sans-serif;
@@ -29,7 +29,7 @@ ul.categories {
 	}
 }
 
-#home p {
+#home [role=main] > p {
 	text-align: center;
 	
 	input[type=image] {
@@ -42,12 +42,9 @@ ul.categories {
 }
 
 #settings {
-	width: 90%;
 	z-index: 0;
 	
 	&.active + #home {
-		transform: translateX(90%);
-		
 		[screen="$home"] {
 			display: block;
 		}
@@ -60,3 +57,19 @@ ul.categories {
 section[role="region"] > header:first-child .icon.icon-search {
 	background-image: url("images/icons/search.png");
 }
+
+section[role="region"][data-type=sidebar] [role="main"] {
+	background: none;
+}
+
+
+
+#settings label:not([for]) input + span {
+	left: 3rem;
+	line-height: 2rem;
+}
+
+#settings button {
+	text-align: center;
+}
+

@@ -185,4 +185,25 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 		}, true)
 	})
 	.controller('FoursquareSettings', function FoursquareSettings($scope, Foursquare) {
+		$scope.loading = false;
+		
+		function registerSettingHandler(settingName) {
+			$scope.$watch('settings.'+settingName, function(settingValue, oldValue) {
+				if(settingValue !== undefined && oldValue !== undefined) {
+					Foursquare.api.settings.set({setting_id: settingName, value: settingValue});
+				}
+			});
+		}
+		
+		[	'sendBadgesToTwitter' , 'sendMayorshipsToTwitter', 
+			'sendBadgesToFacebook', 'sendMayorshipsToFacebook', 
+			'receivePings'        , 'receiveCommentPings', 
+		].forEach(registerSettingHandler);
+		
+		$scope.loadSettings = function() {
+			$scope.loading = true;
+			$scope.settings = Foursquare.api.settings.all(function(response) {
+				$scope.loading = false;
+			});
+		}
 	});
