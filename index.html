@@ -13,6 +13,8 @@
 		<script type="text/javascript" src="/components/angular-resource/angular-resource.js"></script>
 		<script type="text/javascript" src="/components/angularjs-foursquare/angularjs-foursquare.js"></script>
 		<script type="text/javascript" src="/components/angularjs-webapp/angularjs-webapp.js"></script>
+		<script type="text/javascript" src="/components/photoswipe/release/3.0.3/lib/klass.min.js"></script>
+		<script type="text/javascript" src="/components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min.js"></script>
 		
 		<script type="text/javascript" src="/index.js"></script>
 		
@@ -202,10 +204,10 @@
 				</form>
 				
 				<div data-type="list" ng:show="checkin.photos.count">
-					<ul>
+					<ul gallery>
 						<li ng:repeat="photo in checkin.photos.items">
 							<aside>
-								<img fsq:photo="photo" fsq:photo-size="cap100" />
+								<a fsq:photo="photo"><img fsq:photo="photo" fsq:photo-size="cap100" /></a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -235,10 +237,10 @@
 				
 				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
 					<header>{{ group.name }}</header>
-					<ul>
+					<ul gallery>
 						<li ng:repeat="photo in group.items">
 							<aside>
-								<img ng:src="{{photo.prefix}}cap100{{photo.suffix}}"/>
+								<a fsq:photo="photo" fsq:photo-size="cap480"><img fsq:photo="photo" fsq:photo-size="cap100" /></a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}

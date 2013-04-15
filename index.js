@@ -1,4 +1,11 @@
 window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
+	.config(function FoursquareAppRun(FoursquareProvider) {
+		FoursquareProvider.config({
+			clientId: location.hostname === 'place.texthtml.net' ? 'BPZJXWFV0BBYQTIC04N34Q2QIRKKULRQIGX0OVNWALFSNFEI' : 'KUSZIXIYTQ252MLOAXHMFTTQOSMJS14G544EJA3EKTRUVRB4', 
+			clientSecret: location.hostname === 'place.texthtml.net' ? 'ZF3DCPSVCW4VZFTVUVOKRGXGMSLQWTXER24JS2BJATDKEMHI' : '2YKQWTLKJBYTE4ASWIGEZ5ERU4N3GN4AQCQ5P2O0SWVKBYFY', 
+			redirectURI: document.location.href + '?authenticated'
+		});
+	})
 	.directive('ngModelDelay', function($timeout) {
 		return {
 			restrict: 'A',
@@ -22,12 +29,51 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 			}
 		};
 	})
-	.config(function FoursquareAppRun(FoursquareProvider) {
-		FoursquareProvider.config({
-			clientId: location.hostname === 'place.texthtml.net' ? 'BPZJXWFV0BBYQTIC04N34Q2QIRKKULRQIGX0OVNWALFSNFEI' : 'KUSZIXIYTQ252MLOAXHMFTTQOSMJS14G544EJA3EKTRUVRB4', 
-			clientSecret: location.hostname === 'place.texthtml.net' ? 'ZF3DCPSVCW4VZFTVUVOKRGXGMSLQWTXER24JS2BJATDKEMHI' : '2YKQWTLKJBYTE4ASWIGEZ5ERU4N3GN4AQCQ5P2O0SWVKBYFY', 
-			redirectURI: document.location.href + '?authenticated'
-		});
+	.directive('gallery', function() {
+		return {
+			link: function(scope, elm, attr) {
+				elm.bind('click', function(event) {
+					var 
+						elements = elm[0].querySelectorAll('li'), 
+						start_position = -1, 
+						images = [].map.call(elements, function(el, i) {
+							if(start_position === -1) {
+								var e = event.target;
+								
+								do {
+									e = e.parentNode;
+								} while(e !== null && e !== el);
+								if(e === el) {
+									start_position = i;
+								}
+							}
+							
+							return {
+								url: el.querySelector('a').href
+							};
+						}), 
+						options = {
+							getImageSource: function(obj){
+								return obj.url;
+							},
+							getImageCaption: function(obj){
+								return obj.caption;
+							}, 
+							loop: false, 
+							captionAndToolbarHide: true
+						}, 
+						gallery = Code.PhotoSwipe.createInstance(images, options);
+					
+					if(start_position !== -1) {
+						gallery.toggleToolbar = function() {
+							gallery.hide();
+							gallery.dispose();
+						};
+						gallery.show(start_position);
+					}
+				});
+			}
+		}
 	})
 	.controller('FoursquareApp', function FoursquareApp($scope, $rootScope, Foursquare) {
 		$scope.fsq = Foursquare;
