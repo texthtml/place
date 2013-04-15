@@ -63,8 +63,10 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 				$scope.refresh();
 			}
 		});
+		
+		$scope.$on('fsq:new-checkin', $scope.refresh);
 	})
-	.controller('FoursquareCheckin', function FoursquareCheckin($scope) {
+	.controller('FoursquareCheckin', function FoursquareCheckin($scope, $rootScope) {
 		$scope.loading = false;
 		$scope.$watch('checkin', function() {
 			if(
@@ -125,6 +127,7 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 				$scope.new_shout = '';
 				$scope.checkin = response.data.checkin;
 				$scope.replaceState();
+				$rootScope.$broadcast('fsq:new-checkin', response.data);
 			});
 		}
 	})
