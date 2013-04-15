@@ -48,15 +48,19 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.controller('FoursquareHome', function FoursquareHome($scope, Foursquare) {
 		$scope.loading = false;
 		
+		$scope.refresh = function refreshRecentCheckin() {
+			$scope.loading = true;
+			Foursquare.api.checkins.recent(function(response) {
+				$scope.checkins = [];
+				[].push.apply($scope.checkins, response.data);
+				$scope.loading = false;
+			});
+		}
+		
 		$scope.$watch('fsq.logged', function(logged) {
 			$scope.checkins = [];
 			if(logged) {
-				$scope.loading = true;
-				Foursquare.api.checkins.recent(function(response) {
-					$scope.checkins = [];
-					[].push.apply($scope.checkins, response.data);
-					$scope.loading = false;
-				});
+				$scope.refresh();
 			}
 		});
 	})

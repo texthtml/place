@@ -72,6 +72,7 @@
 				<button screen="#settings"><span class="icon icon-menu">Settings</span></button>
 				<button screen="$home"><span class="icon icon-menu">Settings</span></button>
 				<menu type="toolbar">
+					<button ng:click="refresh() || !fsq.logged" ng:disabled="loading"><span class="icon icon-refresh">Refresh</span></button>
 					<button screen="#search"><span class="icon icon-search">Search</span></button>
 				</menu>
 				<h1>Foursquare</h1>

@@ -14,6 +14,7 @@ ul.categories{float:left;}ul.categories li{display:inline-block;list-style:none;
 #settings{z-index:0;}#settings.active+#home [screen="$home"]{display:block;}
 #settings.active+#home [screen="#settings"]{display:none;}
 section[role="region"]>header:first-child .icon.icon-search{background-image:url("images/icons/search.png");}
+section[role="region"]>header:first-child .icon.icon-refresh{background-image:url("images/icons/refresh.png");}
 section[role="region"][data-type=sidebar] [role="main"]{background:none;}
 #settings label:not([for]) input+span{left:3rem;line-height:2rem;}
 #settings button{text-align:center;}
