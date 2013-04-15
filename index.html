@@ -69,7 +69,7 @@
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
-				<button screen="#settings"><span class="icon icon-menu">Settings</span></button>
+				<button screen="#settings" ng:disabled="!fsq.logged"><span class="icon icon-menu">Settings</span></button>
 				<button screen="$home"><span class="icon icon-menu">Settings</span></button>
 				<menu type="toolbar">
 					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh">Refresh</span></button>
