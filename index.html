@@ -33,13 +33,13 @@
 					<li>
 						<label>
 							<input type="checkbox"  ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
-							<span>Send badges to Twitter</span>
+							<span>Send badges</span>
 						</label>
 					</li>
 					<li>
 						<label>
 							<input type="checkbox"  ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
-							<span>Send mayorships to Twitter</span>
+							<span>Send mayorships</span>
 						</label>
 					</li>
 				</ul>
@@ -62,9 +62,6 @@
 				<ul>
 					<li>
 						<button class="danger" ng:click="fsq.logout()" screen="$home" ng:show="fsq.logged">log out</button>
-					</li>
-					<li>
-						{{ loading }}
 					</li>
 				</ul>
 			</nav>

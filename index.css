@@ -2,6 +2,7 @@
 @import "components/gaia-ui-building-blocks/stable/headers.css";
 @import "components/gaia-ui-building-blocks/stable/input_areas.css";
 @import "components/gaia-ui-building-blocks/stable/buttons.css";
+@import "components/gaia-ui-building-blocks/stable/switches.css";
 @import "components/gaia-ui-building-blocks/unstable/lists.css";
 @import "components/gaia-ui-building-blocks/unstable/progress_activity.css";
 @import "drawer.css";
