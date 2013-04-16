@@ -243,7 +243,10 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 		function registerSettingHandler(settingName) {
 			$scope.$watch('settings.'+settingName, function(settingValue, oldValue) {
 				if(settingValue !== undefined && oldValue !== undefined) {
-					Foursquare.api.settings.set({setting_id: settingName, value: settingValue});
+					$scope.loading = true;
+					Foursquare.api.settings.set({setting_id: settingName, value: settingValue}, function() {
+						$scope.loading = false;
+					});
 				}
 			});
 		}
