@@ -258,5 +258,9 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 			$scope.settings = Foursquare.api.settings.all(function(response) {
 				$scope.loading = false;
 			});
+			
+			if($scope.$$phase === null) {
+				$scope.$apply();
+			}
 		}
 	});
