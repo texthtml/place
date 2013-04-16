@@ -6,10 +6,10 @@
 #home {
   width: 100%;
   transition: all 0.25s ease;
-  // position: relative;
   left: -2rem;
   z-index: 100;
   padding-left: 2rem;
+  overflow: hidden;
 }
 
 #settings.active + #home {
