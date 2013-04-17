@@ -202,7 +202,9 @@ section[data-type="sidebar"] > nav > ul > li:active {
   background: #00ABCC;  
 }
 
-section[data-type="sidebar"] > nav > ul > li > label { 
+section[data-type="sidebar"] > nav > ul > li > label, 
+section[data-type="sidebar"] > nav > ul > li > button, 
+section[data-type="sidebar"] > nav > ul > li > a { 
   text-decoration: none;
   color: #fff;
   font-size: 1.6rem;
@@ -218,6 +220,10 @@ section[data-type="sidebar"] > nav > ul > li > label {
   overflow: hidden;
 }
 
+section[data-type="sidebar"] > nav > ul > li > button {
+  text-indent: 0;
+  margin: 0;
+}
 [data-type=sidebar] + section[role="region"] > header:first-child .icon.icon-menu {
   width: 4rem;
 }
