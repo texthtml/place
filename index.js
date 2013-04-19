@@ -1,10 +1,21 @@
 window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.config(function FoursquareAppRun(FoursquareProvider) {
-		FoursquareProvider.config({
-			clientId: location.hostname === 'place.texthtml.net' ? 'BPZJXWFV0BBYQTIC04N34Q2QIRKKULRQIGX0OVNWALFSNFEI' : 'KUSZIXIYTQ252MLOAXHMFTTQOSMJS14G544EJA3EKTRUVRB4', 
-			clientSecret: location.hostname === 'place.texthtml.net' ? 'ZF3DCPSVCW4VZFTVUVOKRGXGMSLQWTXER24JS2BJATDKEMHI' : '2YKQWTLKJBYTE4ASWIGEZ5ERU4N3GN4AQCQ5P2O0SWVKBYFY', 
-			redirectURI: document.location.href + '?authenticated'
-		});
+		var config = {
+			'place.texthtml.net' : {
+				clientId: 'BPZJXWFV0BBYQTIC04N34Q2QIRKKULRQIGX0OVNWALFSNFEI', 
+				clientSecret: 'ZF3DCPSVCW4VZFTVUVOKRGXGMSLQWTXER24JS2BJATDKEMHI'
+			}, 
+			'place.webapp.127.0.0.1.xip.io' : {
+				clientId: 'KUSZIXIYTQ252MLOAXHMFTTQOSMJS14G544EJA3EKTRUVRB4', 
+				clientSecret: '2YKQWTLKJBYTE4ASWIGEZ5ERU4N3GN4AQCQ5P2O0SWVKBYFY'
+			}, 
+			'place.webapp.192.168.1.66.xip.io' : {
+				clientId: 'WNFGTGGFPP1PIROYTCGCXZUZEYRE4L0204XRR32C4ACHRBCD', 
+				clientSecret: 'EXT2OVJVZZI0RGO34DPKT4MZ3KHYHRJQNDQ13OXPAQMCFCY1'
+			}
+		}[location.hostname];
+		config.redirectURI = document.location.href + '?authenticated';
+		FoursquareProvider.config(config);
 	})
 	.directive('ngModelDelay', function($timeout) {
 		return {
@@ -94,6 +105,25 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.controller('FoursquareHome', function FoursquareHome($scope, Foursquare) {
 		$scope.loading = false;
 		
+		$scope.options = {mozSystem: true, mozAnon: true};
+		var xhr = new XMLHttpRequest($scope.options);
+		$scope.systemXHR = (xhr.mozSystem);
+		$scope.systemXHR2 = (xhr.mozAnon);
+		$scope.text = "...";
+		console.log($scope.systemXHR);
+		console.log($scope.systemXHR2);
+		
+		xhr.onreadystatechange = function() {
+			if(this.readyState === 4) {
+				console.log(this, this.responseText);
+				$scope.text = this.responseText;
+				$scope.$apply();
+			}
+		};
+		
+		xhr.open('get', 'http://perdu.com/');
+		xhr.send();
+		
 		$scope.refresh = function refreshRecentCheckin() {
 			$scope.loading = true;
 			Foursquare.api.checkins.recent(function(response) {
@@ -175,7 +205,11 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 				$scope.replaceState();
 				$rootScope.$broadcast('fsq:new-checkin', response.data);
 			});
-		}
+		};
+		
+		$scope.uploadPhoto = function() {
+			console.log($scope.photo);
+		};
 	})
 	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, $rootScope, Foursquare) {
 		$scope.venues = [];

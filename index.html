@@ -74,6 +74,12 @@
 						<a target="_blank" href="http://texthtml.net/trac/projects/webapp-place">Visit the website</a>
 					</li>
 				</ul>
+				<h2>Developper tools</h2>
+				<ul>
+					<li>
+						<button screen="$home" onclick="location.reload();">Reload</button>
+					</li>
+				</ul>
 			</nav>
 		</section>
 		
@@ -93,6 +99,12 @@
 				
 				<p>
 					<fsq:login ng:show="!fsq.logged" fsq:display="touch" fsq:color="blue"></fsq:login>
+					{{ systemXHR }}
+					{{ systemXHR2 }}
+					<hr/>
+					{{ options }}
+					<hr/>
+					{{ text }}
 				</p>
 				
 				<p ng:show="loading">Loading recent checkins…</p>
@@ -226,6 +238,12 @@
 						</li>
 					</ul>
 				</div>
+				<form ng:show="checkin.id" ng:submit="uploadPhoto()">
+					<p>
+						<input type="file" ng:model="photo" required accept="image/*"/>
+						<button type="submit" ng:class="{recommend: !checkin.photos.count}">Save photo</button>
+					</p>
+				</form>
 			</div>
 		</section>
 		
