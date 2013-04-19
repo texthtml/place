@@ -1,24 +1,24 @@
 {
-  "name": "Place",
-  "description": "Foursquare client.",
-  "version": "201304102321", 
-  
-  "launch_path": "/",
+	"name": "Place",
+	"description": "Foursquare client.",
+	"version": "201304102321", 
 
-  "developer": {
-    "name": "Mathieu Rochette",
-    "url": "https://mathieu.rochette.cc/"
-  },
-  
-  "icons": {
-    "128": "/icon.png"
-  },
-  
-  "default_locale": "en", 
-  
-  "type": "privileged", 
-  
-  "permissions" : {
-  	"systemXHR" : {}
-  }
+	"launch_path": "/",
+
+	"developer": {
+		"name": "Mathieu Rochette",
+		"url": "https://mathieu.rochette.cc/"
+	},
+
+	"icons": {
+		"128": "/icon.png"
+	},
+
+	"default_locale": "en", 
+
+	"type": "privileged", 
+
+	"permissions" : {
+		"systemXHR" : {}
+	}
 }

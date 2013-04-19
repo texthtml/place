@@ -8483,7 +8483,7 @@ function $HttpProvider() {
 
     // transform outgoing request data
     transformRequest: [function(d) {
-      return isObject(d) && !isFile(d) ? toJson(d) : d;
+      return isObject(d) && !isFile(d)  && toString.apply(d) !== '[object FormData]'? toJson(d) : d;
     }],
 
     // default headers
@@ -9206,7 +9206,7 @@ function createHttpBackend($browser, XHR, $browserDefer, callbacks, rawDocument,
         delete callbacks[callbackId];
       });
     } else {
-      var xhr = new XHR();
+      var xhr = new XHR({mozSystem: true});
       xhr.open(method, url, true);
       forEach(headers, function(value, key) {
         if (value) xhr.setRequestHeader(key, value);

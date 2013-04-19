@@ -48,7 +48,7 @@
 						defaultParams || {}, 
 						FoursquareDefaultParams, 
 						inputParams || {}, 
-						FoursquareClientParams
+						FoursquareDefaultParams.oauth_token === undefined ? FoursquareClientParams : {}
 					);
 				
 				for(var i = 0; i < endpointParams.length; i++) {
@@ -59,11 +59,18 @@
 					}
 				}
 				
+				if(method.toUpperCase() === 'POST') {
+					data = data || new FormData;
+					for(var name in params) {
+						data.append(name, params[name]);
+					}
+				}
+				
 				var 
 					resource = isArray ? [] : {}, 
 					q = $http({
 						url: FoursquareAPI + url, 
-						params: params, 
+						params: method.toUpperCase() === 'POST' ? undefined : params, 
 						method: method, 
 						data: data, 
 						headers: angular.extend({
@@ -198,7 +205,7 @@
 				notifications:         FoursquareEndpoint('get',  'updates/notifications',              'notifications'), 
 				marknotificationsread: FoursquareEndpoint('get',  'updates/marknotificationsread',      'notifications')}), 
 			photos: e(                 FoursquareEndpoint('get',  'photos/:photo_id',                   'photo'), {
-				add:                   FoursquareEndpoint('post', 'photos/add',                         'photo', {}, {'content-type': 'image/jpeg'})}), 
+				add:                   FoursquareEndpoint('post', 'photos/add',                         'photo', {}, {'Content-Type': false})}), 
 			settings: e(               FoursquareEndpoint('get',  'settings/:setting_id',               'value'), {
 				all:                   FoursquareEndpoint('get',  'settings/all',                       'settings'), 
 				set:                   FoursquareEndpoint('post', 'settings/:setting_id/set',           'settings')}), 

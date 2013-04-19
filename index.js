@@ -17,6 +17,28 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 		config.redirectURI = document.location.href + '?authenticated';
 		FoursquareProvider.config(config);
 	})
+	.directive('model', function() {
+		return {
+			restrict: 'A', 
+			link: function(scope, elem, attrs) {
+				if(attrs.type !== 'file') {
+					return;
+				}
+				
+				elem.bind('change', function(event) {
+					scope.$apply(function() {
+						scope[attrs.model] = attrs.multiple ? elem[0].files : elem[0].files[0];
+					});
+				});
+				
+				scope.$watch(attrs.model, function(file) {
+					if(file === '') {
+						elem.val('');
+					}
+				});
+			}
+		};
+	})
 	.directive('ngModelDelay', function($timeout) {
 		return {
 			restrict: 'A',
@@ -89,6 +111,8 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.controller('FoursquareApp', function FoursquareApp($scope, $rootScope, Foursquare) {
 		$scope.fsq = Foursquare;
 		
+		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
+		
 		$scope.setVenue = function(venue) {
 			$rootScope.$broadcast('venue', venue);
 		};
@@ -104,25 +128,6 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	})
 	.controller('FoursquareHome', function FoursquareHome($scope, Foursquare) {
 		$scope.loading = false;
-		
-		$scope.options = {mozSystem: true, mozAnon: true};
-		var xhr = new XMLHttpRequest($scope.options);
-		$scope.systemXHR = (xhr.mozSystem);
-		$scope.systemXHR2 = (xhr.mozAnon);
-		$scope.text = "...";
-		console.log($scope.systemXHR);
-		console.log($scope.systemXHR2);
-		
-		xhr.onreadystatechange = function() {
-			if(this.readyState === 4) {
-				console.log(this, this.responseText);
-				$scope.text = this.responseText;
-				$scope.$apply();
-			}
-		};
-		
-		xhr.open('get', 'http://perdu.com/');
-		xhr.send();
 		
 		$scope.refresh = function refreshRecentCheckin() {
 			$scope.loading = true;
@@ -207,8 +212,36 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 			});
 		};
 		
+		$scope.setFile = function(element) {
+			$scope.$apply(function($scope) {
+				$scope.files = element.files;
+			});
+		};
+		
+		$scope.uploading = false;
 		$scope.uploadPhoto = function() {
-			console.log($scope.photo);
+			$scope.uploading = true;
+			var photo = new FormData;
+			photo.append('photo', $scope.photo);
+			
+			$scope.photo = '';
+			
+			Foursquare.api.photos.add({checkinId: $scope.checkin.id}, photo, function(response) {
+				$scope.uploading = false;
+				
+				for(var i = 0; i < $scope.checkin.photos.items.length; i++) {
+					if(response.data.id === $scope.checkin.photos.items[i].id) {
+						return;
+					}
+				}
+				
+				response.data.user = $scope.me;
+				
+				$scope.checkin.photos.count++;
+				$scope.checkin.photos.items.push(response.data);
+				
+				$scope.replaceState();
+			});
 		};
 	})
 	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, $rootScope, Foursquare) {
