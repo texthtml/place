@@ -1,12 +1,27 @@
+requirejs.config({
+	shim: {
+		'components/angular/angular': {
+			exports: 'angular'
+		}, 
+		'components/angularjs-foursquare/angularjs-foursquare':   ['components/angular/angular'], 
+		'components/angularjs-webapp/angularjs-webapp':           ['components/angular/angular'], 
+		'components/photoswipe/release/3.0.3/lib/klass.min': {
+			exports: 'klass'
+		}, 
+		'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min': {
+			deps: ['components/photoswipe/release/3.0.3/lib/klass.min'], 
+			exports: 'Code.PhotoSwipe'
+		}
+	}
+});
+
 require([
 	'components/angular/angular', 
+	'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
 	'components/angularjs-foursquare/angularjs-foursquare', 
 	'components/angularjs-webapp/angularjs-webapp', 
-	'components/photoswipe/release/3.0.3/lib/klass.min', 
-	'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
-	'index'
-], function() {
-	angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
+], function(angular, PhotoSwipe) {
+	angular.module('FoursquareApp', ['FoursquareService', 'WebApp'])
 	.config(function FoursquareAppRun(FoursquareProvider) {
 		var config = {
 			'place.texthtml.net' : {
@@ -103,7 +118,7 @@ require([
 							loop: false, 
 							captionAndToolbarHide: true
 						}, 
-						gallery = Code.PhotoSwipe.createInstance(images, options);
+						gallery = PhotoSwipe.createInstance(images, options);
 					
 					if(start_position !== -1) {
 						gallery.toggleToolbar = function() {
