@@ -9,14 +9,7 @@
 		
 		<meta name="viewport" content="width=device-width">
 		
-		<script type="text/javascript" src="/components/angular/angular.js"></script>
-		<script type="text/javascript" src="/components/angularjs-foursquare/angularjs-foursquare.js"></script>
-		<script type="text/javascript" src="/components/angularjs-webapp/angularjs-webapp.js"></script>
-		<script type="text/javascript" src="/components/photoswipe/release/3.0.3/lib/klass.min.js"></script>
-		<script type="text/javascript" src="/components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min.js"></script>
-		
-		<script type="text/javascript" src="/index.js"></script>
-		
+		<script data-main="index.js" src="components/requirejs/require.js"></script>
 		<link rel="stylesheet" type="text/css" href="index.css"></link>
 	</head>
 	<body ng:controller="FoursquareApp" role="application">
@@ -102,8 +95,8 @@
 				</p>
 				
 				<p ng:show="loading">Loading recent checkins…</p>
-				<p ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
-				<div data-type="list">
+				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
+				<div ng:cloak data-type="list">
 					<ul ng:show="checkins.length">
 						<li ng:repeat="checkin in checkins">
 							<a screen="#checkin" screen:model="checkin">

@@ -20,3 +20,4 @@ section[role="region"]>header:first-child .icon.icon-refresh{background-image:ur
 section[role="region"][data-type=sidebar] [role="main"]{background:none;}
 #settings label:not([for]) input+span{left:3rem;line-height:2rem;}
 #settings button{text-align:center;}
+[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}

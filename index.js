@@ -1,4 +1,12 @@
-window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
+require([
+	'components/angular/angular', 
+	'components/angularjs-foursquare/angularjs-foursquare', 
+	'components/angularjs-webapp/angularjs-webapp', 
+	'components/photoswipe/release/3.0.3/lib/klass.min', 
+	'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
+	'index'
+], function() {
+	angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 	.config(function FoursquareAppRun(FoursquareProvider) {
 		var config = {
 			'place.texthtml.net' : {
@@ -334,3 +342,4 @@ window.module = angular.module('FoursquareApp', ['WebApp', 'FoursquareService'])
 			}
 		}
 	});
+});
