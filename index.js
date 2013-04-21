@@ -354,4 +354,6 @@ require([
 			}
 		}
 	});
+	
+	angular.bootstrap(document.documentElement, ['FoursquareApp'])
 });
