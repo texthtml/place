@@ -52,10 +52,23 @@
 						</label>
 					</li>
 				</ul>
-				<h2>Account</h2>
+				<h2>Geolocation</h2>
 				<ul>
 					<li>
-						<button class="danger" ng:click="fsq.logout()" screen="$home" ng:show="fsq.logged">log out</button>
+						<label>
+							<input type="checkbox" ng:model="geolocationEnabled">
+							<span>Enable geolocation</span>
+						</label>
+						<label>
+							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy && geolocationEnabled">
+							<span>High Accuracy</span>
+						</label>
+					</li>
+				</ul>
+				<h2 ng:show="fsq.logged">Account</h2>
+				<ul ng:show="fsq.logged">
+					<li>
+						<button class="danger" ng:click="fsq.logout()" screen="$home">log out</button>
 					</li>
 				</ul>
 				<h2>Contact</h2>
@@ -78,7 +91,7 @@
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
-				<button screen="#settings" ng:disabled="!fsq.logged"><span class="icon icon-menu">Settings</span></button>
+				<button screen="#settings"><span class="icon icon-menu">Settings</span></button>
 				<button screen="$home"><span class="icon icon-menu">Settings</span></button>
 				<menu type="toolbar">
 					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh">Refresh</span></button>
