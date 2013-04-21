@@ -24,20 +24,17 @@ require([
 	angular.module('FoursquareApp', ['FoursquareService', 'WebApp'])
 	.config(function FoursquareAppRun(FoursquareProvider) {
 		var config = {
-			'place.texthtml.net' : {
-				clientId: 'BPZJXWFV0BBYQTIC04N34Q2QIRKKULRQIGX0OVNWALFSNFEI', 
-				clientSecret: 'ZF3DCPSVCW4VZFTVUVOKRGXGMSLQWTXER24JS2BJATDKEMHI'
+			'prod' : {
+				clientId: 'R4MYVBHKVMCNR0MAB5YTWRIJ5Z2ROR3R2DWRDTC1EOQCKEEI', 
+				clientSecret: 'GZ2TX5NP0VX3EV1CSACE455GKE3CYLHMIHHJKDUX0LWGJSCN', 
+				redirectURI: 'http://place.texthtml.net/?authenticated'
 			}, 
-			'place.webapp.127.0.0.1.xip.io' : {
-				clientId: 'KUSZIXIYTQ252MLOAXHMFTTQOSMJS14G544EJA3EKTRUVRB4', 
-				clientSecret: '2YKQWTLKJBYTE4ASWIGEZ5ERU4N3GN4AQCQ5P2O0SWVKBYFY'
-			}, 
-			'place.webapp.192.168.1.66.xip.io' : {
-				clientId: 'WNFGTGGFPP1PIROYTCGCXZUZEYRE4L0204XRR32C4ACHRBCD', 
-				clientSecret: 'EXT2OVJVZZI0RGO34DPKT4MZ3KHYHRJQNDQ13OXPAQMCFCY1'
+			'dev' : {
+				clientId: '1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 
+				clientSecret: 'QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 
+				redirectURI: 'http://place.webapp.192.168.1.66.xip.io/?authenticated'
 			}
-		}[location.hostname];
-		config.redirectURI = document.location.href + '?authenticated';
+		}[location.hostname === 'place.webapp.192.168.1.66.xip.io' ? 'dev' : 'prod'];
 		FoursquareProvider.config(config);
 	})
 	.directive('model', function() {
