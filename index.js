@@ -365,6 +365,12 @@ require([
 			});
 		}
 		
+		$scope.$watch('fsq.logged', function(logged) {
+			if(!logged) {
+				delete $scope.settings;
+			}
+		});
+		
 		[	'sendBadgesToTwitter' , 'sendMayorshipsToTwitter', 
 			'sendBadgesToFacebook', 'sendMayorshipsToFacebook', 
 			'receivePings'        , 'receiveCommentPings', 
