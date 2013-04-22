@@ -130,14 +130,10 @@ require([
 			}
 		}
 	})
-	.controller('FoursquareApp', function FoursquareApp($scope, $rootScope, thFoursquare) {
+	.controller('FoursquareApp', function FoursquareApp($scope, thFoursquare) {
 		$scope.fsq = thFoursquare;
 		
 		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
-		
-		$scope.setVenue = function(venue) {
-			$rootScope.$broadcast('venue', venue);
-		};
 		
 		$scope.$watch('fsq.logged', function(logged) {
 			if(logged) {
@@ -265,7 +261,7 @@ require([
 			});
 		};
 	})
-	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, $rootScope, thFoursquare, thGeolocation) {
+	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation) {
 		$scope.venues = [];
 		$scope.geocode = {};
 		$scope.loading = false;
@@ -323,7 +319,7 @@ require([
 			}
 		}, true)
 	})
-	.controller('FoursquareSettings', function FoursquareSettings($scope, $rootScope, thFoursquare, thGeolocation) {
+	.controller('FoursquareSettings', function FoursquareSettings($scope, thFoursquare, thGeolocation) {
 		
 		$scope.geolocationSupported    = thGeolocation.supported;
 		$scope.geolocationEnabled      = localStorage.geolocationEnabled      !== 'false';
