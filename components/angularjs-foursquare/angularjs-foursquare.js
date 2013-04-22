@@ -353,7 +353,7 @@
 				display: '@thFsqDisplay'
 			}, 
 			link: function foursquareLoginLinking(scope, element, attrs) {
-				scope.fsq = thFoursquare;
+				scope.thFsq = thFoursquare;
 				
 				var onLogin = $parse(scope.onLogin);
 				
