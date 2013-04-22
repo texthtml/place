@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng:app="FoursquareApp">
+<html th:app>
 	<head>
 		<meta charset="utf-8" />
 		
@@ -15,7 +15,7 @@
 	<body ng:controller="FoursquareApp" role="application">
 		
 		
-		<section role="region" ng:controller="FoursquareSettings" screen:on-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
+		<section role="region" ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
 				<h1>Settings</h1>
 			</header>
@@ -52,8 +52,8 @@
 						</label>
 					</li>
 				</ul>
-				<h2>Geolocation</h2>
-				<ul>
+				<h2 ng:show="geolocationSupported">Geolocation</h2>
+				<ul ng:show="geolocationSupported">
 					<li>
 						<label>
 							<input type="checkbox" ng:model="geolocationEnabled">
@@ -68,7 +68,7 @@
 				<h2 ng:show="fsq.logged">Account</h2>
 				<ul ng:show="fsq.logged">
 					<li>
-						<button class="danger" ng:click="fsq.logout()" screen="$home">log out</button>
+						<button class="danger" ng:click="fsq.logout()" th:screen="$home">log out</button>
 					</li>
 				</ul>
 				<h2>Contact</h2>
@@ -83,7 +83,7 @@
 				<h2>Developper tools</h2>
 				<ul>
 					<li>
-						<button screen="$home" onclick="location.reload();">Reload</button>
+						<button th:screen="$home" onclick="location.reload();">Reload</button>
 					</li>
 				</ul>
 			</nav>
@@ -91,11 +91,11 @@
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
-				<button screen="#settings"><span class="icon icon-menu">Settings</span></button>
-				<button screen="$home"><span class="icon icon-menu">Settings</span></button>
+				<button th:screen="#settings"><span class="icon icon-menu">Settings</span></button>
+				<button th:screen="$home"><span class="icon icon-menu">Settings</span></button>
 				<menu type="toolbar">
 					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh">Refresh</span></button>
-					<button screen="#search"><span class="icon icon-search">Search</span></button>
+					<button th:screen="#search"><span class="icon icon-search">Search</span></button>
 				</menu>
 				<h1>Foursquare</h1>
 			</header>
@@ -104,7 +104,7 @@
 				<progress ng:show="loading" value="0" max="100" class="pack-activity"></progress>
 				
 				<p>
-					<fsq:login ng:show="!fsq.logged" fsq:display="touch" fsq:color="blue"></fsq:login>
+					<th:fsq-login ng:show="!fsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
 				</p>
 				
 				<p ng:show="loading">Loading recent checkins…</p>
@@ -112,9 +112,9 @@
 				<div ng:cloak data-type="list">
 					<ul ng:show="checkins.length">
 						<li ng:repeat="checkin in checkins">
-							<a screen="#checkin" screen:model="checkin">
+							<a th:screen="#checkin" th:screen-model="checkin">
 								<aside class="pack-end">
-									<img fsq:photo="checkin.user.photo" fsq:photo-size="cap60" />
+									<img th:fsq-photo="checkin.user.photo" th:fsq-photo-size="cap60" />
 								</aside>
 								<p>
 									<strong>{{ checkin.user.firstName }}</strong> at {{ checkin.venue.name }}
@@ -131,7 +131,7 @@
 		
 		<section role="region" ng:controller="FoursquareSearch" id="search" data-viewport="right">
 			<header>
-				<button screen="$home"><span class="icon icon-back">Back</span></button>
+				<button th:screen="$home"><span class="icon icon-back">Back</span></button>
 				<h1>Foursquare</h1>
 			</header>
 			
@@ -153,16 +153,16 @@
 					
 					<ul ng-show="venues.length">
 						<li ng:repeat="venue in venues">
-							<a screen="#venue" screen:model="venue"><p>{{ venue.name }}</p></a>
+							<a th:screen="#venue" th:screen-model="venue"><p>{{ venue.name }}</p></a>
 						</li>
 					<ul>
 				</div>
 			</div>
 		</section>
 		
-		<section role="region" ng:controller="FoursquareCheckin" id="checkin" ng:model="checkin" data-viewport="right">
+		<section role="region" ng:controller="FoursquareCheckin" id="checkin" th:model="checkin" data-viewport="right">
 			<header>
-				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<h1>{{ checkin.user.firstName || 'Someone' }} at {{ checkin.venue.name }}</h1>
 			</header>
 			
@@ -170,10 +170,10 @@
 				<progress ng:show="loading || checkingin" class="pack-activity" value="0" max="100"></progress>
 				<ul ng:show="checkin.venue.categories.length" class="categories">
 					<li ng:repeat="category in checkin.venue.categories">
-						<img fsq:photo="category.icon" fsq:photo-size="bg_32" alt="{{ category.name }}" title="{{ category.name }}"/>
+						<img th:fsq-photo="category.icon" th:fsq-photo-size="bg_32" alt="{{ category.name }}" title="{{ category.name }}"/>
 					</li>
 				</ul>
-				<h2><a screen="#venue" screen:model="checkin.venue">{{ checkin.venue.name }}</a></h2>
+				<h2><a th:screen="#venue" th:screen-model="checkin.venue">{{ checkin.venue.name }}</a></h2>
 				
 				<button ng:show="checkin.id && !checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})">Like</button>
 				<button ng:show="checkin.id && checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})">Unlike</button>
@@ -186,7 +186,7 @@
 					<ul>
 						<li ng:show="checkin.shout">
 							<aside class="pack-end">
-								<img fsq:photo="checkin.user.photo" fsq:photo-size="cap60" />
+								<img th:fsq-photo="checkin.user.photo" th:fsq-photo-size="cap60" />
 							</aside>
 							<p>
 								{{ checkin.shout }}
@@ -198,7 +198,7 @@
 						</li>
 						<li ng:repeat="comment in checkin.comments.items">
 							<aside class="pack-end">
-								<img fsq:photo="comment.user.photo" fsq:photo-size="cap60" />
+								<img th:fsq-photo="comment.user.photo" th:fsq-photo-size="cap60" />
 							</aside>
 							<p>
 								{{ comment.text }}
@@ -227,7 +227,7 @@
 					<ul gallery>
 						<li ng:repeat="photo in checkin.photos.items">
 							<aside>
-								<a fsq:photo="photo"><img fsq:photo="photo" fsq:photo-size="cap100" /></a>
+								<a th:fsq-photo="photo"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -248,11 +248,11 @@
 			</div>
 		</section>
 		
-		<section role="region" ng:controller="FoursquareVenue" id="venue" ng:model="venue" data-viewport="right">
+		<section role="region" ng:controller="FoursquareVenue" id="venue" th:model="venue" data-viewport="right">
 			<header>
-				<button screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<menu type="toolbar">
-					<button ng:disabled="!me" screen="#checkin" screen:model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
+					<button ng:disabled="!me" th:screen="#checkin" th:screen-model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>
@@ -267,7 +267,7 @@
 					<ul gallery>
 						<li ng:repeat="photo in group.items">
 							<aside>
-								<a fsq:photo="photo" fsq:photo-size="cap480"><img fsq:photo="photo" fsq:photo-size="cap100" /></a>
+								<a th:fsq-photo="photo" th:fsq-photo-size="cap480"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}

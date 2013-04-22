@@ -39,7 +39,7 @@ ul.categories {
 	}
 }
 
-#home [screen="$home"] {
+#home [th\:screen="$home"] {
 	display: none;
 }
 
@@ -47,10 +47,10 @@ ul.categories {
 	z-index: 0;
 	
 	&.active + #home {
-		[screen="$home"] {
+		[th\:screen="$home"] {
 			display: block;
 		}
-		[screen="#settings"] {
+		[th\:screen="#settings"] {
 			display: none;
 		}
 	}

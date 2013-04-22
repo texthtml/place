@@ -1,5 +1,5 @@
-angular.module('WebApp', [])
-	.factory('History', function($window, $rootScope) {
+angular.module('thWebApp', [])
+	.factory('thHistory', function($window, $rootScope) {
 		var position = $window.history.state === null ? 0 : $window.history.state.position || 0;
 		
 		var History = {
@@ -40,7 +40,7 @@ angular.module('WebApp', [])
 		
 		return History;
 	})
-	.factory('Router', function($parse) {
+	.factory('thRouter', function($parse) {
 		
 		var routes = [];
 		
@@ -60,7 +60,7 @@ angular.module('WebApp', [])
 							};
 							return true;
 						}
-					} (elem.attr('route').split('/'))
+					} ((elem.attr('th:route') || elem.attr('th-route') || elem.attr('thRoute')).split('/'))
 				});
 			}, 
 			find: function(path) {
@@ -98,7 +98,7 @@ angular.module('WebApp', [])
 		
 		return Router;
 	})
-	.factory('ScreenManager', function($rootScope, $window, History, Router) {
+	.factory('thScreenManager', function($rootScope, $window, thHistory, thRouter) {
 		var current;
 		var currentClass;
 		var homeSelector;
@@ -112,9 +112,17 @@ angular.module('WebApp', [])
 			
 			var el         = setupScreen(state);
 			var scope      = el.scope();
-			var onActivate = el.attr('screen:on-activate') || el.attr('screen:onActivate') || el.attr('screen-on-activate') || el.attr('screenOnActivate');
+			var onActivate = el.attr('th:screen:activate') || 
+			                 el.attr('th:screen-activate') || 
+			                 el.attr('th-screen:activate') || 
+			                 el.attr('th-screen-activate') || 
+			                 el.attr('th:screenActivate') || 
+			                 el.attr('th-screenActivate') || 
+			                 el.attr('thScreen:activate') || 
+			                 el.attr('thScreenActivate') || 
+			                 el.attr('thScreen-activate');
 			
-			Router.parse(el.attr('route'), $window.location.pathname, scope);
+			thRouter.parse(el.attr('th:route') || el.attr('th-route') || el.attr('thRoute'), $window.location.pathname, scope);
 			
 			if(scope.$$phase === null) {
 				scope.$apply();
@@ -129,7 +137,7 @@ angular.module('WebApp', [])
 			var selector  = state.selector;
 			var model     = state.model;
 			var el        = typeof state.selector === 'string' ? angular.element($window.document.querySelector(selector)) : selector;
-			var modelName = el.attr('ng:model') || el.attr('ng-model') || el.attr('ngModel');
+			var modelName = el.attr('th:model') || el.attr('th-model') || el.attr('thModel');
 			
 			if(current !== undefined) {
 				current.removeClass(currentClass);
@@ -154,20 +162,20 @@ angular.module('WebApp', [])
 					return false;
 				}
 				
-				History.replace({
+				thHistory.replace({
 					model: model, 
-					selector: History.state().selector
+					selector: thHistory.state().selector
 				});
 				
 				return true;
 			}, 
 			go: function(screen, model) {
 				if(screen === '$backOrHome') {
-					screen = History.position() === 0 ? '$home' : '$back';
+					screen = thHistory.position() === 0 ? '$home' : '$back';
 				}
 				
 				if(screen === '$back') {
-					return History.back();
+					return thHistory.back();
 				}
 				
 				var selector = screen === '$home' ? homeSelector : screen;
@@ -176,25 +184,25 @@ angular.module('WebApp', [])
 					selector: selector
 				};
 				var el = setupScreen(state);
-				var url = Router.compile(el.attr('route'), el.scope());
+				var url = thRouter.compile(el.attr('th:route') || el.attr('th-route') || el.attr('thRoute'), el.scope());
 				
-				History.push(state, url, true);
+				thHistory.push(state, url, true);
 			}, 
 			config: function(_currentClass, _homeSelector) {
 				currentClass = _currentClass;
 				homeSelector = _homeSelector;
 			}, 
 			start: function() {
-				if(History.state() === null) {
+				if(thHistory.state() === null) {
 					// wait for routes to register
 					$rootScope.$evalAsync(function() {
-						var route = Router.find($window.location.pathname);
+						var route = thRouter.find($window.location.pathname);
 						var state = {
-							selector: route === null ? homeSelector : '[route="'+route.elem.attr('route')+'"]', 
+							selector: route === null ? homeSelector : '[route="'+(route.elem.attr('th:route') || route.elem.attr('th-route') || route.elem.attr('thRoute'))+'"]', 
 							historyPosition: currentHistoryPosition = 0
 						};
 						
-						History.replace(state);
+						thHistory.replace(state);
 					});
 				}
 			}
@@ -202,46 +210,46 @@ angular.module('WebApp', [])
 		
 		return ScreenManager;
 	})
-	.directive('ngApp', function webappFactory(ScreenManager) {
+	.directive('thApp', function webappFactory(thScreenManager) {
 		return {
 			controller: function($attrs) {
-				ScreenManager.config(
-					$attrs.screenClass || 'active', 
-					$attrs.firstScreen || '#home'
+				thScreenManager.config(
+					$attrs.thScreenClass || 'active', 
+					$attrs.thFirstScreen || '#home'
 				);
-				ScreenManager.start();
+				thScreenManager.start();
 			}
 		};
 	})
-	.directive('route', function routeFactory(Router) {
+	.directive('thRoute', function routeFactory(thRouter) {
 		return {
 			restrict: 'A', 
 			link: function routeAttributeLink(scope, element, attrs) {
-				Router.register(element);
+				thRouter.register(element);
 			}
 		};
 	})
-	.directive('ngModel', function screenFactory(History, ScreenManager) {
+	.directive('thModel', function screenFactory(thHistory, thScreenManager) {
 		return {
 			restrict: 'A', 
 			link: function modelReplaceStateFactory(scope, element, attrs) {
 				scope.replaceState = function() {
-					var model = scope.$eval(attrs.ngModel);
-					ScreenManager.replace(element, model);
+					var model = scope.$eval(attrs.thModel);
+					thScreenManager.replace(element, model);
 				}
 			}
 		};
 	})
-	.directive('screen', function screenFactory(ScreenManager) {
+	.directive('thScreen', function screenFactory(thScreenManager) {
 		return {
 			restrict: 'A', 
 			link: function screenAttributeLink(scope, element, attrs) {
 				element.bind('click', function(event) {
-					ScreenManager.go(attrs.screen, scope.$eval(attrs.screenModel));
+					thScreenManager.go(attrs.thScreen, scope.$eval(attrs.thScreenModel));
 				});
 				
-				if(attrs.screen === '$back') {
-					element[0].disabled = !History.position();
+				if(attrs.thScreen === '$back') {
+					element[0].disabled = !thHistory.position();
 					scope.$on('history:current-state-changed', function(event, data, position) {
 						element[0].disabled = !position;
 					});
