@@ -165,7 +165,7 @@ require([
 		
 		$scope.$on('fsq:new-checkin', $scope.refresh);
 	})
-	.controller('FoursquareCheckin', function FoursquareCheckin($scope, $rootScope, thGeolocation, thFoursquare) {
+	.controller('FoursquareCheckin', function FoursquareCheckin($scope, $rootScope, llConfig, thFoursquare) {
 		$scope.loading = false;
 		$scope.$watch('checkin', function() {
 			if(
@@ -220,7 +220,7 @@ require([
 				shout: $scope.new_shout
 			};
 			
-			thFoursquare.api.checkins.add(thGeolocation.llconfig(checkin), function(response) {
+			thFoursquare.api.checkins.add(llConfig(checkin), function(response) {
 				$scope.checkingin = false;
 				$scope.new_shout = '';
 				$scope.checkin = response.data.checkin;
@@ -243,7 +243,7 @@ require([
 			
 			$scope.photo = '';
 			
-			thFoursquare.api.photos.add(thGeolocation.llconfig({checkinId: $scope.checkin.id}), photo, function(response) {
+			thFoursquare.api.photos.add(llConfig({checkinId: $scope.checkin.id}), photo, function(response) {
 				$scope.uploading = false;
 				
 				for(var i = 0; i < $scope.checkin.photos.items.length; i++) {
@@ -261,10 +261,11 @@ require([
 			});
 		};
 	})
-	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation) {
+	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig) {
 		$scope.venues = [];
 		$scope.geocode = {};
 		$scope.loading = false;
+		$scope.geolocationSupported = thGeolocation.supported;
 		
 		var search_venues = function() {
 			var request = 0;
@@ -275,7 +276,7 @@ require([
 				
 				if($scope.query !== undefined && $scope.query.length > 2) {
 					$scope.loading = true;
-					thFoursquare.api.venues.search(thGeolocation.llconfig({
+					thFoursquare.api.venues.search(llConfig({
 						query: $scope.query, 
 						near: $scope.place
 					}), function(response) {
@@ -325,15 +326,13 @@ require([
 		$scope.geolocationEnabled      = localStorage.geolocationEnabled      !== 'false';
 		$scope.geolocationHighAccuracy = localStorage.geolocationHighAccuracy !== 'false';
 		
-		thGeolocation.llconfig = function(config) {
-			if(thGeolocation.position !== undefined && thGeolocation.position.coords !== undefined) {
-				config.ll     = thGeolocation.position.coords.latitude + ',' + thGeolocation.position.coords.longitude;
-				config.llAcc  = thGeolocation.position.coords.accuracy;
-				config.alt    = thGeolocation.position.coords.altitude;
-				config.altAcc = thGeolocation.position.coords.altitudeAccuracy;
+		thGeolocation.config({
+			enableHighAccuracy: $scope.geolocationHighAccuracy, 
+			fake: {
+				longitude: 33.2, 
+				latitude: 42.7
 			}
-			return config;
-		}
+		});
 		
 		$scope.$watch('geolocationEnabled', function(geolocationEnabled, oldValue) {
 			localStorage.geolocationEnabled = geolocationEnabled;
@@ -348,7 +347,11 @@ require([
 		$scope.$watch('geolocationHighAccuracy', function(geolocationHighAccuracy) {
 			localStorage.geolocationHighAccuracy = geolocationHighAccuracy;
 			thGeolocation.config({
-				enableHighAccuracy: geolocationHighAccuracy
+				enableHighAccuracy: geolocationHighAccuracy, 
+				fake: {
+					longitude: 33.2, 
+					latitude: 42.7
+				}
 			});
 		});
 		
@@ -387,6 +390,17 @@ require([
 					$scope.$apply();
 				}
 			}
+		}
+	})
+	.factory('llConfig', function(thGeolocation) {
+		return function(config) {
+			if(thGeolocation.position !== undefined && thGeolocation.position.coords !== undefined) {
+				config.ll     = thGeolocation.position.coords.latitude + ',' + thGeolocation.position.coords.longitude;
+				config.llAcc  = thGeolocation.position.coords.accuracy;
+				config.alt    = thGeolocation.position.coords.altitude;
+				config.altAcc = thGeolocation.position.coords.altitudeAccuracy;
+			}
+			return config;
 		}
 	});
 	
