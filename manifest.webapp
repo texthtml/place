@@ -1,7 +1,7 @@
 {
 	"name": "Place",
-	"description": "Foursquare client.",
-	"version": "201304102321", 
+	"description": "Simple Foursquare client",
+	"version": "v1.0", 
 
 	"launch_path": "/",
 
@@ -14,11 +14,5 @@
 		"128": "/icon.png"
 	},
 
-	"default_locale": "en", 
-
-	"type": "privileged", 
-
-	"permissions" : {
-		"systemXHR" : {}
-	}
+	"default_locale": "en"
 }
