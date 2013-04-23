@@ -57,10 +57,12 @@
 					<li>
 						<label>
 							<input type="checkbox" ng:model="geolocationEnabled">
-							<span>Enable geolocation</span>
+							<span>Auto geolocation</span>
 						</label>
+					</li>
+					<li>
 						<label>
-							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy && geolocationEnabled">
+							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy">
 							<span>High Accuracy</span>
 						</label>
 					</li>
@@ -91,7 +93,7 @@
 					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh">Refresh</span></button>
 					<button th:screen="#search"><span class="icon icon-search">Search</span></button>
 				</menu>
-				<h1>Foursquare</h1>
+				<h1>Who & Where</h1>
 			</header>
 			
 			<div role="main">
@@ -123,16 +125,22 @@
 			</div>
 		</section>
 		
-		<section role="region" ng:controller="FoursquareSearch" id="search" data-viewport="right">
+		<section role="region" ng:controller="FoursquareSearch" id="search" th:screen-activate="initSearch()" data-viewport="right">
 			<header>
 				<button th:screen="$home"><span class="icon icon-back">Back</span></button>
-				<h1>Foursquare</h1>
+				<menu type="toolbar">
+					<button ng:click="findMe()" ng:show="geolocationSupported" ng:class="{locating:locating}"><span class="icon icon-gps">Find me</span></button>
+				</menu>
+				<h1>Search</h1>
 			</header>
 			
 			<div role="main">
 				<form>
-					<p>
+					<p ng:show="!located && !locating">
 						<input type="search" ng:model="place" ng:model-delay placeholder="Where are you?"/>
+					</p>
+					<p ng:show="located || locating">
+						<input type="text" disabled ng:model="position" placeholder="looking for you…"/>
 					</p>
 					<p>
 						<input type="search" ng:model="query" ng:model-delay placeholder="What are you looking for?"/>
@@ -141,9 +149,10 @@
 				
 				<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
 				
-				<div ng:show="query && place" data-type="list">
-					<p ng-show="!loading && !geocode">Cannot find {{ place }}</p>
-					<p ng-show="!loading && geocode && !venues.length">no results for {{ query }} near {{ geocode.displayName }}</p>
+				<div ng:show="(place.length > 2 || located)" data-type="list">
+					<p ng-show="!loading && !geocode && !located">Cannot find {{ place }}</p>
+					<p ng-show="!loading && located && !venues.length">no results for {{ query }} near you</p>
+					<p ng-show="!loading && geocode && !located && !venues.length">no results for {{ query }} near {{ geocode.displayName }}</p>
 					
 					<ul ng-show="venues.length">
 						<li ng:repeat="venue in venues">

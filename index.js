@@ -262,10 +262,64 @@ require([
 		};
 	})
 	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig) {
-		$scope.venues = [];
-		$scope.geocode = {};
-		$scope.loading = false;
+		$scope.venues   = [];
+		$scope.geocode  = {};
+		$scope.loading  = false;
+		$scope.locating = false;
+		$scope.located  = false;
+		$scope.position = '';
+		$scope.place    = '';
+		$scope.query    = '';
 		$scope.geolocationSupported = thGeolocation.supported;
+		
+		var last_request_id = 0;
+		$scope.findMe = function(force) {
+			if(($scope.locating === false && $scope.located === false) || force) {
+				$scope.locating = true;
+				$scope.located  = false;
+				$scope.position = '';
+				last_request_id++;
+				thGeolocation.getCurrentPosition(
+					function(current_request) {
+						return function(position) {
+							if($scope.locating && last_request_id === current_request) {
+								console.log('located');
+								$scope.located  = true;
+								$scope.locating = false;
+								$scope.position = 'We know where you are!';
+							}
+							if($scope.$$phase === null) {
+								$scope.$apply();
+							}
+						};
+					} (last_request_id), 
+					function(current_request) {
+						return function(error) {
+							if($scope.locating && last_request_id === current_request) {
+								$scope.position = error.message;
+							}
+							$scope.locating = false;
+							$scope.located  = false;
+							$scope.position = '';
+						}
+					} (last_request_id)
+				);
+				if($scope.$$phase === null) {
+					$scope.$apply();
+				}
+			}
+			else {
+				$scope.locating = false;
+				$scope.located  = false;
+			}
+		};
+		
+		$scope.initSearch = function() {
+			console.log(localStorage.geolocationEnabled);
+			if(localStorage.geolocationEnabled === 'true') {
+				$scope.findMe(true);
+			}
+		};
 		
 		var search_venues = function() {
 			var request = 0;
@@ -274,19 +328,22 @@ require([
 				if(request !== 0 && arguments[0] === arguments[1]) return;
 				var request_id = ++request;
 				
-				if($scope.query !== undefined && $scope.query.length > 2) {
+				if($scope.place.length > 2 || $scope.located) {
 					$scope.loading = true;
-					thFoursquare.api.venues.search(llConfig({
+					var config = $scope.located ? llConfig({
+						query: $scope.query
+					}) : {
 						query: $scope.query, 
 						near: $scope.place
-					}), function(response) {
+					};
+					thFoursquare.api.venues.search(config, function(response) {
 						if(request !== request_id) return;
 						
 						$scope.loading = false;
 						$scope.venues = [];
 						[].push.apply($scope.venues, response.data.venues);
-						$scope.geocode = response.data.geocode.feature;
-					}, function() {
+						$scope.geocode = response.data.geocode ? response.data.geocode.feature : undefined;
+					}, function(error) {
 						if(request !== request_id) return;
 						
 						$scope.venues = [];
@@ -302,6 +359,7 @@ require([
 		
 		$scope.$watch('query', search_venues);
 		$scope.$watch('place', search_venues);
+		$scope.$watch('located', search_venues);
 	})
 	.controller('FoursquareVenue', function FoursquareVenue($scope, $timeout, thFoursquare) {
 		$scope.loading = false;
@@ -323,16 +381,8 @@ require([
 	.controller('FoursquareSettings', function FoursquareSettings($scope, thFoursquare, thGeolocation) {
 		
 		$scope.geolocationSupported    = thGeolocation.supported;
-		$scope.geolocationEnabled      = localStorage.geolocationEnabled      !== 'false';
-		$scope.geolocationHighAccuracy = localStorage.geolocationHighAccuracy !== 'false';
-		
-		thGeolocation.config({
-			enableHighAccuracy: $scope.geolocationHighAccuracy, 
-			fake: {
-				longitude: 33.2, 
-				latitude: 42.7
-			}
-		});
+		$scope.geolocationEnabled      = localStorage.geolocationEnabled      === 'true';
+		$scope.geolocationHighAccuracy = localStorage.geolocationHighAccuracy === 'true';
 		
 		$scope.$watch('geolocationEnabled', function(geolocationEnabled, oldValue) {
 			localStorage.geolocationEnabled = geolocationEnabled;
@@ -347,11 +397,7 @@ require([
 		$scope.$watch('geolocationHighAccuracy', function(geolocationHighAccuracy) {
 			localStorage.geolocationHighAccuracy = geolocationHighAccuracy;
 			thGeolocation.config({
-				enableHighAccuracy: geolocationHighAccuracy, 
-				fake: {
-					longitude: 33.2, 
-					latitude: 42.7
-				}
+				enableHighAccuracy: geolocationHighAccuracy
 			});
 		});
 		

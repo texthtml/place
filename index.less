@@ -12,6 +12,29 @@ html, body {
 	font: 10px/1em "MozTT", Sans-serif;
 }
 
+section[role="region"] {
+	& > header:first-child > a[aria-disabled="true"], 
+	& > header:first-child > button[disabled] {
+		opacity: 0.5;
+	}
+
+	& > header:first-child .icon.icon-search {
+		background-image: url("images/icons/search.png");
+	}
+
+	& > header:first-child .icon.icon-refresh {
+		background-image: url("images/icons/refresh.png");
+	}
+
+	& > header:first-child .icon.icon-gps {
+		background-image: url("images/icons/gps.png");
+	}
+
+	&[data-type=sidebar] [role="main"] {
+		background: none;
+	}
+}
+
 ul.categories {
 	float: left;
 	
@@ -31,16 +54,42 @@ ul.categories {
 	}
 }
 
-#home [role=main] > p {
-	text-align: center;
-	
-	input[type=image] {
-		height: 3em;
+#home {
+	[role=main] > p {
+		text-align: center;
+		
+		input[type=image] {
+			height: 3em;
+		}
+	}
+
+	[th\:screen="$home"] {
+		display: none;
 	}
 }
 
-#home [th\:screen="$home"] {
-	display: none;
+#search {
+	form p {
+		margin: 0;
+		&:last-child {
+			margin-top: 1rem;
+		}
+	}
+	
+	button.locating .icon.icon-gps {
+		transition: transform 0.2s;
+		animation: rotate 5s linear 0s infinite normal;
+		transform: rotate(0deg);
+	}
+
+	@keyframes rotate {
+		from {
+			transform: rotate(0deg);
+		}
+		to { 
+			transform: rotate(360deg);
+		}
+	}
 }
 
 #settings {
@@ -54,34 +103,15 @@ ul.categories {
 			display: none;
 		}
 	}
-}
+	
+	label:not([for]) input + span {
+		left: 3rem;
+		line-height: 2rem;
+	}
 
-section[role="region"] > header:first-child > a[aria-disabled="true"], 
-section[role="region"] > header:first-child > button[disabled] {
-	opacity: 0.5;
-}
-
-section[role="region"] > header:first-child .icon.icon-search {
-	background-image: url("images/icons/search.png");
-}
-
-section[role="region"] > header:first-child .icon.icon-refresh {
-	background-image: url("images/icons/refresh.png");
-}
-
-section[role="region"][data-type=sidebar] [role="main"] {
-	background: none;
-}
-
-
-
-#settings label:not([for]) input + span {
-	left: 3rem;
-	line-height: 2rem;
-}
-
-#settings button {
-	text-align: center;
+	button {
+		text-align: center;
+	}
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {

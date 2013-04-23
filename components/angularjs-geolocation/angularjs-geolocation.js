@@ -6,20 +6,26 @@ angular.module('thGeolocation', [])
 			Geolocation = {
 				supported: 'geolocation' in navigator, 
 				watching: false, 
+				waiting: false, 
 				config: function(newConfig) {
-					geolocationConfig = newConfig || {};
+					geolocationConfig = angular.extend(geolocationConfig, newConfig || {});
 					if(Geolocation.watching) {
 						Geolocation.watchPosition();
 					}
 				}, 
-				stopWatching: function() {
+				stopWatching: function(clearPosition) {
 					navigator.geolocation.clearWatch(watchID);
 					Geolocation.watching = false;
 					fakeID++;
+					
+					if(clearPosition) {
+						delete Geolocation.position;
+					}
+					delete Geolocation.error;
 				}
 			}, 
 			getPosition = function(watching) {
-				return function() {
+				return function(success, failure) {
 					var 
 						options = angular.extend({}, geolocationConfig), 
 						fct = navigator.geolocation[watching ? 'watchPosition' : 'getCurrentPosition'].bind(navigator.geolocation);
@@ -29,6 +35,10 @@ angular.module('thGeolocation', [])
 					}
 					
 					delete Geolocation.error;
+					
+					if(Geolocation.position === undefined) {
+						Geolocation.waiting = true;
+					}
 					
 					if(options.fake !== undefined) {
 						if(typeof options.fake !== 'function') {
@@ -45,7 +55,7 @@ angular.module('thGeolocation', [])
 						var fake = options.fake;
 						fake.stopped = (function(id) {
 							return function() {
-								return id === fakeID;
+								return watching && id !== fakeID;
 							}
 						}) (fakeID);
 						fct = function(success, failure, options) {
@@ -72,6 +82,8 @@ angular.module('thGeolocation', [])
 					
 					watchID = fct(
 						function GeolocationWatchSuccess(response) {
+							Geolocation.waiting = false;
+							
 							Geolocation.position = {
 								coords: {}, 
 								timestamp: response.timestamp
@@ -79,6 +91,7 @@ angular.module('thGeolocation', [])
 							for(var i in response.coords) {
 								Geolocation.position.coords[i] = response.coords[i];
 							}
+							success && success(Geolocation.position);
 							
 							if($rootScope.$$phase === null) {
 								$rootScope.$apply();
@@ -88,6 +101,8 @@ angular.module('thGeolocation', [])
 							Geolocation.position.watching = false;
 							Geolocation.position = undefined;
 							Geolocation.error = error;
+							
+							failure && failure(Geolocation.error);
 							
 							if($rootScope.$$phase === null) {
 								$rootScope.$apply();
