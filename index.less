@@ -1,0 +1,150 @@
+@import "components/angularjs-webapp/angularjs-webapp.css";
+@import "components/gaia-ui-building-blocks/stable/headers.css";
+@import "components/gaia-ui-building-blocks/stable/input_areas.css";
+@import "components/gaia-ui-building-blocks/stable/buttons.css";
+@import "components/gaia-ui-building-blocks/stable/switches.css";
+@import "components/gaia-ui-building-blocks/unstable/lists.css";
+@import "components/gaia-ui-building-blocks/unstable/progress_activity.css";
+@import "components/photoswipe/release/3.0.3/photoswipe.css";
+@import "drawer.css";
+
+html, body {
+	font: 10px/1em "MozTT", Sans-serif;
+}
+
+section[role="region"] {
+	& > header:first-child > a[aria-disabled="true"], 
+	& > header:first-child > button[disabled] {
+		opacity: 0.5;
+	}
+
+	& > header:first-child .icon.icon-search {
+		background-image: url("images/icons/search.png");
+	}
+
+	& > header:first-child .icon.icon-refresh {
+		background-image: url("images/icons/refresh.png");
+	}
+
+	& > header:first-child .icon.icon-gps {
+		background-image: url("images/icons/gps.png");
+	}
+
+	&[data-type=sidebar] [role="main"] {
+		background: none;
+	}
+}
+	
+[role="main"] p {
+	font-size: 1.6rem;
+	line-height: 2rem;
+	margin: 0.5rem 1rem;
+}
+
+ul.categories {
+	float: left;
+	
+	li {
+		display: inline-block;
+		list-style: none;
+		margin-right: 3px;
+	}
+}
+
+#checkin ul.categories + h2 {
+	margin: 10px 0;
+	
+	& a {
+		line-height: 34px;
+		display: block;
+	}
+}
+
+#home {
+	[role=main] {
+		width: ~"calc(100% - 2rem)";
+		& > p {
+		text-align: center;
+		
+		input[type=image] {
+				height: 3em;
+			}
+		}
+	}
+
+	[th\:screen="$home"] {
+		display: none;
+	}
+}
+
+#search {
+	form p {
+		margin: 0;
+		&:last-child {
+			margin-top: 1rem;
+		}
+	}
+	
+	button.locating .icon.icon-gps {
+		transition: transform 0.2s;
+		animation: rotate 5s linear 0s infinite normal;
+		transform: rotate(0deg);
+	}
+
+	@keyframes rotate {
+		from {
+			transform: rotate(0deg);
+		}
+		to { 
+			transform: rotate(360deg);
+		}
+	}
+	
+	.askingForLocationHint {
+		label, button {
+			text-decoration: underline;
+			color: rgb(0, 0, 238);
+			border: 0;
+			display: inline;
+			background: none;
+			height: auto;
+			width: auto;
+			padding: 0;
+			margin: 0;
+			vertical-align: bottom;
+			font: inherit;
+		}
+	}
+	
+	ul aside img {
+		width: 40px;
+		height: 40px;
+		margin-top: 10px;
+	}
+}
+
+#settings {
+	z-index: 0;
+	
+	&.active + #home {
+		[th\:screen="$home"] {
+			display: block;
+		}
+		[th\:screen="#settings"] {
+			display: none;
+		}
+	}
+	
+	label:not([for]) input + span {
+		left: 3rem;
+		line-height: 2rem;
+	}
+
+	button {
+		text-align: center;
+	}
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none;
+}

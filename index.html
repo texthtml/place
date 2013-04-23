@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html th:app>
+	<head>
+		<meta charset="utf-8" />
+		
+		
+		<title>Place</title>
+		
+		
+		<meta name="viewport" content="width=device-width">
+		
+		<script data-main="index.js" src="components/requirejs/require.js"></script>
+		<link rel="stylesheet" type="text/css" href="index.css"></link>
+	</head>
+	<body ng:controller="FoursquareApp" role="application">
+		
+		
+		<section role="region" ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
+			<header>
+				<h1>Settings</h1>
+			</header>
+			
+			<nav>
+				<progress class="pack-activity" value="0" max="100" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
+				<h2 ng:show="settings.twitter">Twitter options</h2>
+				<ul ng:show="settings.twitter">
+					<li>
+						<label>
+							<input type="checkbox" ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
+							<span>Send badges</span>
+						</label>
+					</li>
+					<li>
+						<label>
+							<input type="checkbox" ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
+							<span>Send mayorships</span>
+						</label>
+					</li>
+				</ul>
+				<h2 ng:show="settings.facebook">Facebook options</h2>
+				<ul ng:show="settings.facebook">
+					<li>
+						<label>
+							<input type="checkbox" ng:model="settings.sendBadgesToFacebook" ng:disabled="!settings.facebook"/>
+							<span>Send badges</span>
+						</label>
+					</li>
+					<li>
+						<label>
+							<input type="checkbox" ng:model="settings.sendMayorshipsToFacebook" ng:disabled="!settings.facebook"/>
+							<span>Send mayorships</span>
+						</label>
+					</li>
+				</ul>
+				<h2 ng:show="geolocationSupported">Geolocation</h2>
+				<ul ng:show="geolocationSupported">
+					<li>
+						<label>
+							<input type="checkbox" ng:model="geolocationEnabled">
+							<span>Auto geolocation</span>
+						</label>
+					</li>
+					<li>
+						<label>
+							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy">
+							<span>High Accuracy</span>
+						</label>
+					</li>
+				</ul>
+				<h2 ng:show="fsq.logged">Account</h2>
+				<ul ng:show="fsq.logged">
+					<li>
+						<button class="danger" ng:click="fsq.logout()" th:screen="$home">log out</button>
+					</li>
+				</ul>
+				<h2>Contact</h2>
+				<ul>
+					<li>
+						<a href="mailto:mathieu@rochette.cc">Send an e-mail</a>
+					</li>
+					<li>
+						<a target="_blank" href="http://texthtml.net/trac/projects/webapp-place">Visit the website</a>
+					</li>
+				</ul>
+			</nav>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
+			<header>
+				<button th:screen="#settings"><span class="icon icon-menu">Settings</span></button>
+				<button th:screen="$home"><span class="icon icon-menu">Settings</span></button>
+				<menu type="toolbar">
+					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh">Refresh</span></button>
+					<button th:screen="#search"><span class="icon icon-search">Search</span></button>
+				</menu>
+				<h1>Who & Where</h1>
+			</header>
+			
+			<div role="main">
+				<progress ng:show="loading" value="0" max="100" class="pack-activity"></progress>
+				
+				<th:fsq-login ng:show="!thFsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
+				
+				<p ng:show="loading">Loading recent checkins…</p>
+				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
+				<div ng:cloak data-type="list">
+					<ul ng:show="checkins.length">
+						<li ng:repeat="checkin in checkins">
+							<a th:screen="#checkin" th:screen-model="checkin">
+								<aside class="pack-end">
+									<img th:fsq-photo="checkin.user.photo" th:fsq-photo-size="cap60" />
+								</aside>
+								<p>
+									<strong>{{ checkin.user.firstName }}</strong> at {{ checkin.venue.name }}
+								</p>
+								<p>
+									<date>{{ checkin.createdAt*1000 | date }}</date>
+								</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareSearch" id="search" th:screen-activate="initSearch()" data-viewport="right">
+			<header>
+				<button th:screen="$home"><span class="icon icon-back">Back</span></button>
+				<menu type="toolbar">
+					<button ng:click="findMe()" ng:show="geolocationSupported" ng:class="{locating:locating}"><span class="icon icon-gps">Find me</span></button>
+				</menu>
+				<h1>Search</h1>
+			</header>
+			
+			<div role="main">
+				<form>
+					<p ng:show="!located && !locating">
+						<input id="placeInput" type="search" ng:model="place" ng:model-delay placeholder="Where are you?"/>
+					</p>
+					<p ng:show="located || locating">
+						<input type="text" disabled ng:model="position" placeholder="I'm looking for you…"/>
+					</p>
+					<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[locating]"></progress>
+					<p>
+						<input type="search" ng:model="query" ng:model-delay placeholder="What are you looking for?"/>
+					</p>
+				</form>
+				
+				<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
+				
+				<p ng:show="!loading && !locating && !located && !place.length && query" class="askingForLocationHint">
+					Where am I suppose to look? <label for="placeInput">Please give me a hint.</label>
+				</p>
+				<p ng:show="!loading && !locating && !located && !place.length && query && geolocationSupported" class="askingForLocationHint">
+					Or do you want me to <button ng:click="findMe()">look for you?</button>
+				</p>
+				
+				<div ng:show="(place.length || located)" data-type="list">
+					<p ng-show="!loading && !venues.length && !located && !geocode">I don't know where <em>{{ place }}</em> is.</p>
+					<p ng-show="!loading && !venues.length && !located && geocode">I couldn't find any <em>{{ query }}</em> near <em>{{ geocode.displayName }}.</em></p>
+					<p ng-show="!loading && !venues.length && located">I couldn't find any <em>{{ query }}</em> near you.</p>
+					
+					<ul ng-show="venues.length">
+						<li ng:repeat="venue in venues">
+							<a th:screen="#venue" th:screen-model="venue">
+								<aside class="pack-start">
+									<img th:fsq-photo="venue.categories[0].icon" th:fsq-photo-size="bg_44"/>
+								</aside>
+								<p>{{ venue.name }}</p>
+								<p>{{ venue.categories[0].name }}</p>
+							</a>
+						</li>
+					<ul>
+				</div>
+			</div>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareCheckin" id="checkin" th:model="checkin" data-viewport="right">
+			<header>
+				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<h1>{{ checkin.user.firstName || 'Someone' }} at {{ checkin.venue.name }}</h1>
+			</header>
+			
+			<div role="main">
+				<progress ng:show="loading || checkingin" class="pack-activity" value="0" max="100"></progress>
+				<ul ng:show="checkin.venue.categories.length" class="categories">
+					<li ng:repeat="category in checkin.venue.categories">
+						<img th:fsq-photo="category.icon" th:fsq-photo-size="bg_32" alt="{{ category.name }}" title="{{ category.name }}"/>
+					</li>
+				</ul>
+				<h2><a th:screen="#venue" th:screen-model="checkin.venue">{{ checkin.venue.name }}</a></h2>
+				
+				<button ng:show="checkin.id && !checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})">Like</button>
+				<button ng:show="checkin.id && checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})">Unlike</button>
+				<p ng:show="checkin.likes.count">❤ {{ checkin.likes.summary }} like this</p>
+				
+				<p role="status" ng:show="loading">
+					<span ng:show="">Loading comments & photos…</span>
+				</p>
+				<div data-type="list" ng:show="checkin.shout || checkin.comments.count">
+					<ul>
+						<li ng:show="checkin.shout">
+							<aside class="pack-end">
+								<img th:fsq-photo="checkin.user.photo" th:fsq-photo-size="cap60" />
+							</aside>
+							<p>
+								{{ checkin.shout }}
+							</p>
+							<p>
+								<em>{{ checkin.user.firstName }}</em> - {{ checkin.createdAt*1000 | date }}
+								<progress ng:show="checkingin" class="pack-activity" value="0" max="100"></progress>
+							</p>
+						</li>
+						<li ng:repeat="comment in checkin.comments.items">
+							<aside class="pack-end">
+								<img th:fsq-photo="comment.user.photo" th:fsq-photo-size="cap60" />
+							</aside>
+							<p>
+								{{ comment.text }}
+							</p>
+							<p>
+								<em>{{ comment.user.firstName }}</em> - {{ comment.createdAt*1000 | date }}
+								<progress ng:show="!comment.id" class="pack-activity" value="0" max="100"></progress>
+							</p>
+						</li>
+					</ul>
+				</div>
+				<form ng:show="checkin.id" ng:submit="postComment()">
+					<p>
+						<input type="text" ng:model="new_comment" required ng:disabled="posting"/>
+						<button type="submit" ng:disabled="posting">Post comment</button>
+					</p>
+				</form>
+				<form ng:show="!checkin.id" ng:submit="checkIn()">
+					<p>
+						<input type="text" ng:model="new_shout" ng:disabled="checkingin" placeholder="What are you doing?"/>
+						<button type="submit" ng:disabled="checkingin" class="recommend">Check in!</button>
+					</p>
+				</form>
+				
+				<div data-type="list" ng:show="checkin.photos.count">
+					<ul gallery>
+						<li ng:repeat="photo in checkin.photos.items">
+							<aside>
+								<a th:fsq-photo="photo"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
+							</aside>
+							<p>
+								{{ photo.user.firstName }}
+							</p>
+							<p>
+								<date>{{ photo.createdAt*1000 | date }}</date>
+							</p>
+						</li>
+					</ul>
+				</div>
+				<progress  ng:style="{true:{}, false: {visibility: 'hidden'}}[uploading]" value="0" max="100" class="pack-activity"></progress>
+				<form ng:show="checkin.id && canUploadPhoto" ng:submit="uploadPhoto()">
+					<p>
+						<input type="file" model="photo" required accept="image/*"/>
+						<button type="submit" ng:class="{recommend: !checkin.photos.count}" ng:disabled="uploading">Save photo</button>
+					</p>
+				</form>
+			</div>
+		</section>
+		
+		<section role="region" ng:controller="FoursquareVenue" id="venue" th:model="venue" data-viewport="right">
+			<header>
+				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<menu type="toolbar">
+					<button ng:disabled="!me" th:screen="#checkin" th:screen-model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
+				</menu>
+				<h1>{{ venue.name }}</h1>
+			</header>
+			
+			<div role="main">
+				<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
+				<p ng:show="loading">loading photos…</p>
+				<p ng:show="!loading && !venue.photos.count">no photo</p>
+				
+				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
+					<header>{{ group.name }}</header>
+					<ul gallery>
+						<li ng:repeat="photo in group.items">
+							<aside>
+								<a th:fsq-photo="photo" th:fsq-photo-size="cap480"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
+							</aside>
+							<p>
+								{{ photo.user.firstName }}
+							</p>
+							<p>
+								<date>{{ photo.createdAt*1000 | date }}</date>
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
