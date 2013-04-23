@@ -99,9 +99,7 @@
 			<div role="main">
 				<progress ng:show="loading" value="0" max="100" class="pack-activity"></progress>
 				
-				<p>
-					<th:fsq-login ng:show="!thFsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
-				</p>
+				<th:fsq-login ng:show="!thFsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
 				
 				<p ng:show="loading">Loading recent checkins…</p>
 				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
@@ -137,11 +135,12 @@
 			<div role="main">
 				<form>
 					<p ng:show="!located && !locating">
-						<input type="search" ng:model="place" ng:model-delay placeholder="Where are you?"/>
+						<input id="placeInput" type="search" ng:model="place" ng:model-delay placeholder="Where are you?"/>
 					</p>
 					<p ng:show="located || locating">
-						<input type="text" disabled ng:model="position" placeholder="looking for you…"/>
+						<input type="text" disabled ng:model="position" placeholder="I'm looking for you…"/>
 					</p>
+					<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[locating]"></progress>
 					<p>
 						<input type="search" ng:model="query" ng:model-delay placeholder="What are you looking for?"/>
 					</p>
@@ -149,14 +148,27 @@
 				
 				<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
 				
-				<div ng:show="(place.length > 2 || located)" data-type="list">
-					<p ng-show="!loading && !geocode && !located">Cannot find {{ place }}</p>
-					<p ng-show="!loading && located && !venues.length">no results for {{ query }} near you</p>
-					<p ng-show="!loading && geocode && !located && !venues.length">no results for {{ query }} near {{ geocode.displayName }}</p>
+				<p ng:show="!loading && !locating && !located && !place.length && query" class="askingForLocationHint">
+					Where am I suppose to look? <label for="placeInput">Please give me a hint.</label>
+				</p>
+				<p ng:show="!loading && !locating && !located && !place.length && query && geolocationSupported" class="askingForLocationHint">
+					Or do you want me to <button ng:click="findMe()">look for you?</button>
+				</p>
+				
+				<div ng:show="(place.length || located)" data-type="list">
+					<p ng-show="!loading && !venues.length && !located && !geocode">I don't know where <em>{{ place }}</em> is.</p>
+					<p ng-show="!loading && !venues.length && !located && geocode">I couldn't find any <em>{{ query }}</em> near <em>{{ geocode.displayName }}.</em></p>
+					<p ng-show="!loading && !venues.length && located">I couldn't find any <em>{{ query }}</em> near you.</p>
 					
 					<ul ng-show="venues.length">
 						<li ng:repeat="venue in venues">
-							<a th:screen="#venue" th:screen-model="venue"><p>{{ venue.name }}</p></a>
+							<a th:screen="#venue" th:screen-model="venue">
+								<aside class="pack-start">
+									<img th:fsq-photo="venue.categories[0].icon" th:fsq-photo-size="bg_44"/>
+								</aside>
+								<p>{{ venue.name }}</p>
+								<p>{{ venue.categories[0].name }}</p>
+							</a>
 						</li>
 					<ul>
 				</div>

@@ -13,13 +13,15 @@ section[role="region"]>header:first-child .icon.icon-search{background-image:url
 section[role="region"]>header:first-child .icon.icon-refresh{background-image:url("images/icons/refresh.png");}
 section[role="region"]>header:first-child .icon.icon-gps{background-image:url("images/icons/gps.png");}
 section[role="region"][data-type=sidebar] [role="main"]{background:none;}
+[role="main"] p{font-size:1.6rem;line-height:2rem;margin:0.5rem 1rem;}
 ul.categories{float:left;}ul.categories li{display:inline-block;list-style:none;margin-right:3px;}
 #checkin ul.categories+h2{margin:10px 0;}#checkin ul.categories+h2 a{line-height:34px;display:block;}
-#home [role=main]>p{text-align:center;}#home [role=main]>p input[type=image]{height:3em;}
+#home [role=main]{width:calc(100% - 2rem);}#home [role=main]>p{text-align:center;}#home [role=main]>p input[type=image]{height:3em;}
 #home [th\:screen="$home"]{display:none;}
 #search form p{margin:0;}#search form p:last-child{margin-top:1rem;}
 #search button.locating .icon.icon-gps{transition:transform 0.2s;animation:rotate 5s linear 0s infinite normal;transform:rotate(0deg);}
-@keyframes rotate{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
+@keyframes rotate{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}#search .askingForLocationHint label,#search .askingForLocationHint button{text-decoration:underline;color:#0000ee;border:0;display:inline;background:none;height:auto;width:auto;padding:0;margin:0;vertical-align:bottom;font:inherit;}
+#search ul aside img{width:40px;height:40px;margin-top:10px;}
 #settings{z-index:0;}#settings.active+#home [th\:screen="$home"]{display:block;}
 #settings.active+#home [th\:screen="#settings"]{display:none;}
 #settings label:not([for]) input+span{left:3rem;line-height:2rem;}

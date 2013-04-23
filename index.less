@@ -34,6 +34,12 @@ section[role="region"] {
 		background: none;
 	}
 }
+	
+[role="main"] p {
+	font-size: 1.6rem;
+	line-height: 2rem;
+	margin: 0.5rem 1rem;
+}
 
 ul.categories {
 	float: left;
@@ -55,11 +61,14 @@ ul.categories {
 }
 
 #home {
-	[role=main] > p {
+	[role=main] {
+		width: ~"calc(100% - 2rem)";
+		& > p {
 		text-align: center;
 		
 		input[type=image] {
-			height: 3em;
+				height: 3em;
+			}
 		}
 	}
 
@@ -89,6 +98,28 @@ ul.categories {
 		to { 
 			transform: rotate(360deg);
 		}
+	}
+	
+	.askingForLocationHint {
+		label, button {
+			text-decoration: underline;
+			color: rgb(0, 0, 238);
+			border: 0;
+			display: inline;
+			background: none;
+			height: auto;
+			width: auto;
+			padding: 0;
+			margin: 0;
+			vertical-align: bottom;
+			font: inherit;
+		}
+	}
+	
+	ul aside img {
+		width: 40px;
+		height: 40px;
+		margin-top: 10px;
 	}
 }
 

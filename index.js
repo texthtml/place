@@ -263,7 +263,7 @@ require([
 	})
 	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig) {
 		$scope.venues   = [];
-		$scope.geocode  = {};
+		$scope.geocode  = '';
 		$scope.loading  = false;
 		$scope.locating = false;
 		$scope.located  = false;
@@ -283,10 +283,9 @@ require([
 					function(current_request) {
 						return function(position) {
 							if($scope.locating && last_request_id === current_request) {
-								console.log('located');
 								$scope.located  = true;
 								$scope.locating = false;
-								$scope.position = 'We know where you are!';
+								$scope.position = 'I know where you are!';
 							}
 							if($scope.$$phase === null) {
 								$scope.$apply();
@@ -315,7 +314,6 @@ require([
 		};
 		
 		$scope.initSearch = function() {
-			console.log(localStorage.geolocationEnabled);
 			if(localStorage.geolocationEnabled === 'true') {
 				$scope.findMe(true);
 			}
