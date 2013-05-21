@@ -1,7 +1,7 @@
 {
 	"name": "Place",
 	"description": "Simple Foursquare client",
-	"version": "v1.0", 
+	"version": "v1.0.2", 
 
 	"launch_path": "/",
 
@@ -14,5 +14,11 @@
 		"128": "/icon.png"
 	},
 
-	"default_locale": "en"
+	"default_locale": "en", 
+	
+	"permissions": {
+		"geolocation": {
+			"description": "required to give quickly locate you"
+		}
+	}
 }
