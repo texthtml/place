@@ -283,7 +283,7 @@
 				
 				<div data-type="list" ng:show="!loading && venue.tips.count" ng:repeat="group in venue.tips.groups">
 					<header>{{ group.name }}</header>
-					<ul gallery>
+					<ul>
 						<li ng:repeat="tip in group.items" ng:class="{expanded: tip.expanded}" ng:click="tip.expanded = !tip.expanded">
 							<aside>
 								<img th:fsq-photo="tip.user.photo" th:fsq-photo-size="cap100" />
