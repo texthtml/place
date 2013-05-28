@@ -267,7 +267,7 @@
 			<header>
 				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
 				<menu type="toolbar">
-					<button ng:disabled="!me" th:screen="#checkin" th:screen-model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
+					<button th:screen="#checkin" th:screen-model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>

@@ -220,13 +220,31 @@ require([
 				shout: $scope.new_shout
 			};
 			
-			thFoursquare.api.checkins.add(llConfig(checkin), function(response) {
-				$scope.checkingin = false;
-				$scope.new_shout = '';
-				$scope.checkin = response.data.checkin;
-				$scope.replaceState();
-				$rootScope.$broadcast('fsq:new-checkin', response.data);
-			});
+			var checkIn = function() {
+				thFoursquare.api.checkins.add(llConfig(checkin), function(response) {
+					$scope.checkingin = false;
+					$scope.new_shout = '';
+					$scope.checkin = response.data.checkin;
+					$scope.replaceState();
+					$rootScope.$broadcast('fsq:new-checkin', response.data);
+				});
+			};
+			
+			if($scope.checkin.user === undefined) {
+				thFoursquare.login().then(function() {
+					$scope.checkin.user = thFoursquare.api.users();
+					checkIn();
+				}, function() {
+					$scope.checkingin = false;
+					delete $scope.checkin.shout;
+					delete $scope.checkin.createdAt;
+					
+					alert('checkin failed');
+				});
+			}
+			else {
+				checkIn();
+			}
 		};
 		
 		$scope.setFile = function(element) {
