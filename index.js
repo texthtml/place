@@ -34,9 +34,9 @@ require([
 			'dev' : {
 				clientId: '1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 
 				clientSecret: 'QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 
-				redirectURI: 'http://place.webapp.192.168.1.66.xip.io/?authenticated'
+				redirectURI: 'http://place.webapp.192.168.1.70.xip.io/?authenticated'
 			}
-		}[location.hostname === 'place.webapp.192.168.1.66.xip.io' ? 'dev' : 'prod'];
+		}[location.hostname === 'place.texthtml.net' ? 'prod' : 'dev'];
 		thFoursquareProvider.config(config);
 	})
 	.directive('model', function() {
