@@ -299,7 +299,6 @@
 				</div>
 				
 				<p ng:show="loading">loading photos…</p>
-				<p ng:show="!loading && !venue.photos.count">no photo</p>
 				
 				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
 					<header>{{ group.name }}</header>
@@ -316,6 +315,18 @@
 							</p>
 						</li>
 					</ul>
+				</div>
+				
+				
+				<div class="stats">
+					<dl>
+						<dt>Total Visitors</dt>
+						<dd>{{ venue.stats.usersCount }}</dd>
+					</dl>
+					<dl>
+						<dt>Total Check-ins</dt>
+						<dd>{{ venue.stats.checkinsCount }}</dd>
+					</dl>
 				</div>
 			</div>
 		</section>

@@ -20,6 +20,8 @@ ul.categories{float:left;}ul.categories li{display:inline-block;list-style:none;
 #venue [role=main]>header{padding:0.5rem 1.5rem;clear:both;overflow:auto;}#venue [role=main]>header img,#venue [role=main]>header h1{float:left;}
 #venue [role=main]>header h1,#venue [role=main]>header h2{float:right;margin-left:0.5rem;width:calc(100% - 44px - 0.5rem);line-height:1.6rem;margin-top:0;padding:0;}
 #venue [role=main]>header h2{float:right;boder-bottom:0.1rem solid #e6e6e6;}
+#venue [role=main] .stats{padding:0.5rem 1.5rem;}#venue [role=main] .stats dt{float:left;font-weight:bolder;color:gray;padding-right:0.3em;}
+#venue [role=main] .stats dd{padding-left:0.5rem;font-weight:bolder;}
 #home [role=main]{width:calc(100% - 2rem);}#home [role=main]>p{text-align:center;}
 #home [role=main]>form{margin-top:5rem;text-align:center;}#home [role=main]>form input[type=image]{height:4rem;}
 #home [th\:screen="$home"]{display:none;}
