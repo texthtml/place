@@ -8,6 +8,7 @@
 @import "components/photoswipe/release/3.0.3/photoswipe.css";
 @import "drawer.css";
 html,body{font:10px/1em "MozTT",Sans-serif;}
+[data-type="list"] li.expanded{min-height:6rem;height:auto;}[data-type="list"] li.expanded p{white-space:normal;}
 section[role="region"]>header:first-child>a[aria-disabled="true"],section[role="region"]>header:first-child>button[disabled]{opacity:0.5;}
 section[role="region"]>header:first-child .icon.icon-search{background-image:url("images/icons/search.png");}
 section[role="region"]>header:first-child .icon.icon-refresh{background-image:url("images/icons/refresh.png");}

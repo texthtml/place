@@ -274,6 +274,24 @@
 			
 			<div role="main">
 				<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
+				
+				<div data-type="list" ng:show="!loading && venue.tips.count" ng:repeat="group in venue.tips.groups">
+					<header>{{ group.name }}</header>
+					<ul gallery>
+						<li ng:repeat="tip in group.items" ng:class="{expanded: tip.expanded}" ng:click="tip.expanded = !tip.expanded">
+							<aside>
+								<img th:fsq-photo="tip.user.photo" th:fsq-photo-size="cap100" />
+							</aside>
+							<p>
+								{{ tip.text }}
+							</p>
+							<p>
+								{{ tip.user.firstname }} {{ tip.user.lastname }}<date>{{ tip.createdAt*1000 | date }}</date>
+							</p>
+						</li>
+					</ul>
+				</div>
+				
 				<p ng:show="loading">loading photos…</p>
 				<p ng:show="!loading && !venue.photos.count">no photo</p>
 				

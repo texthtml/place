@@ -12,6 +12,15 @@ html, body {
 	font: 10px/1em "MozTT", Sans-serif;
 }
 
+[data-type="list"] li.expanded {
+	p {
+		white-space: normal;
+	}
+	
+	min-height: 6rem;
+	height: auto;
+}
+
 section[role="region"] {
 	& > header:first-child > a[aria-disabled="true"], 
 	& > header:first-child > button[disabled] {
