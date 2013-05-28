@@ -1,5 +1,5 @@
 angular.module('thWebApp', [])
-	.factory('thHistory', function($window, $rootScope) {
+	.factory('thHistory', ['$window', '$rootScope', function($window, $rootScope) {
 		var position = $window.history.state === null ? 0 : $window.history.state.position || 0;
 		
 		var History = {
@@ -39,8 +39,8 @@ angular.module('thWebApp', [])
 		})
 		
 		return History;
-	})
-	.factory('thRouter', function($parse) {
+	}])
+	.factory('thRouter', ['$parse', function($parse) {
 		
 		var routes = [];
 		
@@ -97,8 +97,9 @@ angular.module('thWebApp', [])
 		};
 		
 		return Router;
-	})
-	.factory('thScreenManager', function($rootScope, $window, thHistory, thRouter) {
+	}])
+	.factory('thScreenManager', ['$rootScope', '$window', 'thHistory', 'thRouter', 
+	function($rootScope, $window, thHistory, thRouter) {
 		var current;
 		var currentClass;
 		var homeSelector;
@@ -209,27 +210,27 @@ angular.module('thWebApp', [])
 		};
 		
 		return ScreenManager;
-	})
-	.directive('thApp', function webappFactory(thScreenManager) {
+	}])
+	.directive('thApp', ['thScreenManager', function webappFactory(thScreenManager) {
 		return {
-			controller: function($attrs) {
+			controller: ['$attrs', function($attrs) {
 				thScreenManager.config(
 					$attrs.thScreenClass || 'active', 
 					$attrs.thFirstScreen || '#home'
 				);
 				thScreenManager.start();
-			}
+			}]
 		};
-	})
-	.directive('thRoute', function routeFactory(thRouter) {
+	}])
+	.directive('thRoute', ['thRouter', function routeFactory(thRouter) {
 		return {
 			restrict: 'A', 
 			link: function routeAttributeLink(scope, element, attrs) {
 				thRouter.register(element);
 			}
 		};
-	})
-	.directive('thModel', function screenFactory(thHistory, thScreenManager) {
+	}])
+	.directive('thModel', ['thHistory', 'thScreenManager', function screenFactory(thHistory, thScreenManager) {
 		return {
 			restrict: 'A', 
 			link: function modelReplaceStateFactory(scope, element, attrs) {
@@ -239,8 +240,8 @@ angular.module('thWebApp', [])
 				}
 			}
 		};
-	})
-	.directive('thScreen', function screenFactory(thScreenManager) {
+	}])
+	.directive('thScreen', ['thScreenManager', function screenFactory(thScreenManager) {
 		return {
 			restrict: 'A', 
 			link: function screenAttributeLink(scope, element, attrs) {
@@ -256,4 +257,4 @@ angular.module('thWebApp', [])
 				}
 			}
 		};
-	});
+	}]);

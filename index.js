@@ -23,8 +23,7 @@ require([
 	'components/angularjs-webapp/angularjs-webapp', 
 	'components/angularjs-geolocation/angularjs-geolocation'
 ], function(angular, PhotoSwipe) {
-	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation'])
-	.config(function FoursquareAppRun(thFoursquareProvider) {
+	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation'], ['thFoursquareProvider', function FoursquareAppRun(thFoursquareProvider) {
 		var config = {
 			'prod' : {
 				clientId: 'R4MYVBHKVMCNR0MAB5YTWRIJ5Z2ROR3R2DWRDTC1EOQCKEEI', 
@@ -38,7 +37,7 @@ require([
 			}
 		}[location.hostname === 'place.texthtml.net' ? 'prod' : 'dev'];
 		thFoursquareProvider.config(config);
-	})
+	}])
 	.directive('model', function() {
 		return {
 			restrict: 'A', 
@@ -61,7 +60,7 @@ require([
 			}
 		};
 	})
-	.directive('ngModelDelay', function($timeout) {
+	.directive('ngModelDelay', ['$timeout', function($timeout) {
 		return {
 			restrict: 'A',
 			require: 'ngModel',
@@ -83,7 +82,7 @@ require([
 				});
 			}
 		};
-	})
+	}])
 	.directive('gallery', function() {
 		return {
 			link: function(scope, elm, attr) {
@@ -130,7 +129,7 @@ require([
 			}
 		}
 	})
-	.controller('FoursquareApp', function FoursquareApp($scope, thFoursquare) {
+	.controller('FoursquareApp', ['$scope', 'thFoursquare', function FoursquareApp($scope, thFoursquare) {
 		$scope.fsq = thFoursquare;
 		
 		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
@@ -143,8 +142,8 @@ require([
 				delete $scope.me;
 			}
 		});
-	})
-	.controller('FoursquareHome', function FoursquareHome($scope, thFoursquare) {
+	}])
+	.controller('FoursquareHome', ['$scope', 'thFoursquare', function FoursquareHome($scope, thFoursquare) {
 		$scope.loading = false;
 		
 		$scope.refresh = function refreshRecentCheckin() {
@@ -164,8 +163,9 @@ require([
 		});
 		
 		$scope.$on('fsq:new-checkin', $scope.refresh);
-	})
-	.controller('FoursquareCheckin', function FoursquareCheckin($scope, $rootScope, llConfig, thFoursquare) {
+	}])
+	.controller('FoursquareCheckin', ['$scope', '$rootScope', 'llConfig', 'thFoursquare', 
+	function FoursquareCheckin($scope, $rootScope, llConfig, thFoursquare) {
 		$scope.loading = false;
 		$scope.$watch('checkin', function() {
 			if(
@@ -278,8 +278,9 @@ require([
 				$scope.replaceState();
 			});
 		};
-	})
-	.controller('FoursquareSearch', function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig) {
+	}])
+	.controller('FoursquareSearch', ['$scope', '$timeout', 'thFoursquare', 'thGeolocation', 'llConfig', 
+	function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig) {
 		$scope.venues   = [];
 		$scope.geocode  = '';
 		$scope.loading  = false;
@@ -376,8 +377,9 @@ require([
 		$scope.$watch('query', search_venues);
 		$scope.$watch('place', search_venues);
 		$scope.$watch('located', search_venues);
-	})
-	.controller('FoursquareVenue', function FoursquareVenue($scope, $timeout, thFoursquare) {
+	}])
+	.controller('FoursquareVenue', ['$scope', '$timeout', 'thFoursquare', 
+	function FoursquareVenue($scope, $timeout, thFoursquare) {
 		$scope.loading = false;
 		
 		$scope.$watch('venue', function(venue) {
@@ -393,8 +395,9 @@ require([
 				$scope.loading = false;
 			}
 		}, true)
-	})
-	.controller('FoursquareSettings', function FoursquareSettings($scope, thFoursquare, thGeolocation) {
+	}])
+	.controller('FoursquareSettings', ['$scope', 'thFoursquare', 'thGeolocation', 
+	function FoursquareSettings($scope, thFoursquare, thGeolocation) {
 		
 		$scope.geolocationSupported    = thGeolocation.supported;
 		$scope.geolocationEnabled      = localStorage.geolocationEnabled      === 'true';
@@ -453,8 +456,8 @@ require([
 				}
 			}
 		}
-	})
-	.factory('llConfig', function(thGeolocation) {
+	}])
+	.factory('llConfig', ['thGeolocation', function(thGeolocation) {
 		return function(config) {
 			if(thGeolocation.position !== undefined && thGeolocation.position.coords !== undefined) {
 				config.ll     = thGeolocation.position.coords.latitude + ',' + thGeolocation.position.coords.longitude;
@@ -464,7 +467,7 @@ require([
 			}
 			return config;
 		}
-	});
+	}]);
 	
 	angular.bootstrap(document.documentElement, ['FoursquareApp'])
 });
