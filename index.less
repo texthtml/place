@@ -69,6 +69,33 @@ ul.categories {
 	}
 }
 
+#venue [role=main] {
+	& > header {
+		padding: 0.5rem 1.5rem;
+		
+		img, h1 {
+			float: left;
+		}
+		
+		h1, h2 {
+			float: right;
+			margin-left: 0.5rem;
+			width: ~"calc(100% - 44px - 0.5rem)";
+			line-height: 1.6rem;
+			margin-top: 0;
+			padding: 0;
+		}
+		
+		h2 {
+			float: right;
+			boder-bottom: 0.1rem solid rgb(230, 230, 230);
+		}
+		
+		clear: both;
+		overflow: auto;
+	}
+}
+
 #home {
 	[role=main] {
 		width: ~"calc(100% - 2rem)";

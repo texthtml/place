@@ -275,6 +275,12 @@
 			<div role="main">
 				<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
 				
+				<header>
+					<img th:fsq-photo="venue.categories[0].icon" th:fsq-photo-size="bg_44"/> 
+					<h1>{{ venue.name }}</h1>
+					<h2>{{ venue.categories[0].name }}</h2>
+				</header>
+				
 				<div data-type="list" ng:show="!loading && venue.tips.count" ng:repeat="group in venue.tips.groups">
 					<header>{{ group.name }}</header>
 					<ul gallery>
