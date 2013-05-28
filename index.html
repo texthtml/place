@@ -101,7 +101,9 @@
 				
 				<th:fsq-login ng:show="!thFsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
 				
-				<p ng:show="loading">Loading recent checkins…</p>
+				<p ng:show="false">Loading…</p>
+				
+				<p ng:cloak ng:show="loading">Loading recent checkins…</p>
 				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
 				<div ng:cloak data-type="list">
 					<ul ng:show="checkins.length">
