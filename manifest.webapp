@@ -1,5 +1,5 @@
 {
-	"name": "Place",
+	"name": "Foursquare",
 	"description": "Simple Foursquare client",
 	"version": "v1.0.2", 
 
@@ -11,14 +11,26 @@
 	},
 
 	"icons": {
-		"128": "/icon.png"
+		"128": "/images/place.png"
 	},
 
 	"default_locale": "en", 
 	
+	"type": "privileged", 
+	
 	"permissions": {
 		"geolocation": {
 			"description": "required to give quickly locate you"
+		}, 
+		"systemXHR": {
+			"description": "required to upload photos"
 		}
-	}
+	}, 
+	
+	"redirects": [
+		{
+			"from": "http://place.texthtml.net/?authenticated", 
+			"to" : "/index.min.html?authenticated"
+		}
+	]
 }

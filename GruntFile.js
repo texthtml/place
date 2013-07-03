@@ -1,5 +1,21 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
+		compress: {
+			package: {
+				options: {
+					archive: 'place.zip'
+				}, 
+				files: [
+					{src: 'icon.png'}, 
+					{src: 'images/**'}, 
+					{src: 'index.min.css'}, 
+					{src: 'index.min.js'}, 
+					{src: 'js/vendor/min/**'}, 
+					{src: 'index.min.html'}, 
+					{src: 'manifest.webapp'}
+				]
+			}
+		}, 
 		requirejs: {
 			compile: {
 				options: {
@@ -34,6 +50,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-css');
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
+	grunt.loadNpmTasks('grunt-contrib-compress');
 	
 	grunt.registerTask('index.min', function() {
 		grunt.file.copy('index.html', 'index.min.html', {
@@ -43,5 +60,5 @@ module.exports = function(grunt) {
 		});
 	});
 	
-	grunt.registerTask('default', ['cssjoin', 'cssmin', 'index.min', 'requirejs']);
+	grunt.registerTask('default', ['cssjoin', 'cssmin', 'index.min', 'requirejs', 'compress']);
 };
