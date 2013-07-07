@@ -1,0 +1,36 @@
+{
+	"name": "Foursquare",
+	"description": "Simple Foursquare client",
+	"version": "v2.0.0", 
+
+	"launch_path": "/build/index.html",
+
+	"developer": {
+		"name": "Mathieu Rochette",
+		"url": "https://mathieu.rochette.cc/"
+	},
+
+	"icons": {
+		"128": "/build/images/place.png"
+	},
+
+	"default_locale": "en", 
+	
+	"type": "privileged", 
+	
+	"permissions": {
+		"geolocation": {
+			"description": "required to give quickly locate you"
+		}, 
+		"systemXHR": {
+			"description": "required to upload photos"
+		}
+	}, 
+	
+	"redirects": [
+		{
+			"from": "http://place.texthtml.net/?authenticated", 
+			"to" : "/build/authenticated.html"
+		}
+	]
+}

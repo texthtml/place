@@ -1,24 +1,6 @@
-requirejs.config({
-	shim: {
-		'components/angular/angular': {
-			exports: 'angular'
-		}, 
-		'components/angularjs-foursquare/angularjs-foursquare':   ['components/angular/angular'], 
-		'components/angularjs-webapp/angularjs-webapp':           ['components/angular/angular'], 
-		'components/angularjs-geolocation/angularjs-geolocation': ['components/angular/angular'], 
-		'components/photoswipe/release/3.0.3/lib/klass.min': {
-			exports: 'klass'
-		}, 
-		'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min': {
-			deps: ['components/photoswipe/release/3.0.3/lib/klass.min'], 
-			exports: 'Code.PhotoSwipe'
-		}
-	}
-});
-
 require([
 	'components/angular/angular', 
-	'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
+	// 'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
 	'components/angularjs-foursquare/angularjs-foursquare', 
 	'components/angularjs-webapp/angularjs-webapp', 
 	'components/angularjs-geolocation/angularjs-geolocation'
@@ -85,49 +67,50 @@ require([
 	}])
 	.directive('gallery', function() {
 		return {
-			link: function(scope, elm, attr) {
+			link: function(scope, elm) {
 				elm.bind('click', function(event) {
-					var 
-						elements = elm[0].querySelectorAll('li'), 
-						start_position = -1, 
-						images = [].map.call(elements, function(el, i) {
-							if(start_position === -1) {
-								var e = event.target;
+					event.preventDefault();
+				// 	var 
+				// 		elements = elm[0].querySelectorAll('li'), 
+				// 		start_position = -1, 
+				// 		images = [].map.call(elements, function(el, i) {
+				// 			if(start_position === -1) {
+				// 				var e = event.target;
 								
-								do {
-									e = e.parentNode;
-								} while(e !== null && e !== el);
-								if(e === el) {
-									start_position = i;
-								}
-							}
+				// 				do {
+				// 					e = e.parentNode;
+				// 				} while(e !== null && e !== el);
+				// 				if(e === el) {
+				// 					start_position = i;
+				// 				}
+				// 			}
 							
-							return {
-								url: el.querySelector('a').href
-							};
-						}), 
-						options = {
-							getImageSource: function(obj){
-								return obj.url;
-							},
-							getImageCaption: function(obj){
-								return obj.caption;
-							}, 
-							loop: false, 
-							captionAndToolbarHide: true
-						}, 
-						gallery = PhotoSwipe.createInstance(images, options);
+				// 			return {
+				// 				url: el.querySelector('a').href
+				// 			};
+				// 		}), 
+				// 		options = {
+				// 			getImageSource: function(obj){
+				// 				return obj.url;
+				// 			},
+				// 			getImageCaption: function(obj){
+				// 				return obj.caption;
+				// 			}, 
+				// 			loop: false, 
+				// 			captionAndToolbarHide: true
+				// 		}, 
+				// 		gallery = PhotoSwipe.createInstance(images, options);
 					
-					if(start_position !== -1) {
-						gallery.toggleToolbar = function() {
-							gallery.hide();
-							gallery.dispose();
-						};
-						gallery.show(start_position);
-					}
+				// 	if(start_position !== -1) {
+				// 		gallery.toggleToolbar = function() {
+				// 			gallery.hide();
+				// 			gallery.dispose();
+				// 		};
+				// 		gallery.show(start_position);
+				// 	}
 				});
 			}
-		}
+		};
 	})
 	.controller('FoursquareApp', ['$scope', 'thFoursquare', function FoursquareApp($scope, thFoursquare) {
 		$scope.fsq = thFoursquare;

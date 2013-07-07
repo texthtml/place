@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html th:app>
+<html th:app ng:csp ng-csp="">
 	<head>
 		<meta charset="utf-8" />
-		
+		<meta http-equiv="Content-Security-Policy" content=""default-src *; script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline'"">
 		
 		<title>Place</title>
 		
 		
 		<meta name="viewport" content="width=device-width">
 		
-		<script data-main="index.min.js" src="components/requirejs/require.js"></script>
-		<link rel="stylesheet" type="text/css" href="index.min.css"></link>
+		<script data-main="index.js" src="/components/requirejs/require.js"></script>
+		<link rel="stylesheet" type="text/css" href="index.css"></link>
 	</head>
 	<body ng:controller="FoursquareApp" role="application">
 		

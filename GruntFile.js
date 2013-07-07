@@ -1,43 +1,74 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
+		ffospush: {
+			app: {
+				appId: 'place.texthtml.net', 
+				zip: 'place.zip'
+			}
+		}, 
 		compress: {
 			package: {
 				options: {
 					archive: 'place.zip'
 				}, 
 				files: [
-					{src: 'icon.png'}, 
-					{src: 'images/**'}, 
-					{src: 'index.min.css'}, 
-					{src: 'index.min.js'}, 
-					{src: 'js/vendor/min/**'}, 
-					{src: 'index.min.html'}, 
-					{src: 'manifest.webapp'}
+					{src: 'components/requirejs/require.js'}, 
+					{src: 'components/gaia-ui-building-blocks/stable/header/images/**'}, 
+					{src: 'components/gaia-ui-building-blocks/stable/input_areas/images/**'}, 
+					{src: 'components/gaia-ui-building-blocks/stable/buttons/images/**'}, 
+					{src: 'components/gaia-ui-building-blocks/stable/switches/images/**'}, 
+					{src: 'components/gaia-ui-building-blocks/unstable/lists/images/**'}, 
+					{src: 'components/gaia-ui-building-blocks/unstable/progress_activity/images/**'}, 
+					{src: 'components/gaia-ui-building-blocks/unstable/drawer/images/**'}, 
+					{src: 'components/angularjs-foursquare/images/connect-*'}, 
+					{src: 'app/**'}
 				]
 			}
 		}, 
 		requirejs: {
 			compile: {
 				options: {
-					baseUrl: '.', 
-					name: 'index.js', 
-					mainConfigFile: 'index.js', 
-					out: 'index.min.js', 
-					optimize: 'uglify2'
+					almond: true, 
+					wrap: true, 
+					baseUrl: 'src', 
+					name: 'index', 
+					mainConfigFile: 'src/index.js', 
+					out: 'build/index.js', 
+					optimize: 'uglify2', 
+					preserveLicenseComments: false, 
+					generateSourceMaps: true
+					
 				}
+			}
+		}, 
+		copy: {
+			main: {
+				options: {
+					processContent: function(content, file) {
+						if(file === 'src/manifest.webapp') {
+							return content.replace(/\/src\//g, '/build/');
+						}
+						return content;
+					}
+				}, 
+				files: [
+					{expand: true, cwd: 'src', src: 'index.html', dest: 'build/'}, 
+					{expand: true, cwd: 'src', src: 'images/**', dest: 'build/'}, 
+					{expand: true, cwd: 'src', src: 'manifest.webapp', dest: 'build/'}
+				]
 			}
 		}, 
 		cssjoin: {
 			join: {
 				files: {
-					'index.all.css' : 'index.css'
+					'temp/index.css' : 'src/index.css'
 				}
 			}
 		}, 
 		cssmin: {
 			compress: {
 				files: {
-					'index.min.css' : 'index.all.css'
+					'build/index.css' : 'temp/index.css'
 				}, 
 				options: {
 					root: '.'
@@ -48,17 +79,13 @@ module.exports = function(grunt) {
 	
 	grunt.loadNpmTasks('grunt-cssjoin'); // use r.js or publish my own grunt task before commit
 	grunt.loadNpmTasks('grunt-css');
-	grunt.loadNpmTasks('grunt-contrib-htmlmin');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-compress');
+	grunt.loadNpmTasks('grunt-firefoxos');
 	
-	grunt.registerTask('index.min', function() {
-		grunt.file.copy('index.html', 'index.min.html', {
-			process: function(html) {
-				return html.replace(/index.([a-z]{1,3})/g, 'index.min.$1');
-			}
-		});
-	});
-	
-	grunt.registerTask('default', ['cssjoin', 'cssmin', 'index.min', 'requirejs', 'compress']);
+	grunt.registerTask('build',   ['cssjoin', 'cssmin', 'copy', 'requirejs']);
+	grunt.registerTask('package', ['build', 'compress']);
+	grunt.registerTask('push',    ['package', 'ffospush']);
+	grunt.registerTask('default', ['push']);
 };
