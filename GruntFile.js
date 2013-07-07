@@ -49,7 +49,8 @@ module.exports = function(grunt) {
 							return content.replace(/\/src\//g, '/build/');
 						}
 						return content;
-					}
+					}, 
+					processContentExclude: ['**/images/**']
 				}, 
 				files: [
 					{expand: true, cwd: 'src', src: 'index.html', dest: 'build/'}, 
