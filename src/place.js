@@ -4,18 +4,21 @@ require([
 	'components/angularjs-foursquare/angularjs-foursquare', 
 	'components/angularjs-webapp/angularjs-webapp', 
 	'components/angularjs-geolocation/angularjs-geolocation'
-], function(angular, PhotoSwipe) {
+], function(angular/*, PhotoSwipe*/) {
+	'use strict';
+	
 	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation'], ['thFoursquareProvider', function FoursquareAppRun(thFoursquareProvider) {
-		var config = {
+		var redirectURI = 'http://' + location.host + '/authenticated.html', 
+			config = {
 			'prod' : {
 				clientId: 'R4MYVBHKVMCNR0MAB5YTWRIJ5Z2ROR3R2DWRDTC1EOQCKEEI', 
 				clientSecret: 'GZ2TX5NP0VX3EV1CSACE455GKE3CYLHMIHHJKDUX0LWGJSCN', 
-				redirectURI: 'http://place.texthtml.net/?authenticated'
+				redirectURI: redirectURI
 			}, 
 			'dev' : {
 				clientId: '1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 
 				clientSecret: 'QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 
-				redirectURI: 'http://place.webapp.192.168.1.70.xip.io/?authenticated'
+				redirectURI: redirectURI
 			}
 		}[location.hostname === 'place.texthtml.net' ? 'prod' : 'dev'];
 		thFoursquareProvider.config(config);
@@ -28,7 +31,7 @@ require([
 					return;
 				}
 				
-				elem.bind('change', function(event) {
+				elem.bind('change', function() {
 					scope.$apply(function() {
 						scope[attrs.model] = attrs.multiple ? elem[0].files : elem[0].files[0];
 					});
@@ -47,7 +50,9 @@ require([
 			restrict: 'A',
 			require: 'ngModel',
 			link: function(scope, elm, attr, ngModelCtrl) {
-				if (attr.type === 'radio' || attr.type === 'checkbox') return;
+				if(attr.type === 'radio' || attr.type === 'checkbox') {
+					return;
+				}
 
 				elm.unbind('input').unbind('keydown').unbind('change');
 				
@@ -136,7 +141,7 @@ require([
 				[].push.apply($scope.checkins, response.data);
 				$scope.loading = false;
 			});
-		}
+		};
 		
 		$scope.$watch('fsq.logged', function(logged) {
 			$scope.checkins = [];
@@ -171,7 +176,7 @@ require([
 				$scope.checkin.comments = {
 					count: 1, 
 					items: []
-				}
+				};
 			}
 			var comment = {
 				text: $scope.new_comment, 
@@ -239,7 +244,7 @@ require([
 		$scope.uploading = false;
 		$scope.uploadPhoto = function() {
 			$scope.uploading = true;
-			var photo = new FormData;
+			var photo = new FormData();
 			photo.append('photo', $scope.photo);
 			
 			$scope.photo = '';
@@ -282,8 +287,8 @@ require([
 				$scope.position = '';
 				last_request_id++;
 				thGeolocation.getCurrentPosition(
-					function(current_request) {
-						return function(position) {
+					(function(current_request) {
+						return function(/* position */) {
 							if($scope.locating && last_request_id === current_request) {
 								$scope.located  = true;
 								$scope.locating = false;
@@ -293,8 +298,8 @@ require([
 								$scope.$apply();
 							}
 						};
-					} (last_request_id), 
-					function(current_request) {
+					}) (last_request_id), 
+					(function(current_request) {
 						return function(error) {
 							if($scope.locating && last_request_id === current_request) {
 								$scope.position = error.message;
@@ -302,8 +307,8 @@ require([
 							$scope.locating = false;
 							$scope.located  = false;
 							$scope.position = '';
-						}
-					} (last_request_id)
+						};
+					}) (last_request_id)
 				);
 				if($scope.$$phase === null) {
 					$scope.$apply();
@@ -316,16 +321,19 @@ require([
 		};
 		
 		$scope.initSearch = function() {
-			if(localStorage.geolocationEnabled === 'true') {
+			if(localStorage.getItem('geolocationEnabled') === 'true') {
 				$scope.findMe(true);
 			}
 		};
 		
-		var search_venues = function() {
+		var search_venues = (function() {
 			var request = 0;
 			
 			return function() {
-				if(request !== 0 && arguments[0] === arguments[1]) return;
+				if(request !== 0 && arguments[0] === arguments[1]) {
+					return;
+				}
+				
 				var request_id = ++request;
 				
 				if($scope.place.length > 2 || $scope.located) {
@@ -337,14 +345,18 @@ require([
 						near: $scope.place
 					};
 					thFoursquare.api.venues.search(config, function(response) {
-						if(request !== request_id) return;
+						if(request !== request_id) {
+							return;
+						}
 						
 						$scope.loading = false;
 						$scope.venues = [];
 						[].push.apply($scope.venues, response.data.venues);
 						$scope.geocode = response.data.geocode ? response.data.geocode.feature : undefined;
-					}, function(error) {
-						if(request !== request_id) return;
+					}, function(/* error */) {
+						if(request !== request_id) {
+							return;
+						}
 						
 						$scope.venues = [];
 						$scope.geocode = false;
@@ -355,7 +367,7 @@ require([
 					$scope.loading = false;
 				}
 			};
-		} ();
+		}) ();
 		
 		$scope.$watch('query', search_venues);
 		$scope.$watch('place', search_venues);
@@ -377,17 +389,17 @@ require([
 			else {
 				$scope.loading = false;
 			}
-		}, true)
+		}, true);
 	}])
 	.controller('FoursquareSettings', ['$scope', 'thFoursquare', 'thGeolocation', 
 	function FoursquareSettings($scope, thFoursquare, thGeolocation) {
 		
 		$scope.geolocationSupported    = thGeolocation.supported;
-		$scope.geolocationEnabled      = localStorage.geolocationEnabled      === 'true';
-		$scope.geolocationHighAccuracy = localStorage.geolocationHighAccuracy === 'true';
+		$scope.geolocationEnabled      = localStorage.getItem('geolocationEnabled')      === 'true';
+		$scope.geolocationHighAccuracy = localStorage.getItem('geolocationHighAccuracy') === 'true';
 		
-		$scope.$watch('geolocationEnabled', function(geolocationEnabled, oldValue) {
-			localStorage.geolocationEnabled = geolocationEnabled;
+		$scope.$watch('geolocationEnabled', function(geolocationEnabled) {
+			localStorage.setItem('geolocationEnabled', geolocationEnabled);
 			if(!geolocationEnabled) {
 				thGeolocation.stopWatching();
 			}
@@ -397,7 +409,7 @@ require([
 		});
 		
 		$scope.$watch('geolocationHighAccuracy', function(geolocationHighAccuracy) {
-			localStorage.geolocationHighAccuracy = geolocationHighAccuracy;
+			localStorage.setItem('geolocationHighAccuracy', geolocationHighAccuracy);
 			thGeolocation.config({
 				enableHighAccuracy: geolocationHighAccuracy
 			});
@@ -424,13 +436,13 @@ require([
 		
 		[	'sendBadgesToTwitter' , 'sendMayorshipsToTwitter', 
 			'sendBadgesToFacebook', 'sendMayorshipsToFacebook', 
-			'receivePings'        , 'receiveCommentPings', 
+			'receivePings'        , 'receiveCommentPings'
 		].forEach(registerSettingHandler);
 		
 		$scope.loadSettings = function() {
 			if(thFoursquare.logged) {
 				$scope.loading = true;
-				$scope.settings = thFoursquare.api.settings.all(function(response) {
+				$scope.settings = thFoursquare.api.settings.all(function(/* response */) {
 					$scope.loading = false;
 				});
 				
@@ -438,7 +450,7 @@ require([
 					$scope.$apply();
 				}
 			}
-		}
+		};
 	}])
 	.factory('llConfig', ['thGeolocation', function(thGeolocation) {
 		return function(config) {
@@ -449,8 +461,8 @@ require([
 				config.altAcc = thGeolocation.position.coords.altitudeAccuracy;
 			}
 			return config;
-		}
+		};
 	}]);
 	
-	angular.bootstrap(document.documentElement, ['FoursquareApp'])
+	angular.bootstrap(document.documentElement, ['FoursquareApp']);
 });
