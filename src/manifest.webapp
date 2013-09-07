@@ -1,7 +1,7 @@
 {
-	"name": "Foursquare",
+	"name": "Place",
 	"description": "Simple Foursquare client",
-	"version": "v2.0.0", 
+	"version": "v1.0.0", 
 
 	"launch_path": "/src/index.html",
 
@@ -11,7 +11,8 @@
 	},
 
 	"icons": {
-		"128": "/src/images/place.png"
+		"60": "/src/images/60x60-place.png", 
+		"128": "/src/images/128x128-place.png"
 	},
 
 	"default_locale": "en", 
@@ -20,7 +21,7 @@
 	
 	"permissions": {
 		"geolocation": {
-			"description": "required to give quickly locate you"
+			"description": "required to quickly locate you"
 		}, 
 		"systemXHR": {
 			"description": "required to upload photos"
@@ -29,7 +30,7 @@
 	
 	"redirects": [
 		{
-			"from": "http://place.texthtml.net/?authenticated", 
+			"from": "http://place.texthtml.net/authenticated.html", 
 			"to" : "/src/authenticated.html"
 		}
 	]

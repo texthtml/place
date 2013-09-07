@@ -1,6 +1,6 @@
 angular.module('thWebApp', [])
 	.factory('thHistory', ['$window', '$rootScope', function($window, $rootScope) {
-		var position = $window.history.state === null ? 0 : $window.history.state.position || 0;
+		var position = $window.history.state === undefined ? 0 : $window.history.state === null ? 0 : $window.history.state.position;
 		
 		var History = {
 			position: function() {
@@ -26,7 +26,7 @@ angular.module('thWebApp', [])
 				$window.history.back();
 			}, 
 			state: function() {
-				return $window.history.state === null ? null : $window.history.state.data;
+				return $window.history.state === undefined ? null : $window.history.state === null ? null : $window.history.state.data;
 			}
 		};
 		

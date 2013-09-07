@@ -1,3 +1,5 @@
 node_modules/
 temp/
-place.zip
+build/place.zip
+build/index.js.map
+build/index.js.src

@@ -51,7 +51,7 @@
 						defaultParams || {}, 
 						FoursquareDefaultParams, 
 						inputParams || {}, 
-						FoursquareDefaultParams.oauth_token === undefined ? FoursquareClientParams : {}
+						FoursquareDefaultParams.oauth_token === null ? FoursquareClientParams : {}
 					);
 				
 				for(var i = 0; i < endpointParams.length; i++) {
@@ -69,7 +69,7 @@
 							params[name] !== undefined && 
 							params[name] !== null && 
 							params[name] !== false && 
-							!isNaN(params[name])
+							!Number.isNaN(params[name])
 						) {
 							data.append(name, params[name]);
 						}
@@ -78,9 +78,10 @@
 				
 				var 
 					resource = isArray ? [] : {}, 
-					q = $http({
+					post = method.toUpperCase() === 'POST', 
+					http_request = {
 						url: FoursquareAPI + url, 
-						params: method.toUpperCase() === 'POST' ? undefined : params, 
+						params: post ? undefined : params, 
 						method: method, 
 						data: data, 
 						headers: angular.extend({
@@ -105,7 +106,8 @@
 							delete response_data.meta.code;
 							return response_data.meta;
 						}
-					});
+					}, 
+					q = $http(http_request);
 				
 				q.then(success, failure);
 				

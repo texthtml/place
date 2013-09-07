@@ -21,6 +21,7 @@ require([
 				redirectURI: redirectURI
 			}
 		}[location.hostname === 'place.texthtml.net' ? 'prod' : 'dev'];
+		
 		thFoursquareProvider.config(config);
 	}])
 	.directive('model', function() {
@@ -193,6 +194,10 @@ require([
 				$scope.posting = false;
 				$scope.new_comment = '';
 				$scope.checkin.comments.items[i] = response.data;
+				
+				if($scope.checkin.comments.count === 0) {
+					$scope.checkin.comments.count = 1;
+				}
 				$scope.replaceState();
 			});
 		};

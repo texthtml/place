@@ -1,11 +1,11 @@
-@import "../components/angularjs-webapp/angularjs-webapp.css";
-@import "../components/gaia-ui-building-blocks/stable/headers.css";
-@import "../components/gaia-ui-building-blocks/stable/input_areas.css";
-@import "../components/gaia-ui-building-blocks/stable/buttons.css";
-@import "../components/gaia-ui-building-blocks/stable/switches.css";
-@import "../components/gaia-ui-building-blocks/unstable/lists.css";
-@import "../components/gaia-ui-building-blocks/unstable/progress_activity.css";
-@import "drawer.css";
+@import '../components/angularjs-webapp/angularjs-webapp.css';
+@import '../components/gaia-ui-building-blocks/stable/headers.css';
+@import '../components/gaia-ui-building-blocks/stable/input_areas.css';
+@import '../components/gaia-ui-building-blocks/stable/buttons.css';
+@import '../components/gaia-ui-building-blocks/stable/switches.css';
+@import '../components/gaia-ui-building-blocks/unstable/lists.css';
+@import '../components/gaia-ui-building-blocks/unstable/progress_activity.css';
+@import 'drawer.css';
 html,body{font:10px/1em "MozTT",Sans-serif;}
 [data-type="list"] li.expanded{min-height:6rem;height:auto;}[data-type="list"] li.expanded p{white-space:normal;}
 section[role="region"]>header:first-child>a[aria-disabled="true"],section[role="region"]>header:first-child>button[disabled]{opacity:0.5;}
@@ -18,7 +18,7 @@ ul.categories{float:left;}ul.categories li{display:inline-block;list-style:none;
 #checkin ul.categories+h2{margin:10px 0;}#checkin ul.categories+h2 a{line-height:34px;display:block;}
 #venue [role=main]>header{padding:0.5rem 1.5rem;clear:both;overflow:auto;}#venue [role=main]>header img,#venue [role=main]>header h1{float:left;}
 #venue [role=main]>header h1,#venue [role=main]>header h2{float:right;margin-left:0.5rem;width:calc(100% - 44px - 0.5rem);line-height:1.6rem;margin-top:0;padding:0;}
-#venue [role=main]>header h2{float:right;boder-bottom:0.1rem solid #e6e6e6;}
+#venue [role=main]>header h2{float:right;border-bottom:0.1rem solid #e6e6e6;}
 #venue [role=main] .stats{padding:0.5rem 1.5rem;}#venue [role=main] .stats dt{float:left;font-weight:bolder;color:gray;padding-right:0.3em;}
 #venue [role=main] .stats dd{padding-left:0.5rem;font-weight:bolder;}
 #home [role=main]{width:calc(100% - 2rem);}#home [role=main]>p{text-align:center;}
