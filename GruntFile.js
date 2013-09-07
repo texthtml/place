@@ -93,7 +93,7 @@ module.exports = function(grunt) {
 				}
 			}
 		}, 
-		cssUrls: {
+		cssurls: {
 			import: {
 				options: {
 					targetDir: 'build', 
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-firefoxos');
 	
-	grunt.registerTask('build',   ['cssUrls', 'cssjoin', 'cssmin', 'copy', 'requirejs']);
+	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'copy', 'requirejs']);
 	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
 	grunt.registerTask('default', ['push']);
