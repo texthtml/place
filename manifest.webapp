@@ -3,7 +3,7 @@
 	"description": "Simple Foursquare client",
 	"version": "v1.0.0", 
 
-	"launch_path": "/src/index.html",
+	"launch_path": "/build/index.html",
 
 	"developer": {
 		"name": "Mathieu Rochette",
@@ -11,8 +11,8 @@
 	},
 
 	"icons": {
-		"60": "/src/images/60x60-place.png", 
-		"128": "/src/images/128x128-place.png"
+		"60": "/build/images/60x60-place.png", 
+		"128": "/build/images/128x128-place.png"
 	},
 
 	"default_locale": "en", 
@@ -31,7 +31,7 @@
 	"redirects": [
 		{
 			"from": "http://place.texthtml.net/authenticated.html", 
-			"to" : "/src/authenticated.html"
+			"to" : "/build/authenticated.html"
 		}
 	]
 }

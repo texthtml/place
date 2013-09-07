@@ -51,6 +51,9 @@ module.exports = function(grunt) {
 						if(file === 'src/manifest.webapp') {
 							return content.replace(/\/src\//g, '/build/');
 						}
+						else if(file === 'manifest.webapp') {
+							return content.replace(/web/g, 'privileged');
+						}
 						else if(file === 'src/index.html') {
 							return content
 								.replace(/.*\/components\/requirejs\/require.js.*\n/g, '')
@@ -67,7 +70,8 @@ module.exports = function(grunt) {
 					{expand: true, cwd: 'src', src: 'index.html', dest: 'build/'}, 
 					{expand: true, cwd: 'src', src: 'authenticated.html', dest: 'build/'}, 
 					{expand: true, cwd: 'src', src: 'images/**', dest: 'build/'}, 
-					{expand: true, cwd: 'src', src: 'manifest.webapp', dest: 'build/'}, 
+					{expand: true, cwd: 'src', src: 'manifest.webapp', dest: '.'}, 
+					{expand: true, cwd: '.', src: 'manifest.webapp', dest: 'build/'}, 
 					{expand: true, cwd: 'temp', src: 'index.css', dest: 'build/'}
 				]
 			}
