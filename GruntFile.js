@@ -123,5 +123,5 @@ module.exports = function(grunt) {
 	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'copy', 'requirejs']);
 	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
-	grunt.registerTask('default', ['push']);
+	grunt.registerTask('default', ['build']);
 };
