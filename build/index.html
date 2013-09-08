@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		
-		<title>Place</title>
+		<title l20n:id="appname"></title>
 		
 		
 		<meta name="viewport" content="width=device-width">
@@ -16,69 +16,69 @@
 		
 		<section role="region" ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
-				<h1>Settings</h1>
+				<h1 l20n:id="settings"></h1>
 			</header>
 			
 			<nav>
 				<progress class="pack-activity" value="0" max="100" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
-				<h2 ng:show="settings.twitter">Twitter options</h2>
+				<h2 ng:show="settings.twitter" l20n:id="twitter_settings"></h2>
 				<ul ng:show="settings.twitter">
 					<li>
 						<label>
 							<input type="checkbox" ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
-							<span>Send badges</span>
+							<span l20n:id="twitter_send_badges"></span>
 						</label>
 					</li>
 					<li>
 						<label>
 							<input type="checkbox" ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
-							<span>Send mayorships</span>
+							<span l20n:id="twitter_send_mayorships"></span>
 						</label>
 					</li>
 				</ul>
-				<h2 ng:show="settings.facebook">Facebook options</h2>
+				<h2 ng:show="settings.facebook" l20n:id="facebook_settings"></h2>
 				<ul ng:show="settings.facebook">
 					<li>
 						<label>
 							<input type="checkbox" ng:model="settings.sendBadgesToFacebook" ng:disabled="!settings.facebook"/>
-							<span>Send badges</span>
+							<span l20n:id="facebook_send_badges"></span>
 						</label>
 					</li>
 					<li>
 						<label>
 							<input type="checkbox" ng:model="settings.sendMayorshipsToFacebook" ng:disabled="!settings.facebook"/>
-							<span>Send mayorships</span>
+							<span l20n:id="facebook_send_mayorships"></span>
 						</label>
 					</li>
 				</ul>
-				<h2 ng:show="geolocationSupported">Geolocation</h2>
+				<h2 ng:show="geolocationSupported" l20n:id="geolocation_settings"></h2>
 				<ul ng:show="geolocationSupported">
 					<li>
 						<label>
 							<input type="checkbox" ng:model="geolocationEnabled">
-							<span>Auto geolocation</span>
+							<span l20n:id="geolocation_auto"></span>
 						</label>
 					</li>
 					<li>
 						<label>
 							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy">
-							<span>High Accuracy</span>
+							<span l20n:id="geolocation_high_accuracy"></span>
 						</label>
 					</li>
 				</ul>
-				<h2 ng:show="fsq.logged">Account</h2>
+				<h2 ng:show="fsq.logged" l20n:id="account_settings"></h2>
 				<ul ng:show="fsq.logged">
 					<li>
-						<button class="danger" ng:click="fsq.logout()" th:screen="$home">log out</button>
+						<button class="danger" ng:click="fsq.logout()" th:screen="$home" l20n:id="log_out"></button>
 					</li>
 				</ul>
-				<h2>Contact</h2>
+				<h2 l20n:id="contact"></h2>
 				<ul>
 					<li>
-						<a href="mailto:mathieu@rochette.cc">Send an e-mail</a>
+						<a href="mailto:mathieu@rochette.cc" l20n:id="contact_email"></a>
 					</li>
 					<li>
-						<a target="_blank" href="http://texthtml.net/trac/projects/webapp-place">Visit the website</a>
+						<a target="_blank" href="http://texthtml.net/trac/projects/webapp-place" l20n:id="contact_website"></a>
 					</li>
 				</ul>
 			</nav>
@@ -86,13 +86,13 @@
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
-				<button th:screen="#settings"><span class="icon icon-menu">Settings</span></button>
-				<button th:screen="$home"><span class="icon icon-menu">Settings</span></button>
+				<button th:screen="#settings"><span class="icon icon-menu" l20n:id="settings"></span></button>
+				<button th:screen="$home"><span class="icon icon-menu" l20n:id="home"></span></button>
 				<menu type="toolbar">
-					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh">Refresh</span></button>
-					<button th:screen="#search"><span class="icon icon-search">Search</span></button>
+					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh" l20n:id="refresh"></span></button>
+					<button th:screen="#search"><span class="icon icon-search" l20n:id="search"></span></button>
 				</menu>
-				<h1>Who & Where</h1>
+				<h1 l20n:id="home_title"></h1>
 			</header>
 			
 			<div role="main">
@@ -100,10 +100,10 @@
 				
 				<th:fsq-login ng:show="!thFsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
 				
-				<p ng:show="false">Loading…</p>
+				<p ng:show="false" l20n:id="loading"></p>
 				
-				<p ng:cloak ng:show="loading">Loading recent checkins…</p>
-				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length">No recent checkin</p>
+				<p ng:cloak ng:show="loading" l20n:id="loading_recent_checkins"></p>
+				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length" l20n:id="no_recent_checkin"></p>
 				<div ng:cloak data-type="list">
 					<ul ng:show="checkins.length">
 						<li ng:repeat="checkin in checkins">
@@ -111,9 +111,7 @@
 								<aside class="pack-end">
 									<img th:fsq-photo="checkin.user.photo" th:fsq-photo-size="cap60" />
 								</aside>
-								<p>
-									<strong>{{ checkin.user.firstName }}</strong> at {{ checkin.venue.name }}
-								</p>
+								<p l20n:id="user_at_venue" l20n:data="{user: checkin.user, venue: checkin.venue}"></p>
 								<p>
 									<date>{{ checkin.createdAt*1000 | date }}</date>
 								</p>
@@ -126,40 +124,41 @@
 		
 		<section role="region" ng:controller="FoursquareSearch" id="search" th:screen-activate="initSearch()" data-viewport="right">
 			<header>
-				<button th:screen="$home"><span class="icon icon-back">Back</span></button>
+				<button th:screen="$home"><span class="icon icon-back" l20n:id="back"></span></button>
 				<menu type="toolbar">
-					<button ng:click="findMe()" ng:show="geolocationSupported" ng:class="{locating:locating}"><span class="icon icon-gps">Find me</span></button>
+					<button ng:click="findMe()" ng:show="geolocationSupported" ng:class="{locating:locating}"><span class="icon icon-gps" l20n:id="find_me"></span></button>
 				</menu>
-				<h1>Search</h1>
+				<h1 l20n:id="search_title"></h1>
 			</header>
 			
 			<div role="main">
 				<form>
 					<p ng:show="!located && !locating">
-						<input id="placeInput" type="search" ng:model="place" ng:model-delay placeholder="Where are you?"/>
+						<input id="placeInput" type="search" ng:model="place" ng:model-delay l20n:id="place_placeholder" l20n:target="placeholder" placeholder/>
 					</p>
 					<p ng:show="located || locating">
-						<input type="text" disabled ng:model="position" placeholder="I'm looking for you…"/>
+						<input type="text" disabled ng:model="position" l20n:id="geolocation_placeholder" l20n:target="placeholder"/>
 					</p>
 					<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[locating]"></progress>
 					<p>
-						<input type="search" ng:model="query" ng:model-delay placeholder="What are you looking for?"/>
+						<input type="search" ng:model="query" ng:model-delay l20n:id="query_placeholder" l20n:target="placeholder"/>
 					</p>
 				</form>
 				
 				<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
 				
 				<p ng:show="!loading && !locating && !located && !place.length && query" class="askingForLocationHint">
-					Where am I suppose to look? <label for="placeInput">Please give me a hint.</label>
+					<span l20n:id="need_location" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></span>
+					<label for="placeInput" l20n:id="need_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></label>
 				</p>
 				<p ng:show="!loading && !locating && !located && !place.length && query && geolocationSupported" class="askingForLocationHint">
-					Or do you want me to <button ng:click="findMe()">look for you?</button>
+					<button ng:click="findMe()" l20n:id="geolocation_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></button>
 				</p>
 				
 				<div ng:show="(place.length || located)" data-type="list">
-					<p ng-show="!loading && !venues.length && !located && !geocode">I don't know where <em>{{ place }}</em> is.</p>
-					<p ng-show="!loading && !venues.length && !located && geocode">I couldn't find any <em>{{ query }}</em> near <em>{{ geocode.displayName }}.</em></p>
-					<p ng-show="!loading && !venues.length && located">I couldn't find any <em>{{ query }}</em> near you.</p>
+					<p ng-show="!loading && !venues.length && !located && !geocode" l20n:id="unknown_location" l20n:data="{place: '<em>'+place+'</em>'}" l20n:target="html"></p>
+					<p ng-show="!loading && !venues.length && !located && geocode" l20n:id="no_result_near_location" l20n:data="{query:'<em>'+query+'</em>', location:geocode}" l20n:target="html"></p>
+					<p ng-show="!loading && !venues.length && located" l20n:id="no_result_near_you" l20n:data="{query:'<em>'+query+'</em>'}" l20n:target="html"></p>
 					
 					<ul ng-show="venues.length">
 						<li ng:repeat="venue in venues">
@@ -178,8 +177,8 @@
 		
 		<section role="region" ng:controller="FoursquareCheckin" id="checkin" th:model="checkin" data-viewport="right">
 			<header>
-				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
-				<h1>{{ checkin.user.firstName || 'Someone' }} at {{ checkin.venue.name }}</h1>
+				<button th:screen="$backOrHome"><span class="icon icon-back" l20n:id="back"></span></button>
+				<h1 l20n:id="user_at_venue" l20n:data="{user:checkin.user, venue:checkin.venue}"></h1>
 			</header>
 			
 			<div role="main">
@@ -191,12 +190,12 @@
 				</ul>
 				<h2><a th:screen="#venue" th:screen-model="checkin.venue">{{ checkin.venue.name }}</a></h2>
 				
-				<button ng:show="checkin.id && !checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})">Like</button>
-				<button ng:show="checkin.id && checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})">Unlike</button>
-				<p ng:show="checkin.likes.count">❤ {{ checkin.likes.summary }} like this</p>
+				<button ng:show="checkin.id && !checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})" l20n:id="like"></button>
+				<button ng:show="checkin.id && checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})" l20n:id="unlike"></button>
+				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes:checkin.likes}"></p>
 				
 				<p role="status" ng:show="loading">
-					<span ng:show="">Loading comments & photos…</span>
+					<span ng:show="" l20n:id="loading_comments_and_photos"></span>
 				</p>
 				<div data-type="list" ng:show="checkin.shout || checkin.comments.count">
 					<ul>
@@ -229,13 +228,13 @@
 				<form ng:show="checkin.id" ng:submit="postComment()">
 					<p>
 						<input type="text" ng:model="new_comment" required ng:disabled="posting"/>
-						<button type="submit" ng:disabled="posting">Post comment</button>
+						<button type="submit" ng:disabled="posting" l20n:id="post_comment"></button>
 					</p>
 				</form>
 				<form ng:show="!checkin.id" ng:submit="checkIn()">
 					<p>
-						<input type="text" ng:model="new_shout" ng:disabled="checkingin" placeholder="What are you doing?"/>
-						<button type="submit" ng:disabled="checkingin" class="recommend">Check in!</button>
+						<input type="text" ng:model="new_shout" ng:disabled="checkingin" l20n:id="shout_placeholder" l20n:target="placeholder"/>
+						<button type="submit" ng:disabled="checkingin" class="recommend" l20n:id="check_in"></button>
 					</p>
 				</form>
 				
@@ -258,7 +257,7 @@
 				<form ng:show="checkin.id && canUploadPhoto" ng:submit="uploadPhoto()">
 					<p>
 						<input type="file" model="photo" required accept="image/*"/>
-						<button type="submit" ng:class="{recommend: !checkin.photos.count}" ng:disabled="uploading">Save photo</button>
+						<button type="submit" ng:class="{recommend: !checkin.photos.count}" ng:disabled="uploading" l20n:id="save_photo"></button>
 					</p>
 				</form>
 			</div>
@@ -266,9 +265,9 @@
 		
 		<section role="region" ng:controller="FoursquareVenue" id="venue" th:model="venue" data-viewport="right">
 			<header>
-				<button th:screen="$backOrHome"><span class="icon icon-back">Back</span></button>
+				<button th:screen="$backOrHome"><span class="icon icon-back" l20n:id="back"></span></button>
 				<menu type="toolbar">
-					<button th:screen="#checkin" th:screen-model="{venue: venue, user: me}"><span class="icon icon-add">Checkin</span></button>
+					<button th:screen="#checkin" th:screen-model="{venue: venue, user: me}"><span class="icon icon-add" l20n:id="checkin"></span></button>
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>
@@ -299,7 +298,7 @@
 					</ul>
 				</div>
 				
-				<p ng:show="loading">loading photos…</p>
+				<p ng:show="loading" l20n:id="loading_photos"></p>
 				
 				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
 					<header>{{ group.name }}</header>
@@ -321,11 +320,11 @@
 				
 				<div class="stats">
 					<dl>
-						<dt>Total Visitors</dt>
+						<dt l20n:id="total_visitors"></dt>
 						<dd>{{ venue.stats.usersCount }}</dd>
 					</dl>
 					<dl>
-						<dt>Total Check-ins</dt>
+						<dt l20n:id="total_checkins"></dt>
 						<dd>{{ venue.stats.checkinsCount }}</dd>
 					</dl>
 				</div>

@@ -21,6 +21,7 @@ module.exports = function(grunt) {
 					{src: 'components/gaia-ui-building-blocks/unstable/drawer/images/**'}, 
 					{src: 'components/angularjs-foursquare/images/connect-*'}, 
 					{src: 'components/angularjs-foursquare/authenticated.js'}, 
+					{src: 'locales/**'}, 
 					{src: 'build/images/**'}, 
 					{src: 'build/index.*'}, 
 					{src: 'build/authenticated.html'}, 

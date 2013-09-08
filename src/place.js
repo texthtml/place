@@ -3,11 +3,12 @@ require([
 	// 'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
 	'components/angularjs-foursquare/angularjs-foursquare', 
 	'components/angularjs-webapp/angularjs-webapp', 
-	'components/angularjs-geolocation/angularjs-geolocation'
+	'components/angularjs-geolocation/angularjs-geolocation', 
+	'components/angularjs-l20n/angularjs-l20n'
 ], function(angular/*, PhotoSwipe*/) {
 	'use strict';
 	
-	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation'], ['thFoursquareProvider', function FoursquareAppRun(thFoursquareProvider) {
+	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation', 'thL20N'], ['thFoursquareProvider', 'thL20NContextProvider', function FoursquareAppRun(thFoursquareProvider, thL20NContextProvider) {
 		var redirectURI = 'http://' + location.host + '/authenticated.html', 
 			config = {
 			'prod' : {
@@ -21,6 +22,19 @@ require([
 				redirectURI: redirectURI
 			}
 		}[location.hostname === 'place.texthtml.net' ? 'prod' : 'dev'];
+		
+		
+		thL20NContextProvider.registerLocales('en', ['en', 'fr']);
+		
+		thL20NContextProvider.linkResource(function(locale) {
+			return '../locales/' + locale + '.lol';
+		});
+		
+		thL20NContextProvider.requestLocales();
+		
+		
+		config.locale = thL20NContextProvider.supportedLocales[0];
+		
 		
 		thFoursquareProvider.config(config);
 	}])
@@ -118,7 +132,7 @@ require([
 			}
 		};
 	})
-	.controller('FoursquareApp', ['$scope', 'thFoursquare', function FoursquareApp($scope, thFoursquare) {
+	.controller('FoursquareApp', ['$scope', 'thFoursquare', 'thL20NContext', function FoursquareApp($scope, thFoursquare, thL20NContext) {
 		$scope.fsq = thFoursquare;
 		
 		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
@@ -130,6 +144,8 @@ require([
 			else {
 				delete $scope.me;
 			}
+			
+			thL20NContext.updateData({me: $scope.me});
 		});
 	}])
 	.controller('FoursquareHome', ['$scope', 'thFoursquare', function FoursquareHome($scope, thFoursquare) {
