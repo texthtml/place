@@ -1,4 +1,10 @@
-angular.module('thWebApp', [])
+define(function(require) {
+	'use strict';
+	
+	
+	var angular = require('components/angular/angular');
+	
+	angular.module('thWebApp', [])
 	.factory('thHistory', ['$window', '$rootScope', function($window, $rootScope) {
 		var position = $window.history.state === undefined ? 0 : $window.history.state === null ? 0 : $window.history.state.position;
 		
@@ -258,3 +264,4 @@ angular.module('thWebApp', [])
 			}
 		};
 	}]);
+});
