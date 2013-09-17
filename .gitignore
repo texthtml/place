@@ -1,5 +1,4 @@
-node_modules/
-temp/
-build/place.zip
-build/index.js.map
-build/index.js.src
+/node_modules/
+/bower_components/
+/build/
+/temp/

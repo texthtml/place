@@ -10,7 +10,7 @@
 		
 		<link rel="stylesheet" type="text/css" href="index.css"/>
 		
-		<script data-main="index.js" src="/components/requirejs/require.js"></script>
+		<script data-main="index.js" src="/bower_components/requirejs/require.js"></script>
 	</head>
 	<body ng:controller="FoursquareApp" role="application">
 		
@@ -25,13 +25,13 @@
 				<h2 ng:show="settings.twitter" l20n:id="twitter_settings"></h2>
 				<ul ng:show="settings.twitter">
 					<li>
-						<label>
+						<label class="pack-checkbox">
 							<input type="checkbox" ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
 							<span l20n:id="twitter_send_badges"></span>
 						</label>
 					</li>
 					<li>
-						<label>
+						<label class="pack-checkbox">
 							<input type="checkbox" ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
 							<span l20n:id="twitter_send_mayorships"></span>
 						</label>
@@ -40,13 +40,13 @@
 				<h2 ng:show="settings.facebook" l20n:id="facebook_settings"></h2>
 				<ul ng:show="settings.facebook">
 					<li>
-						<label>
+						<label class="pack-checkbox">
 							<input type="checkbox" ng:model="settings.sendBadgesToFacebook" ng:disabled="!settings.facebook"/>
 							<span l20n:id="facebook_send_badges"></span>
 						</label>
 					</li>
 					<li>
-						<label>
+						<label class="pack-checkbox">
 							<input type="checkbox" ng:model="settings.sendMayorshipsToFacebook" ng:disabled="!settings.facebook"/>
 							<span l20n:id="facebook_send_mayorships"></span>
 						</label>
@@ -55,13 +55,13 @@
 				<h2 ng:show="geolocationSupported" l20n:id="geolocation_settings"></h2>
 				<ul ng:show="geolocationSupported">
 					<li>
-						<label>
+						<label class="pack-checkbox">
 							<input type="checkbox" ng:model="geolocationEnabled">
 							<span l20n:id="geolocation_auto"></span>
 						</label>
 					</li>
 					<li>
-						<label>
+						<label class="pack-checkbox">
 							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy">
 							<span l20n:id="geolocation_high_accuracy"></span>
 						</label>

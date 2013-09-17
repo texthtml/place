@@ -12,15 +12,15 @@ module.exports = function(grunt) {
 					archive: 'build/place.zip'
 				}, 
 				files: [
-					{src: 'components/gaia-ui-building-blocks/stable/headers/images/**'}, 
-					{src: 'components/gaia-ui-building-blocks/stable/input_areas/images/**'}, 
-					{src: 'components/gaia-ui-building-blocks/stable/buttons/images/**'}, 
-					{src: 'components/gaia-ui-building-blocks/stable/switches/images/**'}, 
-					{src: 'components/gaia-ui-building-blocks/unstable/lists/images/**'}, 
-					{src: 'components/gaia-ui-building-blocks/unstable/progress_activity/images/**'}, 
-					{src: 'components/gaia-ui-building-blocks/unstable/drawer/images/**'}, 
-					{src: 'components/angularjs-foursquare/images/connect-*'}, 
-					{src: 'components/angularjs-foursquare/authenticated.js'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style/headers/images/**'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style/input_areas/images/**'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style/buttons/images/**'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style/switches/images/**'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style_unstable/lists/images/**'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style_unstable/progress_activity/images/**'}, 
+					{src: 'bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/**'}, 
+					{src: 'bower_components/angularjs-foursquare/images/connect-*'}, 
+					{src: 'bower_components/angularjs-foursquare/authenticated.js'}, 
 					{src: 'locales/**'}, 
 					{src: 'build/images/**'}, 
 					{src: 'build/index.*'}, 
@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 					almond: true, 
 					wrap: true, 
 					baseUrl: 'src', 
-					name: 'components/almond/almond', 
+					name: '../bower_components/almond/almond', 
 					include: 'index', 
 					mainConfigFile: 'src/index.js', 
 					out: 'build/index.js', 
@@ -57,11 +57,11 @@ module.exports = function(grunt) {
 						}
 						else if(file === 'src/index.html') {
 							return content
-								.replace(/.*\/components\/requirejs\/require.js.*\n/g, '')
+								.replace(/.*\/bower_components\/requirejs\/require.js.*\n/g, '')
 								.replace(/(\s*)(<\/body>)/, '$1\t<script src="/build/index.js"></script>$1$2');
 						}
 						else if(file === 'temp/index.css') {
-							return content.replace(/([^.])\/components/g, '$1../components');
+							return content.replace(/([^.])\/bower_components/g, '$1../components');
 						}
 						return content;
 					}, 

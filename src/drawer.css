@@ -53,7 +53,7 @@
 section[data-type="sidebar"] {
   position: absolute;
   width: 80%;
-  background: url(../components/gaia-ui-building-blocks/unstable/drawer/images/ui/pattern.png) repeat;
+  background: url(../bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/ui/pattern.png) repeat;
   height: 100%;
   top: 0;
   left: 0;
@@ -67,7 +67,7 @@ section[data-type="sidebar"] > header {
   z-index: 10;
   height: 5rem;
   color: #fff;
-  background: url(../components/gaia-ui-building-blocks/unstable/drawer/images/ui/header.png) repeat-x left top;
+  background: url(../bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/ui/header.png) repeat-x left top;
 }
 
 section[data-type="sidebar"] > header:after {
@@ -77,7 +77,7 @@ section[data-type="sidebar"] > header:after {
   top: 100%;
   left: 0;
   right: 0;
-  background: url(../components/gaia-ui-building-blocks/unstable/drawer/images/ui/shadow_header.png) repeat-x left top;
+  background: url(../bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/ui/shadow_header.png) repeat-x left top;
   background-size: auto 100%;
 }
 
@@ -116,7 +116,7 @@ section[data-type="sidebar"] > header menu[type="toolbar"] button {
 
 section[data-type="sidebar"] > header menu[type="toolbar"] a:last-child,
 section[data-type="sidebar"] > header menu[type="toolbar"] button:last-child {
-  background: url(../components/gaia-ui-building-blocks/unstable/drawer/images/ui/separator.png) no-repeat left center;
+  background: url(../bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/ui/separator.png) no-repeat left center;
 }
 
 section[data-type="sidebar"] > header menu[type="toolbar"] {
@@ -155,7 +155,7 @@ section[data-type="sidebar"] > header .icon {
 section[data-type="sidebar"]:after { 
   content: "";
   width: 1rem;
-  background: url(../components/gaia-ui-building-blocks/unstable/drawer/images/ui/shadow.png) right top repeat-y;
+  background: url(../bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/ui/shadow.png) right top repeat-y;
   height: 100%;
   position: absolute;
   top: 0;
@@ -175,7 +175,7 @@ section[data-type="sidebar"] > nav > h2 {
   line-height: 3.3rem;
   text-indent: 3rem;
   color: #fff;
-  background: url(../components/gaia-ui-building-blocks/unstable/drawer/images/ui/pattern_subheader.png) repeat left top;
+  background: url(../bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/ui/pattern_subheader.png) repeat left top;
   border-bottom: 1px solid #596068; 
   margin: 0;
   padding-right: 0.8rem;
