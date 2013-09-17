@@ -1,10 +1,10 @@
 require([
-	'components/angular/angular', 
-	// 'components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
-	'components/angularjs-foursquare/angularjs-foursquare', 
-	'components/angularjs-webapp/angularjs-webapp', 
-	'components/angularjs-geolocation/angularjs-geolocation', 
-	'components/angularjs-l20n/angularjs-l20n'
+	'bower_components/angular/angular', 
+	// 'bower_components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
+	'bower_components/angularjs-foursquare/angularjs-foursquare', 
+	'bower_components/angularjs-webapp/angularjs-webapp', 
+	'bower_components/angularjs-geolocation/angularjs-geolocation', 
+	'bower_components/angularjs-l20n/angularjs-l20n'
 ], function(angular/*, PhotoSwipe*/) {
 	'use strict';
 	

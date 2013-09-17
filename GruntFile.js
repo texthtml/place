@@ -35,7 +35,7 @@ module.exports = function(grunt) {
 					almond: true, 
 					wrap: true, 
 					baseUrl: 'src', 
-					name: '../bower_components/almond/almond', 
+					name: 'bower_components/almond/almond', 
 					include: 'index', 
 					mainConfigFile: 'src/index.js', 
 					out: 'build/index.js', 

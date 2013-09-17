@@ -17,7 +17,6 @@
   "dependencies": {
     "angular": "~1.0.8",
     "almond": "~0.2.6",
-    "l20n.js": "l20n/l20n.js",
     "builds": "l20n/builds",
     "photoswipe": "~3.0.3",
     "requirejs": "~2.1.8",
