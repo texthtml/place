@@ -23,7 +23,7 @@
     "angularjs-foursquare": "git://texthtml.net/webapp/lib/angularjs/foursquare.git",
     "angularjs-geolocation": "git://texthtml.net/webapp/lib/angularjs/geolocation.git",
     "angularjs-webapp": "git://texthtml.net/webapp/lib/angularjs/webapp.git",
-    "gaia-ui-building-blocks": "git@github.com:mozilla-b2g/Gaia-UI-Building-Blocks.git#~0.1.0",
+    "gaia-ui-building-blocks": "git://github.com/mozilla-b2g/Gaia-UI-Building-Blocks.git#~0.1.0",
     "angularjs-l20n": "git://texthtml.net/webapp/lib/angularjs/l20n.git#develop"
   }
 }
