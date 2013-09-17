@@ -75,6 +75,21 @@ module.exports = function(grunt) {
 					{expand: true, cwd: '.', src: 'manifest.webapp', dest: 'build/'}, 
 					{expand: true, cwd: 'temp', src: 'index.css', dest: 'build/'}
 				]
+			}, 
+			angular: {
+				options: {
+					processContent: function(content, file) {
+						return content
+							.replace('new XHR()', 'new XHR({mozSystem: true})')
+							.replace(
+								'return isObject(d) && !isFile(d) ? toJson(d) : d;', 
+								'return isObject(d) && !isFile(d)  && toString.apply(d) !== \'[object FormData]\'? toJson(d) : d;'
+							);
+					}
+				}, 
+				files: [
+					{expand: true, cwd: 'bower_components', src: 'angular/angular.js', dest: 'temp/'}
+				]
 			}
 		}, 
 		cssmin: {
@@ -121,7 +136,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-firefoxos');
 	
-	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'copy', 'requirejs']);
+	grunt.registerTask('angular', ['copy:angular']);
+	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'angular', 'copy:main', 'requirejs']);
 	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
 	grunt.registerTask('default', ['build']);
