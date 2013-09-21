@@ -152,7 +152,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-firefoxos');
 	
 	grunt.registerTask('angular', ['copy:angular']);
-	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'angular', 'copy:main', 'requirejs']);
+	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'requirejs']);
 	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
 	grunt.registerTask('default', ['build']);
