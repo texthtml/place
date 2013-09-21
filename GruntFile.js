@@ -36,8 +36,8 @@ module.exports = function(grunt) {
 					wrap: true, 
 					baseUrl: 'src', 
 					name: 'bower_components/almond/almond', 
-					include: 'index', 
-					mainConfigFile: 'src/index.js', 
+					include: '../temp/index', 
+					mainConfigFile: 'temp/index.js', 
 					out: 'build/index.js', 
 					optimize: 'uglify2', 
 					preserveLicenseComments: false
@@ -89,6 +89,21 @@ module.exports = function(grunt) {
 				}, 
 				files: [
 					{expand: true, cwd: 'bower_components', src: 'angular/angular.js', dest: 'temp/'}
+				]
+			}, 
+			config: {
+				options: {
+					processContent: function(content, file) {
+						return content
+							.replace('1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 'R4MYVBHKVMCNR0MAB5YTWRIJ5Z2ROR3R2DWRDTC1EOQCKEEI')
+							.replace('QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 'GZ2TX5NP0VX3EV1CSACE455GKE3CYLHMIHHJKDUX0LWGJSCN')
+							.replace('http://\' + location.hostname + \'/authenticated.html', 'http://place.texthtml.net/authenticated.html')
+							.replace('require([\'place\']);', 'require([\'../temp/place\']);');
+					}
+				}, 
+				files: [
+					{expand: true, cwd: 'src', src: 'index.js', dest: 'temp/'}, 
+					{expand: true, cwd: 'src', src: 'place.js', dest: 'temp/'}
 				]
 			}
 		}, 

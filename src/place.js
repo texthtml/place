@@ -9,20 +9,11 @@ require([
 	'use strict';
 	
 	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation', 'thL20N'], ['thFoursquareProvider', 'thL20NContextProvider', function FoursquareAppRun(thFoursquareProvider, thL20NContextProvider) {
-		var redirectURI = 'http://' + location.host + '/authenticated.html', 
-			config = {
-			'prod' : {
-				clientId: 'R4MYVBHKVMCNR0MAB5YTWRIJ5Z2ROR3R2DWRDTC1EOQCKEEI', 
-				clientSecret: 'GZ2TX5NP0VX3EV1CSACE455GKE3CYLHMIHHJKDUX0LWGJSCN', 
-				redirectURI: redirectURI
-			}, 
-			'dev' : {
-				clientId: '1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 
-				clientSecret: 'QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 
-				redirectURI: redirectURI
-			}
-		}[location.hostname === 'place.texthtml.net' ? 'prod' : 'dev'];
-		
+		var config = {
+			clientId: '1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 
+			clientSecret: 'QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 
+			redirectURI: 'http://' + location.hostname + '/authenticated.html'
+		};
 		
 		thL20NContextProvider.registerLocales('en', ['en', 'fr']);
 		
