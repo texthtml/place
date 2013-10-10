@@ -408,7 +408,7 @@ require([
 		
 		$scope.geolocationSupported    = thGeolocation.supported;
 		$scope.geolocationEnabled      = localStorage.getItem('geolocationEnabled')      === 'true';
-		$scope.geolocationHighAccuracy = localStorage.getItem('geolocationHighAccuracy') === 'true';
+		$scope.geolocationHighAccuracy = localStorage.getItem('geolocationHighAccuracy') !== 'false';
 		
 		$scope.$watch('geolocationEnabled', function(geolocationEnabled) {
 			localStorage.setItem('geolocationEnabled', geolocationEnabled);
