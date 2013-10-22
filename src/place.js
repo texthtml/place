@@ -298,7 +298,7 @@ require([
 				$scope.located  = false;
 				$scope.position = '';
 				last_request_id++;
-				thGeolocation.getCurrentPosition(
+				thGeolocation.searchCurrentPosition(
 					(function(current_request) {
 						return function(/* position */) {
 							if($scope.locating && last_request_id === current_request) {
@@ -423,6 +423,7 @@ require([
 		$scope.$watch('geolocationHighAccuracy', function(geolocationHighAccuracy) {
 			localStorage.setItem('geolocationHighAccuracy', geolocationHighAccuracy);
 			thGeolocation.config({
+				required_accuracy: 2000, 
 				enableHighAccuracy: geolocationHighAccuracy
 			});
 		});
