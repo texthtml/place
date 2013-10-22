@@ -1,5 +1,7 @@
 <user_at_venue "{{$user.firstName}} à: {{$venue.name}}">
 
+<anonymous_at_venue "{{$venue.name}}">
+
 <appname "Place">
 
 <settings "Options">

@@ -179,7 +179,8 @@
 		<section role="region" ng:controller="FoursquareCheckin" id="checkin" th:model="checkin" data-viewport="right">
 			<header>
 				<button th:screen="$backOrHome"><span class="icon icon-back" l20n:id="back"></span></button>
-				<h1 l20n:id="user_at_venue" l20n:data="{user:checkin.user, venue:checkin.venue}"></h1>
+				<h1 ng:show="!checkin.user" l20n:id="anonymous_at_venue" l20n:data="{venue:checkin.venue}"></h1>
+				<h1 ng:show="checkin.user" l20n:id="user_at_venue" l20n:data="{user:checkin.user, venue:checkin.venue}"></h1>
 			</header>
 			
 			<div role="main">
