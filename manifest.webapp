@@ -1,7 +1,7 @@
 {
 	"name": "Place",
 	"description": "Simple Foursquare client",
-	"version": "v1.0.1", 
+	"version": "v1.0.2", 
 
 	"launch_path": "/build/index.html",
 
