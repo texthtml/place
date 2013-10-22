@@ -105,3 +105,7 @@
 <total_visitors "Nombre de visiteurs">
 
 <total_checkins "Nombre de Check-ins">
+
+<i_see_you "Je sais ou tu es!">
+
+<checkin_failed "Malheuresement votre checkin à échoué. Vérifiez que vous êtes bien connecté puis rééssayer.">

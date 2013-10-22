@@ -160,8 +160,8 @@ require([
 		
 		$scope.$on('fsq:new-checkin', $scope.refresh);
 	}])
-	.controller('FoursquareCheckin', ['$scope', '$rootScope', 'llConfig', 'thFoursquare', 
-	function FoursquareCheckin($scope, $rootScope, llConfig, thFoursquare) {
+	.controller('FoursquareCheckin', ['$scope', '$rootScope', 'llConfig', 'thFoursquare', 'thL20NContext', 
+	function FoursquareCheckin($scope, $rootScope, llConfig, thFoursquare, thL20NContext) {
 		$scope.loading = false;
 		$scope.$watch('checkin', function() {
 			if(
@@ -239,7 +239,7 @@ require([
 					delete $scope.checkin.shout;
 					delete $scope.checkin.createdAt;
 					
-					alert('checkin failed');
+					alert(thL20NContext.get('checkin_failed'));
 				});
 			}
 			else {
@@ -279,8 +279,8 @@ require([
 			});
 		};
 	}])
-	.controller('FoursquareSearch', ['$scope', '$timeout', 'thFoursquare', 'thGeolocation', 'llConfig', 
-	function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig) {
+	.controller('FoursquareSearch', ['$scope', '$timeout', 'thFoursquare', 'thGeolocation', 'llConfig', 'thL20NContext', 
+	function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig, thL20NContext) {
 		$scope.venues   = [];
 		$scope.geocode  = '';
 		$scope.loading  = false;
@@ -304,7 +304,7 @@ require([
 							if($scope.locating && last_request_id === current_request) {
 								$scope.located  = true;
 								$scope.locating = false;
-								$scope.position = 'I know where you are!';
+								$scope.position = thL20NContext.get('i_see_you');
 							}
 							if($scope.$$phase === null) {
 								$scope.$apply();

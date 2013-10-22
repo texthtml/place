@@ -93,3 +93,7 @@
 <total_visitors "Total Visitors">
 
 <total_checkins "Total Checkins">
+
+<i_see_you "I know where you are!">
+
+<checkin_failed "Unfortunately your checkin failed. Check that you are connected and retry in a few seconds.">
