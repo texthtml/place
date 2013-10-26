@@ -1,14 +1,14 @@
 require([
 	'bower_components/angular/angular', 
-	// 'bower_components/photoswipe/release/3.0.3/code.photoswipe-3.0.3.min', 
 	'bower_components/angularjs-foursquare/angularjs-foursquare', 
 	'bower_components/angularjs-webapp/angularjs-webapp', 
 	'bower_components/angularjs-geolocation/angularjs-geolocation', 
-	'bower_components/angularjs-l20n/angularjs-l20n'
-], function(angular/*, PhotoSwipe*/) {
+	'bower_components/angularjs-l20n/angularjs-l20n', 
+	'bower_components/angular-gestures/gestures'
+], function(angular) {
 	'use strict';
 	
-	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation', 'thL20N'], ['thFoursquareProvider', 'thL20NContextProvider', function FoursquareAppRun(thFoursquareProvider, thL20NContextProvider) {
+	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation', 'thL20N', 'angular-gestures'], ['thFoursquareProvider', 'thL20NContextProvider', function FoursquareAppRun(thFoursquareProvider, thL20NContextProvider) {
 		var config = {
 			clientId: '1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 
 			clientSecret: 'QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 
@@ -76,49 +76,204 @@ require([
 			}
 		};
 	}])
+	.directive('carousel', function() {
+		return {
+			restrict: 'E', 
+			template: '\
+				<div \
+					class="carousel-wrapper" \
+					hm:drag-start ="start($event)" \
+					hm:drag="move($event)" \
+					hm:drag-end="end($event)" \
+					hm:tap="stop()" \
+				>\
+					<div class="carousel-frame previous-frame"></div> \
+					<div class="carousel-frame current-frame" ></div> \
+					<div class="carousel-frame next-frame"    ></div> \
+				</div>\
+			', 
+			link: function(scope, elm, attr, controller) {
+				var 
+					source = null, 
+					el = elm[0], 
+					wrapper = el.querySelector('.carousel-wrapper');
+				
+				function setBackgroundImage(class_name, image) {
+					if(image !== undefined) {
+						if(image.src !== undefined) {
+							el.querySelector('.'+class_name).style.backgroundImage = 'url('+image.src+')';
+						}
+						else {
+							el.querySelector('.'+class_name).style.backgroundImage = null;
+							el.querySelector('.'+class_name).style.backgroundColor = 'red';
+						}
+					}
+				}
+				
+				scope.$watch('previous_image', function(previous_image) {
+					setBackgroundImage('previous-frame', previous_image);
+				}, true);
+				scope.$watch('current_image', function(current_image) {
+					if(current_image === undefined) {
+						el.classList.remove('active-carousel');
+					}
+					else {
+						setBackgroundImage('current-frame', current_image);
+						el.classList.add('active-carousel');
+					}
+				}, true);
+				scope.$watch('next_image', function(next_image) {
+					setBackgroundImage('next-frame', next_image);
+				}, true);
+				
+				scope.setSource = function(new_source) {
+					source = new_source;
+					
+					if(source !== undefined) {
+						scope.current_image  = source.initial();
+						scope.previous_image = source.previous(scope.current_image.id);
+						scope.next_image     = source.next(scope.current_image.id);
+						
+						scope.$apply();
+					}
+					else {
+						scope.previous_image = undefined;
+						scope.current_image  = undefined;
+						scope.next_image     = undefined;
+					}
+				};
+				
+				scope.start = function(event) {
+					wrapper.style.transition = 'none';
+					scope.move(event);
+				};
+				
+				scope.move = function(event) {
+					event.preventDefault();
+					
+					if(
+						(event.gesture.deltaX < 0 && scope.current_image.id === scope.previous_image.id) ||
+						(event.gesture.deltaX > 0 && scope.current_image.id === scope.next_image.id)
+					) {
+						return;
+					}
+					
+					var 
+						width = el.clientWidth, 
+						wrapper_pos = Math.max(-width, Math.min(width, event.gesture.deltaX));
+					
+					wrapper.style.transform = 'translateX('+wrapper_pos + 'px)';
+				};
+				
+				scope.end  = function(event) {
+					event.preventDefault();
+					
+					if(
+						(event.gesture.deltaX < 0 && scope.current_image.id === scope.previous_image.id) ||
+						(event.gesture.deltaX > 0 && scope.current_image.id === scope.next_image.id)
+					) {
+						return;
+					}
+					
+					var 
+						width = el.clientWidth, 
+						wrapper_pos = Math.max(-width, Math.min(width, event.gesture.deltaX)), 
+						dragged_enough = Math.abs(wrapper_pos) > width / 3, 
+						direction = wrapper_pos < 0 ? 'next' : 'previous';
+					
+					if(dragged_enough) {
+						var 
+							previous = wrapper.querySelector(direction === 'next' ? '.current-frame'  : '.next-frame'), 
+							current  = wrapper.querySelector(direction === 'next' ? '.next-frame'     : '.previous-frame'), 
+							next     = wrapper.querySelector(direction === 'next' ? '.previous-frame' : '.current-frame');
+						
+						previous.className = 'carousel-frame previous-frame';
+						current.className  = 'carousel-frame current-frame';
+						next.className     = 'carousel-frame next-frame';
+						
+						(direction === 'next' ? previous : next).classList.add('carousel-target');
+						
+						var 
+							new_current_image  = scope[(direction === 'next' ? 'next_image' : 'previous_image')], 
+							new_image          = source[direction](new_current_image.id), 
+							new_previous_image = direction === 'next' ? scope.current_image : new_image, 
+							new_next_image     = direction === 'next' ? new_image : scope.current_image;
+						
+						scope.previous_image = new_previous_image;
+						scope.current_image  = new_current_image;
+						scope.next_image     = new_next_image;
+					}
+					
+					wrapper.style.transition = null;
+					wrapper.style.transform = null;
+				};
+				
+				scope.stop = function() {
+					scope.current_image = undefined;
+				};
+			}
+		};
+	})
 	.directive('gallery', function() {
 		return {
-			link: function(scope, elm) {
+			link: function(scope, elm, attrs) {
+				var carousel = document.querySelector(attrs.gallery);
+				
+				if(carousel === null) {
+					return;
+				}
+				
+				var 
+					initial_position, 
+					images, 
+					image = function(position) {
+						var 
+							l = images.length, 
+							position = (position + l) % l;
+						
+						return images[position];
+					}, 
+					source = {
+						initial: function() {
+							return image(initial_position);
+						}, 
+						previous: function(current_position) {
+							return image(current_position - 1);
+						}, 
+						next: function(current_position) {
+							return image(current_position + 1);
+						}
+					};
+				
 				elm.bind('click', function(event) {
 					event.preventDefault();
-				// 	var 
-				// 		elements = elm[0].querySelectorAll('li'), 
-				// 		start_position = -1, 
-				// 		images = [].map.call(elements, function(el, i) {
-				// 			if(start_position === -1) {
-				// 				var e = event.target;
-								
-				// 				do {
-				// 					e = e.parentNode;
-				// 				} while(e !== null && e !== el);
-				// 				if(e === el) {
-				// 					start_position = i;
-				// 				}
-				// 			}
-							
-				// 			return {
-				// 				url: el.querySelector('a').href
-				// 			};
-				// 		}), 
-				// 		options = {
-				// 			getImageSource: function(obj){
-				// 				return obj.url;
-				// 			},
-				// 			getImageCaption: function(obj){
-				// 				return obj.caption;
-				// 			}, 
-				// 			loop: false, 
-				// 			captionAndToolbarHide: true
-				// 		}, 
-				// 		gallery = PhotoSwipe.createInstance(images, options);
 					
-				// 	if(start_position !== -1) {
-				// 		gallery.toggleToolbar = function() {
-				// 			gallery.hide();
-				// 			gallery.dispose();
-				// 		};
-				// 		gallery.show(start_position);
-				// 	}
+					var 
+						setCarouselSource = angular.element(carousel).scope().setSource, 
+						elements = elm[0].querySelectorAll('li');
+					images = [].map.call(elements, function(el, i) {
+						return {
+							id: i, 
+							src: el.querySelector('a').href
+						};
+					});
+					
+					initial_position = -1;
+					[].forEach.call(elements, function(el, i) {
+						if(initial_position === -1) {
+							var e = event.target;
+							
+							do {
+								e = e.parentNode;
+							} while(e !== null && e !== el);
+							if(e === el) {
+								initial_position = i;
+							}
+						}
+					});
+					
+					setCarouselSource(source);
+					
 				});
 			}
 		};

@@ -70,7 +70,7 @@
 				<h2 ng:show="fsq.logged" l20n:id="account_settings"></h2>
 				<ul ng:show="fsq.logged">
 					<li>
-						<button class="danger" ng:click="fsq.logout()" th:screen="$home" l20n:id="log_out"></button>
+						<button class="danger" hm-tap="fsq.logout()" th:screen="$home" l20n:id="log_out"></button>
 					</li>
 				</ul>
 				<h2 l20n:id="contact"></h2>
@@ -90,7 +90,7 @@
 				<button th:screen="#settings"><span class="icon icon-menu" l20n:id="settings"></span></button>
 				<button th:screen="$home"><span class="icon icon-menu" l20n:id="home"></span></button>
 				<menu type="toolbar">
-					<button ng:click="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh" l20n:id="refresh"></span></button>
+					<button hm-tap="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh" l20n:id="refresh"></span></button>
 					<button th:screen="#search"><span class="icon icon-search" l20n:id="search"></span></button>
 				</menu>
 				<h1 l20n:id="home_title"></h1>
@@ -127,7 +127,7 @@
 			<header>
 				<button th:screen="$home"><span class="icon icon-back" l20n:id="back"></span></button>
 				<menu type="toolbar">
-					<button ng:click="findMe()" ng:show="geolocationSupported" ng:class="{locating:locating}"><span class="icon icon-gps" l20n:id="find_me"></span></button>
+					<button hm-tap="findMe()" ng:show="geolocationSupported" ng:class="{locating:locating}"><span class="icon icon-gps" l20n:id="find_me"></span></button>
 				</menu>
 				<h1 l20n:id="search_title"></h1>
 			</header>
@@ -153,7 +153,7 @@
 					<label for="placeInput" l20n:id="need_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></label>
 				</p>
 				<p ng:show="!loading && !locating && !located && !place.length && query && geolocationSupported" class="askingForLocationHint">
-					<button ng:click="findMe()" l20n:id="geolocation_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></button>
+					<button hm-tap="findMe()" l20n:id="geolocation_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></button>
 				</p>
 				
 				<div ng:show="(place.length || located)" data-type="list">
@@ -192,8 +192,8 @@
 				</ul>
 				<h2><a th:screen="#venue" th:screen-model="checkin.venue">{{ checkin.venue.name }}</a></h2>
 				
-				<button ng:show="checkin.id && !checkin.like" ng:click="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})" l20n:id="like"></button>
-				<button ng:show="checkin.id && checkin.like"  ng:click="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})" l20n:id="unlike"></button>
+				<button ng:show="checkin.id && !checkin.like" hm-tap="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})" l20n:id="like"></button>
+				<button ng:show="checkin.id && checkin.like"  hm-tap="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})" l20n:id="unlike"></button>
 				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes:checkin.likes}"></p>
 				
 				<p role="status" ng:show="loading">
@@ -241,7 +241,7 @@
 				</form>
 				
 				<div data-type="list" ng:show="checkin.photos.count">
-					<ul gallery>
+					<ul gallery="#carousel">
 						<li ng:repeat="photo in checkin.photos.items">
 							<aside>
 								<a th:fsq-photo="photo"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
@@ -286,7 +286,7 @@
 				<div data-type="list" ng:show="!loading && venue.tips.count" ng:repeat="group in venue.tips.groups">
 					<header>{{ group.name }}</header>
 					<ul>
-						<li ng:repeat="tip in group.items" ng:class="{expanded: tip.expanded}" ng:click="tip.expanded = !tip.expanded">
+						<li ng:repeat="tip in group.items" ng:class="{expanded: tip.expanded}" hm-tap="tip.expanded = !tip.expanded">
 							<aside>
 								<img th:fsq-photo="tip.user.photo" th:fsq-photo-size="cap100" />
 							</aside>
@@ -304,7 +304,7 @@
 				
 				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
 					<header>{{ group.name }}</header>
-					<ul gallery>
+					<ul gallery="#carousel">
 						<li ng:repeat="photo in group.items">
 							<aside>
 								<a th:fsq-photo="photo" th:fsq-photo-size="cap480"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
@@ -332,5 +332,7 @@
 				</div>
 			</div>
 		</section>
+		
+		<carousel id="carousel">
 	</body>
 </html>

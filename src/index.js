@@ -7,6 +7,17 @@ requirejs.config({
 	shim: {
 		'bower_components/angular/angular': {
 			exports: 'angular'
+		}, 
+		'bower_components/angular-gestures/gestures': {
+			deps: ['bower_components/angular/angular']
+		}
+	}, 
+	map: {
+		'*': {
+			'bower_components/angular-gestures/gestures': 'quiet-gestures'
+		}, 
+		'quiet-gestures': {
+			'bower_components/angular-gestures/gestures': 'bower_components/angular-gestures/gestures'
 		}
 	}
 });
