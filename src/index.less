@@ -3,6 +3,7 @@
 @import '../bower_components/gaia-ui-building-blocks/style/input_areas.css';
 @import '../bower_components/gaia-ui-building-blocks/style/buttons.css';
 @import '../bower_components/gaia-ui-building-blocks/style/switches.css';
+@import '../bower_components/gaia-ui-building-blocks/style_unstable/toolbars.css';
 @import '../bower_components/gaia-ui-building-blocks/style_unstable/lists.css';
 @import '../bower_components/gaia-ui-building-blocks/style_unstable/progress_activity.css';
 // @import 'bower_components/photoswipe/release/3.0.3/photoswipe.css';
@@ -256,6 +257,41 @@ carousel {
 		
 		&.next-frame {
 			transform: translateX(100%);
+		}
+	}
+	
+	.carousel-toolbar {
+		.carousel-close-button {
+			border: 0;
+			background: none;
+			margin: 0;
+			width: auto;
+			
+			padding: 0 1rem;
+			
+			.icon {
+				position: relative;
+				float: none;
+				display: inline-block;
+				vertical-align: top;
+				width: 3rem;
+				background: ~"transparent no-repeat center center / 3rem auto";
+				font-size: 0;
+				overflow: hidden;
+				background-image: url('../bower_components/gaia-ui-building-blocks/style/headers/images/icons/close.png');
+			}
+		}
+		
+		li + li {
+			color: white;
+			line-height: 40px;
+			padding-left: 1rem;
+		}
+		
+		display: none;
+		
+		&.active-toolbar {
+			display: block;
 		}
 	}
 }

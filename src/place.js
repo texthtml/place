@@ -79,23 +79,12 @@ require([
 	.directive('carousel', function() {
 		return {
 			restrict: 'E', 
-			template: '\
-				<div \
-					class="carousel-wrapper" \
-					hm:drag-start ="start($event)" \
-					hm:drag="move($event)" \
-					hm:drag-end="end($event)" \
-					hm:tap="stop()" \
-				>\
-					<div class="carousel-frame previous-frame"></div> \
-					<div class="carousel-frame current-frame" ></div> \
-					<div class="carousel-frame next-frame"    ></div> \
-				</div>\
-			', 
+			templateUrl: 'carousel.html', 
 			link: function(scope, elm, attr, controller) {
 				var 
 					source = null, 
 					el = elm[0], 
+					toolbar = el.querySelector('.carousel-toolbar'), 
 					wrapper = el.querySelector('.carousel-wrapper');
 				
 				function setBackgroundImage(class_name, image) {
@@ -119,6 +108,9 @@ require([
 					}
 					else {
 						setBackgroundImage('current-frame', current_image);
+						scope.current_user = current_image.user;
+						scope.photo_createdAt = current_image.createdAt;
+						
 						el.classList.add('active-carousel');
 					}
 				}, true);
@@ -208,6 +200,10 @@ require([
 					wrapper.style.transform = null;
 				};
 				
+				scope.toggleToolbar = function() {
+					toolbar.classList.toggle('active-toolbar');
+				};
+				
 				scope.stop = function() {
 					scope.current_image = undefined;
 				};
@@ -252,9 +248,13 @@ require([
 						setCarouselSource = angular.element(carousel).scope().setSource, 
 						elements = elm[0].querySelectorAll('li');
 					images = [].map.call(elements, function(el, i) {
+						var a = el.querySelector('a');
+						
 						return {
 							id: i, 
-							src: el.querySelector('a').href
+							src: a.href, 
+							user: angular.fromJson(a.dataset.user), 
+							createdAt: angular.fromJson(a.dataset.createdAt)
 						};
 					});
 					

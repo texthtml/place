@@ -244,7 +244,14 @@
 					<ul gallery="#carousel">
 						<li ng:repeat="photo in checkin.photos.items">
 							<aside>
-								<a th:fsq-photo="photo"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
+								<a 
+									th:fsq-photo="photo" 
+									th:fsq-photo-size="cap480"
+									data-user="{{photo.user}}"
+									data-created-at="{{photo.createdAt}}"
+								>
+									<img th:fsq-photo="photo" th:fsq-photo-size="cap100" />
+								</a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -307,7 +314,14 @@
 					<ul gallery="#carousel">
 						<li ng:repeat="photo in group.items">
 							<aside>
-								<a th:fsq-photo="photo" th:fsq-photo-size="cap480"><img th:fsq-photo="photo" th:fsq-photo-size="cap100" /></a>
+								<a 
+									th:fsq-photo="photo" 
+									th:fsq-photo-size="cap480"
+									data-user="{{photo.user}}"
+									data-created-at="{{photo.createdAt}}"
+								>
+									<img th:fsq-photo="photo" th:fsq-photo-size="cap100" />
+								</a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -332,6 +346,40 @@
 				</div>
 			</div>
 		</section>
+		
+		<script type="text/ng-template" id="carousel.html">
+			<div
+				class="carousel-wrapper"
+				hm:drag-start ="start($event)"
+				hm:drag="move($event)"
+				hm:drag-end="end($event)"
+				hm:double-tap="stop()"
+				hm:tap="toggleToolbar()"
+			>\
+				<div class="carousel-frame previous-frame"></div>
+				<div class="carousel-frame current-frame" ></div>
+				<div class="carousel-frame next-frame"    ></div>
+			</div>\
+			<div class="carousel-toolbar" role="toolbar">
+				<ul class="carousel-frame-info">
+					<li>
+						<img th:fsq-photo="current_user.photo" th:fsq-photo-size="cap40" />
+					</li>
+					<li>{{ current_user.firstName }}</li>
+					<li>{{ photo_createdAt*1000 | date }}</li>
+				</ul>
+				<ul>
+					<li>
+						<button
+							class="carousel-close-button"
+							hm:tap="stop()"
+						>
+							<span class="icon icon-close" l20n:id="close"></span>
+						</button>
+					</li>
+				</ul>
+			</div>
+		</script>
 		
 		<carousel id="carousel">
 	</body>

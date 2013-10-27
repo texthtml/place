@@ -3,6 +3,7 @@
 @import '../bower_components/gaia-ui-building-blocks/style/input_areas.css';
 @import '../bower_components/gaia-ui-building-blocks/style/buttons.css';
 @import '../bower_components/gaia-ui-building-blocks/style/switches.css';
+@import '../bower_components/gaia-ui-building-blocks/style_unstable/toolbars.css';
 @import '../bower_components/gaia-ui-building-blocks/style_unstable/lists.css';
 @import '../bower_components/gaia-ui-building-blocks/style_unstable/progress_activity.css';
 @import 'drawer.css';
@@ -40,3 +41,6 @@ carousel .carousel-target{z-index:1;}
 carousel .carousel-frame{position:absolute;top:0;bottom:0;width:100vw;background-color:black;background-size:contain;background-position:center;background-repeat:no-repeat;}carousel .carousel-frame.previous-frame{transform:translateX(-100%);}
 carousel .carousel-frame.current-frame{transform:translateX(0);z-index:1;}
 carousel .carousel-frame.next-frame{transform:translateX(100%);}
+carousel .carousel-toolbar{display:none;}carousel .carousel-toolbar .carousel-close-button{border:0;background:none;margin:0;width:auto;padding:0 1rem;}carousel .carousel-toolbar .carousel-close-button .icon{position:relative;float:none;display:inline-block;vertical-align:top;width:3rem;background:transparent no-repeat center center / 3rem auto;font-size:0;overflow:hidden;background-image:url('../bower_components/gaia-ui-building-blocks/style/headers/images/icons/close.png');}
+carousel .carousel-toolbar li+li{color:white;line-height:40px;padding-left:1rem;}
+carousel .carousel-toolbar.active-toolbar{display:block;}
