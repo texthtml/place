@@ -114,7 +114,7 @@
 								</aside>
 								<p l20n:id="user_at_venue" l20n:data="{user: checkin.user, venue: checkin.venue}"></p>
 								<p>
-									<date>{{ checkin.createdAt*1000 | date }}</date>
+									<date>{{ checkin.createdAt*1000 | moment.fromNow }}</date>
 								</p>
 							</a>
 						</li>
@@ -209,7 +209,7 @@
 								{{ checkin.shout }}
 							</p>
 							<p>
-								<em>{{ checkin.user.firstName }}</em> - {{ checkin.createdAt*1000 | date }}
+								<em>{{ checkin.user.firstName }}</em> - {{ checkin.createdAt*1000 | moment.format:'lll' }}
 								<progress ng:show="checkingin" class="pack-activity" value="0" max="100"></progress>
 							</p>
 						</li>
@@ -221,7 +221,7 @@
 								{{ comment.text }}
 							</p>
 							<p>
-								<em>{{ comment.user.firstName }}</em> - {{ comment.createdAt*1000 | date }}
+								<em>{{ comment.user.firstName }}</em> - {{ comment.createdAt*1000 | moment.fromNow }}
 								<progress ng:show="!comment.id" class="pack-activity" value="0" max="100"></progress>
 							</p>
 						</li>
@@ -257,7 +257,7 @@
 								{{ photo.user.firstName }}
 							</p>
 							<p>
-								<date>{{ photo.createdAt*1000 | date }}</date>
+								<date>{{ photo.createdAt*1000 | moment.format:'ll' }}</date>
 							</p>
 						</li>
 					</ul>
@@ -301,7 +301,7 @@
 								{{ tip.text }}
 							</p>
 							<p>
-								{{ tip.user.firstname }} {{ tip.user.lastname }}<date>{{ tip.createdAt*1000 | date }}</date>
+								{{ tip.user.firstname }} {{ tip.user.lastname }}<date>{{ tip.createdAt*1000 | moment.format:'ll' }}</date>
 							</p>
 						</li>
 					</ul>
@@ -327,7 +327,7 @@
 								{{ photo.user.firstName }}
 							</p>
 							<p>
-								<date>{{ photo.createdAt*1000 | date }}</date>
+								<date>{{ photo.createdAt*1000 | moment.format:'ll' }}</date>
 							</p>
 						</li>
 					</ul>
@@ -366,7 +366,7 @@
 						<img th:fsq-photo="current_user.photo" th:fsq-photo-size="cap40" />
 					</li>
 					<li>{{ current_user.firstName }}</li>
-					<li>{{ photo_createdAt*1000 | date }}</li>
+					<li>{{ photo_createdAt*1000 | moment.format:'lll' }}</li>
 				</ul>
 				<ul>
 					<li>

@@ -1,11 +1,12 @@
 require([
 	'bower_components/angular/angular', 
+	'moment', 
 	'bower_components/angularjs-foursquare/angularjs-foursquare', 
 	'bower_components/angularjs-webapp/angularjs-webapp', 
 	'bower_components/angularjs-geolocation/angularjs-geolocation', 
 	'bower_components/angularjs-l20n/angularjs-l20n', 
 	'bower_components/angular-gestures/gestures'
-], function(angular) {
+], function(angular, moment) {
 	'use strict';
 	
 	angular.module('FoursquareApp', ['thFoursquareService', 'thWebApp', 'thGeolocation', 'thL20N', 'angular-gestures'], ['thFoursquareProvider', 'thL20NContextProvider', function FoursquareAppRun(thFoursquareProvider, thL20NContextProvider) {
@@ -26,8 +27,10 @@ require([
 		
 		config.locale = thL20NContextProvider.supportedLocales[0];
 		
-		
 		thFoursquareProvider.config(config);
+		
+		
+		moment.lang(navigator.language);
 	}])
 	.directive('model', function() {
 		return {
@@ -630,7 +633,17 @@ require([
 			}
 			return config;
 		};
-	}]);
+	}])
+	.filter('moment.format', function() {
+		return function(value, format) {
+			return moment(value).format(format);
+		}
+	})
+	.filter('moment.fromNow', function() {
+		return function(value) {
+			return moment(value).fromNow();
+		}
+	});
 	
 	angular.bootstrap(document.documentElement, ['FoursquareApp']);
 });
