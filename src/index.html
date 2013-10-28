@@ -311,16 +311,10 @@
 				
 				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
 					<header>{{ group.name }}</header>
-					<ul gallery="#carousel">
+					<ul gallery="#carousel" gallery-source-type="venue" gallery-source-id="venue.id">
 						<li ng:repeat="photo in group.items">
 							<aside>
-								<a 
-									th:fsq-photo="photo" 
-									th:fsq-photo-size="cap480"
-									data-user="{{photo.user}}"
-									data-created-at="{{photo.createdAt}}"
-								>
-									<img th:fsq-photo="photo" th:fsq-photo-size="cap100" />
+								<img th:fsq-photo="photo" th:fsq-photo-size="cap100"/>
 								</a>
 							</aside>
 							<p>
@@ -356,17 +350,30 @@
 				hm:double-tap="stop()"
 				hm:tap="toggleToolbar()"
 			>\
-				<div class="carousel-frame previous-frame"></div>
-				<div class="carousel-frame current-frame" ></div>
-				<div class="carousel-frame next-frame"    ></div>
+				<div 
+					class="carousel-frame previous-frame" 
+					ng:class="{loading: (undefined == frames[0].photo)}" 
+					data-frame-id="0"
+				></div>
+				<div 
+					class="carousel-frame current-frame"  
+					ng:class="{loading: (undefined == frames[1].photo)}" 
+					data-frame-id="1"
+				></div>
+				<div 
+					class="carousel-frame next-frame"     
+					ng:class="{loading: (undefined == frames[2].photo)}" 
+					data-frame-id="2"
+				></div>
 			</div>\
-			<div class="carousel-toolbar" role="toolbar">
+			<div class="carousel-toolbar active-toolbar" role="toolbar">
 				<ul class="carousel-frame-info">
-					<li>
-						<img th:fsq-photo="current_user.photo" th:fsq-photo-size="cap40" />
+					<li ng:show="current_image.photo.user">
+						<img th:fsq-photo="current_image.photo.user.photo" th:fsq-photo-size="cap40" />
 					</li>
-					<li>{{ current_user.firstName }}</li>
-					<li>{{ photo_createdAt*1000 | moment.format:'lll' }}</li>
+					<li>{{ current_image.photo.user.firstName }}</li>
+					<li ng:show="current_image.photo">{{ current_image.photo.createdAt*1000 | moment.format:'lll' }}</li>
+					<li ng:show="!current_image.photo" l20n:id="loading"></li>
 				</ul>
 				<ul>
 					<li>
@@ -381,6 +388,6 @@
 			</div>
 		</script>
 		
-		<carousel id="carousel">
+		<carousel id="carousel" photo-size="cap480">
 	</body>
 </html>

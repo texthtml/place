@@ -253,6 +253,12 @@ carousel {
 		&.current-frame {
 			transform: translateX(0);
 			z-index: 1;
+			
+			&.loading {
+				background-size: auto;
+				background-image: url(../bower_components/gaia-ui-building-blocks/style_unstable/progress_activity/images/ui/default.png);
+				animation: 2s rotate infinite steps(30);
+			}
 		}
 		
 		&.next-frame {
@@ -289,9 +295,19 @@ carousel {
 		}
 		
 		display: none;
+		top: 0;
 		
 		&.active-toolbar {
 			display: block;
 		}
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(1deg);
+	}
+	to   {
+		transform: rotate(360deg);
 	}
 }

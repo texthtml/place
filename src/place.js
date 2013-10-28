@@ -58,8 +58,8 @@ require([
 		return {
 			restrict: 'A',
 			require: 'ngModel',
-			link: function(scope, elm, attr, ngModelCtrl) {
-				if(attr.type === 'radio' || attr.type === 'checkbox') {
+			link: function(scope, elm, attrs, ngModelCtrl) {
+				if(attrs.type === 'radio' || attrs.type === 'checkbox') {
 					return;
 				}
 
@@ -83,58 +83,45 @@ require([
 		return {
 			restrict: 'E', 
 			templateUrl: 'carousel.html', 
-			link: function(scope, elm, attr, controller) {
+			link: function(scope, elm, attrs, controller) {
 				var 
 					source = null, 
 					el = elm[0], 
+					current_frame_id = 1, 
 					toolbar = el.querySelector('.carousel-toolbar'), 
-					wrapper = el.querySelector('.carousel-wrapper');
+					wrapper = el.querySelector('.carousel-wrapper'), 
+					move_allowed = function(deltaX) {
+						return (
+							(deltaX > 0 && scope.current_image.id !== scope.previous_image.id) || 
+							(deltaX < 0 && scope.current_image.id !== scope.next_image.id)
+						);
+					};
 				
-				function setBackgroundImage(class_name, image) {
-					if(image !== undefined) {
-						if(image.src !== undefined) {
-							el.querySelector('.'+class_name).style.backgroundImage = 'url('+image.src+')';
-						}
-						else {
-							el.querySelector('.'+class_name).style.backgroundImage = null;
-							el.querySelector('.'+class_name).style.backgroundColor = 'red';
-						}
-					}
-				}
-				
-				scope.$watch('previous_image', function(previous_image) {
-					setBackgroundImage('previous-frame', previous_image);
-				}, true);
 				scope.$watch('current_image', function(current_image) {
 					if(current_image === undefined) {
 						el.classList.remove('active-carousel');
 					}
 					else {
-						setBackgroundImage('current-frame', current_image);
-						scope.current_user = current_image.user;
-						scope.photo_createdAt = current_image.createdAt;
-						
 						el.classList.add('active-carousel');
 					}
-				}, true);
-				scope.$watch('next_image', function(next_image) {
-					setBackgroundImage('next-frame', next_image);
 				}, true);
 				
 				scope.setSource = function(new_source) {
 					source = new_source;
 					
 					if(source !== undefined) {
-						scope.current_image  = source.initial();
-						scope.previous_image = source.previous(scope.current_image.id);
-						scope.next_image     = source.next(scope.current_image.id);
+						var current_image = source.initial();
+						
+						scope.frames = [
+							source.previous(current_image), 
+							current_image, 
+							source.next(current_image)
+						];
 						
 						scope.$apply();
 					}
 					else {
-						scope.previous_image = undefined;
-						scope.current_image  = undefined;
-						scope.next_image     = undefined;
+						scope.frames = [];
 					}
 				};
 				
@@ -143,13 +130,35 @@ require([
 					scope.move(event);
 				};
 				
+				scope.$watch('frames', function(frames) {
+					if(frames !== undefined) {
+						for(var frame_id in frames) {
+							var 
+								frame = frames[frame_id], 
+								photo = frame.photo, 
+								size = attrs.photoSize, 
+								frame_el = el.querySelector('[data-frame-id="'+frame_id+'"]');
+							
+							if(photo !== undefined) {
+								frame_el.style.backgroundImage = 'url('+photo.prefix+size+photo.suffix+')';
+								frame_el.classList.remove('loading');
+							}
+							else {
+								frame_el.style.backgroundImage = null;
+								frame_el.classList.add('loading');
+							}
+						}
+						
+						scope.current_image  = frames[current_frame_id];
+						scope.next_image     = frames[(current_frame_id+1)%3];
+						scope.previous_image = frames[(current_frame_id+2)%3];
+					}
+				}, true);
+				
 				scope.move = function(event) {
 					event.preventDefault();
 					
-					if(
-						(event.gesture.deltaX < 0 && scope.current_image.id === scope.previous_image.id) ||
-						(event.gesture.deltaX > 0 && scope.current_image.id === scope.next_image.id)
-					) {
+					if(!move_allowed(event.gesture.deltaX)) {
 						return;
 					}
 					
@@ -163,10 +172,7 @@ require([
 				scope.end  = function(event) {
 					event.preventDefault();
 					
-					if(
-						(event.gesture.deltaX < 0 && scope.current_image.id === scope.previous_image.id) ||
-						(event.gesture.deltaX > 0 && scope.current_image.id === scope.next_image.id)
-					) {
+					if(!move_allowed(event.gesture.deltaX)) {
 						return;
 					}
 					
@@ -178,25 +184,31 @@ require([
 					
 					if(dragged_enough) {
 						var 
-							previous = wrapper.querySelector(direction === 'next' ? '.current-frame'  : '.next-frame'), 
-							current  = wrapper.querySelector(direction === 'next' ? '.next-frame'     : '.previous-frame'), 
-							next     = wrapper.querySelector(direction === 'next' ? '.previous-frame' : '.current-frame');
+							isNext = direction === 'next', 
+							
+							old_previous_el      = wrapper.querySelector('.previous-frame'), 
+							old_current_el       = wrapper.querySelector('.current-frame'), 
+							old_next_el          = wrapper.querySelector('.next-frame'), 
+							
+							new_previous_el      = isNext ? old_current_el  : old_next_el, 
+							new_current_el       = isNext ? old_next_el     : old_previous_el, 
+							new_next_el          = isNext ? old_previous_el : old_current_el, 
+							
+							old_current_frame_id = current_frame_id, 
+							new_current_frame_id = (old_current_frame_id + (isNext ? 1 : 2)) % 3, 
+							replaced_frame_id    = (old_current_frame_id + (isNext ? 2 : 1)) % 3, 
+							
+							new_current_image    = scope.frames[new_current_frame_id], 
+							new_image            = source[direction](new_current_image);
 						
-						previous.className = 'carousel-frame previous-frame';
-						current.className  = 'carousel-frame current-frame';
-						next.className     = 'carousel-frame next-frame';
+						old_current_el.classList.add('carousel-target');
 						
-						(direction === 'next' ? previous : next).classList.add('carousel-target');
+						new_previous_el.className       = 'carousel-frame previous-frame';
+						new_current_el.className        = 'carousel-frame current-frame';
+						new_next_el.className           = 'carousel-frame next-frame';
 						
-						var 
-							new_current_image  = scope[(direction === 'next' ? 'next_image' : 'previous_image')], 
-							new_image          = source[direction](new_current_image.id), 
-							new_previous_image = direction === 'next' ? scope.current_image : new_image, 
-							new_next_image     = direction === 'next' ? new_image : scope.current_image;
-						
-						scope.previous_image = new_previous_image;
-						scope.current_image  = new_current_image;
-						scope.next_image     = new_next_image;
+						scope.frames[replaced_frame_id] = new_image;
+						current_frame_id                = new_current_frame_id;
 					}
 					
 					wrapper.style.transition = null;
@@ -213,10 +225,11 @@ require([
 			}
 		};
 	})
-	.directive('gallery', function() {
+	.directive('gallery', ['thFoursquare', function(thFoursquare) {
 		return {
 			link: function(scope, elm, attrs) {
-				var carousel = document.querySelector(attrs.gallery);
+				var 
+					carousel = document.querySelector(attrs.gallery);
 				
 				if(carousel === null) {
 					return;
@@ -224,42 +237,134 @@ require([
 				
 				var 
 					initial_position, 
+					elements, 
 					images, 
-					image = function(position) {
-						var 
-							l = images.length, 
-							position = (position + l) % l;
+					fsqPhotos, 
+					pending, 
+					pending_id = 0, 
+					getImages = function(el) {
+						if(images === null) {
+							pending = {}, 
+							images = {
+								items: [].map.call(elements, function(el, i) {
+									var 
+										img = el.querySelector('img'), 
+										photo = angular.element(el).scope().photo;
+									
+									return {
+										id:    i, 
+										photo: photo
+									};
+								})
+							};
+							
+							if(fsqPhotos === null) {
+								images.count = images.items.length;
+							}
+						}
 						
-						return images[position];
+						return images;
+					}, 
+					image = function(position, delta) {
+						var 
+							images = getImages(), 
+							count = images.count, 
+							image = {foo: 'bar'}, 
+							offset = images.items.length, 
+							limit = 30;
+						
+						if(typeof position !== 'number') {
+							if(position.id === undefined) {
+								pending[pending_id] = {
+									position: position, 
+									delta: delta, 
+									image: {}
+								}
+								
+								return pending[pending_id++].image;
+							}
+							
+							position = position.id + delta;
+						}
+						
+						if(count !== undefined) {
+							position = (position + count) % count;
+						}
+						else {
+							position = Math.max(0, position);
+						}
+						
+						if(images.items[position] !== undefined) {
+							return images.items[position];
+						}
+						
+						fsqPhotos(offset, limit, function(response) {
+							for(var i = 0; i < response.data.items.length; i++) {
+								var 
+									id = offset + i, 
+									img = response.data.items[i];
+								
+								images.items[id] = {
+									id: id, 
+									photo: img
+								}
+							}
+							
+							if(response.data.items.length !== limit) {
+								images.count = images.items.length;
+							}
+							
+							angular.copy(images.items[position], image);
+							for(var i in pending) {
+								var p = pending[i];
+								if(p.position.id !== null) {
+									angular.copy(images.items[p.position.id + p.delta], p.image);
+									delete pending[i];
+								}
+							}
+						});
+						
+						return image;
 					}, 
 					source = {
 						initial: function() {
 							return image(initial_position);
 						}, 
-						previous: function(current_position) {
-							return image(current_position - 1);
+						previous: function(current) {
+							return image(current, -1);
 						}, 
-						next: function(current_position) {
-							return image(current_position + 1);
+						next: function(current) {
+							return image(current, 1);
 						}
 					};
+				
+				scope.$watch(attrs.gallerySourceId, function(id) {
+					images = null;
+					
+					if(id !== undefined && attrs.gallerySourceType !== undefined) {
+						fsqPhotos = (function(type, venue_id) {
+							return function(offset, limit, data, success, failure) {
+								return thFoursquare.api[type+'s'].photos({
+									venueId: venue_id, 
+									offset: offset, 
+									limit : limit
+								}, data, success, failure);
+							}
+						}) (attrs.gallerySourceType, id);
+					}
+					else {
+						fsqPhotos = null;
+					}
+				});
 				
 				elm.bind('click', function(event) {
 					event.preventDefault();
 					
 					var 
-						setCarouselSource = angular.element(carousel).scope().setSource, 
-						elements = elm[0].querySelectorAll('li');
-					images = [].map.call(elements, function(el, i) {
-						var a = el.querySelector('a');
-						
-						return {
-							id: i, 
-							src: a.href, 
-							user: angular.fromJson(a.dataset.user), 
-							createdAt: angular.fromJson(a.dataset.createdAt)
-						};
-					});
+						setCarouselSource = angular.element(carousel).scope().setSource;
+					
+					elements = elm[0].querySelectorAll('li');
+					images = null;
 					
 					initial_position = -1;
 					[].forEach.call(elements, function(el, i) {
@@ -280,7 +385,7 @@ require([
 				});
 			}
 		};
-	})
+	}])
 	.controller('FoursquareApp', ['$scope', 'thFoursquare', 'thL20NContext', function FoursquareApp($scope, thFoursquare, thL20NContext) {
 		$scope.fsq = thFoursquare;
 		
