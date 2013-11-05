@@ -91,7 +91,7 @@ require([
 					toolbar = el.querySelector('.carousel-toolbar'), 
 					wrapper = el.querySelector('.carousel-wrapper'), 
 					move_allowed = function(deltaX) {
-						return (
+						return scope.current_image !== undefined && (
 							(deltaX > 0 && scope.current_image.id !== scope.previous_image.id) || 
 							(deltaX < 0 && scope.current_image.id !== scope.next_image.id)
 						);
