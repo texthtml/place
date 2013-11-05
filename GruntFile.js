@@ -3,29 +3,17 @@ module.exports = function(grunt) {
 		ffospush: {
 			app: {
 				appId: 'place.texthtml.net', 
-				zip: 'build/place.zip'
+				zip: 'temp/place.zip'
 			}
 		}, 
 		compress: {
 			package: {
 				options: {
-					archive: 'build/place.zip'
+					archive: 'temp/place.zip'
 				}, 
 				files: [
-					{src: 'bower_components/gaia-ui-building-blocks/style/headers/images/**'}, 
-					{src: 'bower_components/gaia-ui-building-blocks/style/input_areas/images/**'}, 
-					{src: 'bower_components/gaia-ui-building-blocks/style/buttons/images/**'}, 
-					{src: 'bower_components/gaia-ui-building-blocks/style/switches/images/**'}, 
-					{src: 'bower_components/gaia-ui-building-blocks/style_unstable/lists/images/**'}, 
-					{src: 'bower_components/gaia-ui-building-blocks/style_unstable/progress_activity/images/**'}, 
-					{src: 'bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/**'}, 
-					{src: 'bower_components/angularjs-foursquare/images/connect-*'}, 
-					{src: 'bower_components/angularjs-foursquare/authenticated.js'}, 
-					{src: 'locales/**'}, 
-					{src: 'build/images/**'}, 
-					{src: 'build/index.*'}, 
-					{src: 'build/authenticated.html'}, 
-					{expand: true, src: 'build/manifest.webapp', dest: '/', flatten: true}
+					{cwd: 'build/', expand: true, src: '**', dest: '/'}
+					// {expand: true, src: 'build/manifest.webapp', dest: '/', flatten: true}
 				]
 			}
 		}, 
@@ -53,12 +41,15 @@ module.exports = function(grunt) {
 							return content.replace(/\/src\//g, '/build/');
 						}
 						else if(file === 'manifest.webapp') {
-							return content.replace(/web/g, 'privileged');
+							return content.replace(/web/g, 'privileged').replace(/\/build\//g, '/');
+						}
+						else if(file === 'temp/index.css') {
+							return content.replace(/\.\.\/bower_components/g, 'bower_components');
 						}
 						else if(file === 'src/index.html') {
 							return content
 								.replace(/.*\/bower_components\/requirejs\/require.js.*\n/g, '')
-								.replace(/(\s*)(<\/body>)/, '$1\t<script src="/build/index.js"></script>$1$2');
+								.replace(/(\s*)(<\/body>)/, '$1\t<script src="index.js"></script>$1$2');
 						}
 						else if(file === 'temp/index.css') {
 							return content.replace(/([^.])\/bower_components/g, '$1../components');
@@ -68,12 +59,22 @@ module.exports = function(grunt) {
 					processContentExclude: ['**/images/**']
 				}, 
 				files: [
-					{expand: true, cwd: 'src', src: 'index.html', dest: 'build/'}, 
-					{expand: true, cwd: 'src', src: 'authenticated.html', dest: 'build/'}, 
-					{expand: true, cwd: 'src', src: 'images/**', dest: 'build/'}, 
-					{expand: true, cwd: 'src', src: 'manifest.webapp', dest: '.'}, 
-					{expand: true, cwd: '.', src: 'manifest.webapp', dest: 'build/'}, 
-					{expand: true, cwd: 'temp', src: 'index.css', dest: 'build/'}
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/headers/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/input_areas/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/buttons/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/switches/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style_unstable/lists/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style_unstable/progress_activity/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/images/connect-*'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/authenticated.js'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'locales/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'manifest.webapp'}, 
+					{expand: true, dest: 'build/', cwd: 'src',  src: 'index.html'}, 
+					{expand: true, dest: 'build/', cwd: 'src',  src: 'authenticated.html'}, 
+					{expand: true, dest: 'build/', cwd: 'src',  src: 'images/**'}, 
+					{expand: true, dest: 'build/', cwd: 'temp', src: 'index.css'}, 
+					{expand: true, dest: '.',      cwd: 'src',  src: 'manifest.webapp'}, 
 				]
 			}, 
 			angular: {
@@ -98,7 +99,8 @@ module.exports = function(grunt) {
 							.replace('1BEYPWIORJCADPTGGG4P42TGWHZKERP3YTJ54L144PHJ0Q2J', 'R4MYVBHKVMCNR0MAB5YTWRIJ5Z2ROR3R2DWRDTC1EOQCKEEI')
 							.replace('QQ3BOXSPS1OSYUS0NZG3MT2GHWJC1LDQFI1DXVG5M21JHP0Q', 'GZ2TX5NP0VX3EV1CSACE455GKE3CYLHMIHHJKDUX0LWGJSCN')
 							.replace('http://\' + location.hostname + \'/authenticated.html', 'http://place.texthtml.net/authenticated.html')
-							.replace('require([\'place\']);', 'require([\'../temp/place\']);');
+							.replace('require([\'place\']);', 'require([\'../temp/place\']);')
+							.replace(/\.\.\/locales/g, 'locales');
 					}
 				}, 
 				files: [
