@@ -91,7 +91,7 @@ require([
 					toolbar = el.querySelector('.carousel-toolbar'), 
 					wrapper = el.querySelector('.carousel-wrapper'), 
 					move_allowed = function(deltaX) {
-						return (
+						return scope.current_image !== undefined && (
 							(deltaX > 0 && scope.current_image.id !== scope.previous_image.id) || 
 							(deltaX < 0 && scope.current_image.id !== scope.next_image.id)
 						);
@@ -131,7 +131,7 @@ require([
 					scope.move(event);
 				};
 				
-				scope.$watch('frames', function(frames) {
+				scope.$watch('frames', function(frames, old_frames) {
 					if(frames !== undefined) {
 						for(var frame_id in frames) {
 							var 
@@ -141,8 +141,13 @@ require([
 								frame_el = el.querySelector('[data-frame-id="'+frame_id+'"]');
 							
 							if(photo !== undefined) {
-								frame_el.style.backgroundImage = 'url('+photo.prefix+size+photo.suffix+')';
-								frame_el.classList.remove('loading');
+								if(
+									old_frames === undefined || 
+									frame.photo.id !== old_frames[frame_id].photo.id
+								) {
+									frame_el.style.backgroundImage = 'url('+photo.prefix+size+photo.suffix+')';
+									frame_el.classList.remove('loading');
+								}
 							}
 							else {
 								frame_el.style.backgroundImage = null;
