@@ -100,6 +100,7 @@ require([
 				scope.$watch('current_image', function(current_image) {
 					if(current_image === undefined) {
 						el.classList.remove('active-carousel');
+						scope.frames = undefined;
 					}
 					else {
 						el.classList.add('active-carousel');
