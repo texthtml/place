@@ -347,7 +347,7 @@
 				hm:drag-start ="start($event)"
 				hm:drag="move($event)"
 				hm:drag-end="end($event)"
-				hm:double-tap="stop()"
+				hm:swipe-down="stop()"
 				hm:tap="toggleToolbar()"
 			>\
 				<div 
@@ -379,7 +379,7 @@
 					<li>
 						<button
 							class="carousel-close-button"
-							hm:tap="stop()"
+							ng:click="stop($event)"
 						>
 							<span class="icon icon-close" l20n:id="close"></span>
 						</button>
