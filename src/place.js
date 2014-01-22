@@ -16,7 +16,7 @@ require([
 			redirectURI: 'http://' + location.hostname + '/authenticated.html'
 		};
 		
-		thL20NContextProvider.registerLocales('en', ['en', 'fr', 'pt']);
+		thL20NContextProvider.registerLocales('en', ['en', 'fr', 'pt', 'es']);
 		
 		thL20NContextProvider.linkResource(function(locale) {
 			return '../locales/' + locale + '.lol';
