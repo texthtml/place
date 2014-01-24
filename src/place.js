@@ -508,7 +508,7 @@ require([
 					delete $scope.checkin.shout;
 					delete $scope.checkin.createdAt;
 					
-					alert(thL20NContext.get('checkin_failed'));
+					alert(thL20NContext.getSync('checkin_failed'));
 				});
 			}
 			else {
@@ -573,7 +573,7 @@ require([
 							if($scope.locating && last_request_id === current_request) {
 								$scope.located  = true;
 								$scope.locating = false;
-								$scope.position = thL20NContext.get('i_see_you');
+								$scope.position = thL20NContext.getSync('i_see_you');
 							}
 							if($scope.$$phase === null) {
 								$scope.$apply();
