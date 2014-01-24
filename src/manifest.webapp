@@ -33,5 +33,28 @@
 			"from": "http://place.texthtml.net/authenticated.html", 
 			"to" : "/src/authenticated.html"
 		}
-	]
+	],
+	
+	"locales": {
+		"en": {
+			"name": "Place",
+			"description": "Simple Foursquare client"
+		},
+		"fr": {
+			"name": "Place",
+			"description": "Simple client Foursquare"
+		},
+		"de": {
+			"name": "Place",
+			"description": "Simple Foursquare client"
+		},
+		"pt": {
+			"name": "Place",
+			"description": "Foursquare para FirefoxOS"
+		},
+		"es": {
+			"name": "Place",
+			"description": "Un cliente simple de Foursquare"
+		}
+	}
 }
