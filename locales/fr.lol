@@ -1,3 +1,7 @@
+<plural($n) {
+    $n == 0 ? "zero" : $n == 1 ? "one" : "many"
+}>
+
 <user_at_venue "{{$user.firstName}} à: {{$venue.name}}">
 
 <anonymous_at_venue "{{$venue.name}}">
@@ -76,14 +80,10 @@
 
 <unlike "Je n'aime plus">
 
-<like_summary "❤ {{$likes.summary}}">
-
-/**
- * ne fonctione pas :(
- */
-<like_summaryfr[$likes.count, $likes.summary] {
-	0: "Personne n'aime ça", 
-	1: {
+<like_summary[plural($likes.count), $likes.summary] {
+    zero: "Personne n'aime ça", 
+	one: {
+		You: "❤ Tu aimes ça", 
 		Toi: "❤ Tu aimes ça", 
 		*unknown: "❤ {{$likes.summary}} aime ça"
 	}, 

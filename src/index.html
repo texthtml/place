@@ -195,7 +195,7 @@
 				
 				<button ng:show="checkin.id && !checkin.like" hm-tap="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})" l20n:id="like"></button>
 				<button ng:show="checkin.id && checkin.like"  hm-tap="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})" l20n:id="unlike"></button>
-				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes:checkin.likes}"></p>
+				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes: checkin.likes}"></p>
 				
 				<p role="status" ng:show="loading">
 					<span ng:show="" l20n:id="loading_comments_and_photos"></span>
