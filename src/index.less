@@ -1,17 +1,41 @@
+@import '../bower_components/Building-Blocks/style/headers.css';
+@import '../bower_components/Building-Blocks/style/input_areas.css';
+@import '../bower_components/Building-Blocks/style/buttons.css';
+@import '../bower_components/Building-Blocks/style/switches.css';
+@import '../bower_components/Building-Blocks/style_unstable/toolbars.css';
+@import '../bower_components/Building-Blocks/style_unstable/lists.css';
+@import '../bower_components/Building-Blocks/style_unstable/progress_activity.css';
+@import '../bower_components/Building-Blocks/style_unstable/drawer.css';
 @import '../bower_components/angularjs-webapp/angularjs-webapp.css';
-@import '../bower_components/gaia-ui-building-blocks/style/headers.css';
-@import '../bower_components/gaia-ui-building-blocks/style/input_areas.css';
-@import '../bower_components/gaia-ui-building-blocks/style/buttons.css';
-@import '../bower_components/gaia-ui-building-blocks/style/switches.css';
-@import '../bower_components/gaia-ui-building-blocks/style_unstable/toolbars.css';
-@import '../bower_components/gaia-ui-building-blocks/style_unstable/lists.css';
-@import '../bower_components/gaia-ui-building-blocks/style_unstable/progress_activity.css';
-// @import 'bower_components/photoswipe/release/3.0.3/photoswipe.css';
-@import 'drawer.css';
 
 html, body {
 	font: 10px/1em "MozTT", Sans-serif;
 }
+
+section.active[role="region"]:target {
+	transform: translateX(80%);
+}
+
+
+section[data-type="sidebar"] > nav > ul > li > label {
+	color: #fff;
+	font-size: 1.6rem;
+	line-height: 4.35rem;
+	border-bottom: 0.1rem solid #596068;
+	text-indent: 3rem;
+	padding-right: 0.8rem;
+	width: 100%;
+	-moz-box-sizing: border-box;
+	display: block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	
+	&.pack-switch input ~ span:after {
+		right: 3rem;
+	}
+}
+
 
 [data-type="list"] li.expanded {
 	p {
@@ -256,7 +280,7 @@ carousel {
 			
 			&.loading {
 				background-size: auto;
-				background-image: url(../bower_components/gaia-ui-building-blocks/style_unstable/progress_activity/images/ui/default.png);
+				background-image: url(../bower_components/Building-Blocks/style_unstable/progress_activity/images/ui/default.png);
 				animation: 2s rotate infinite steps(30);
 			}
 		}
@@ -284,7 +308,7 @@ carousel {
 				background: ~"transparent no-repeat center center / 3rem auto";
 				font-size: 0;
 				overflow: hidden;
-				background-image: url('../bower_components/gaia-ui-building-blocks/style/headers/images/icons/close.png');
+				background-image: url('../bower_components/Building-Blocks/style/headers/images/icons/close.png');
 			}
 		}
 		

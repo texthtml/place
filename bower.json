@@ -19,10 +19,10 @@
     "almond": "~0.2.6",
     "builds": "l20n/builds",
     "requirejs": "~2.1.8",
+    "Building-Blocks": "buildingfirefoxos/Building-Blocks#~1.3.1",
     "angularjs-foursquare": "git://texthtml.net/webapp/lib/angularjs/foursquare.git",
     "angularjs-geolocation": "git://texthtml.net/webapp/lib/angularjs/geolocation.git",
     "angularjs-webapp": "git://texthtml.net/webapp/lib/angularjs/webapp.git",
-    "gaia-ui-building-blocks": "git://github.com/mozilla-b2g/Gaia-UI-Building-Blocks.git#~0.1.0",
     "angularjs-l20n": "git://texthtml.net/webapp/lib/angularjs/l20n.git#develop",
     "angular-gestures": "~0.1.1",
     "momentjs": "~2.4.0"

@@ -15,7 +15,7 @@
 	<body ng:controller="FoursquareApp" role="application">
 		
 		
-		<section role="region" ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
+		<section ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
 				<h1 l20n:id="settings"></h1>
 			</header>
@@ -25,13 +25,13 @@
 				<h2 ng:show="settings.twitter" l20n:id="twitter_settings"></h2>
 				<ul ng:show="settings.twitter">
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
 							<span l20n:id="twitter_send_badges"></span>
 						</label>
 					</li>
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
 							<span l20n:id="twitter_send_mayorships"></span>
 						</label>
@@ -40,13 +40,13 @@
 				<h2 ng:show="settings.facebook" l20n:id="facebook_settings"></h2>
 				<ul ng:show="settings.facebook">
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendBadgesToFacebook" ng:disabled="!settings.facebook"/>
 							<span l20n:id="facebook_send_badges"></span>
 						</label>
 					</li>
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendMayorshipsToFacebook" ng:disabled="!settings.facebook"/>
 							<span l20n:id="facebook_send_mayorships"></span>
 						</label>
@@ -55,13 +55,13 @@
 				<h2 ng:show="geolocationSupported" l20n:id="geolocation_settings"></h2>
 				<ul ng:show="geolocationSupported">
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="geolocationEnabled">
 							<span l20n:id="geolocation_auto"></span>
 						</label>
 					</li>
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy">
 							<span l20n:id="geolocation_high_accuracy"></span>
 						</label>
@@ -87,7 +87,8 @@
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
-				<button th:screen="#settings"><span class="icon icon-menu" l20n:id="settings"></span></button>
+				<a href="#content"><span class="icon icon-menu" l20n:id="hide_settings"></span></a>
+				<a href="#home"><span class="icon icon-menu" l20n:id="settings"></span></a>
 				<button th:screen="$home"><span class="icon icon-menu" l20n:id="home"></span></button>
 				<menu type="toolbar">
 					<button hm-tap="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh" l20n:id="refresh"></span></button>
