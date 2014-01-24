@@ -408,22 +408,46 @@ require([
 			thL20NContext.updateData({me: $scope.me});
 		});
 	}])
-	.controller('FoursquareHome', ['$scope', 'thFoursquare', function FoursquareHome($scope, thFoursquare) {
+	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', function FoursquareHome($scope, thFoursquare, $timeout, $q) {
 		$scope.loading = false;
 		
 		$scope.refresh = function refreshRecentCheckin() {
+			var deferred = $q.defer();
+			
 			$scope.loading = true;
 			thFoursquare.api.checkins.recent(function(response) {
 				$scope.checkins = [];
 				[].push.apply($scope.checkins, response.data);
 				$scope.loading = false;
-			});
+				deferred.resolve();
+			}, deferred.reject);
+			
+			return deferred.promise;
 		};
 		
+		var hearbeat = null;
+		
 		$scope.$watch('fsq.logged', function(logged) {
-			$scope.checkins = [];
 			if(logged) {
-				$scope.refresh();
+				var periodic_refresh = function(timeout) {
+					var restart = function() {
+						hearbeat = $timeout(function() {
+							periodic_refresh(timeout);
+						}, timeout);
+					};
+					
+					$scope.refresh().then(restart, restart);
+				}
+				
+				periodic_refresh(15*60*1000);
+			}
+			else {
+				$scope.checkins = [];
+				
+				if(hearbeat !== null) {
+					$timeout.cancel(hearbeat);
+					hearbeat = null;
+				}
 			}
 		});
 		
