@@ -29,7 +29,6 @@ require([
 		
 		thFoursquareProvider.config(config);
 		
-		
 		moment.lang(navigator.language);
 	}])
 	.directive('model', function() {
@@ -397,21 +396,25 @@ require([
 		
 		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
 		
-		$scope.$watch('fsq.logged', function(logged) {
-			if(logged) {
-				$scope.me = thFoursquare.api.users();
-			}
-			else {
-				delete $scope.me;
-			}
+		thL20NContext.ready(function() {
+			thFoursquare.setLocale(thL20NContext.supportedLocales[0]);
 			
-			thL20NContext.updateData({me: $scope.me});
+			$scope.$watch('fsq.logged', function(logged) {
+				if(logged) {
+					$scope.me = thFoursquare.api.users();
+				}
+				else {
+					delete $scope.me;
+				}
+				
+				thL20NContext.updateData({me: $scope.me});
+			});
 		});
 	}])
-	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', function FoursquareHome($scope, thFoursquare, $timeout, $q) {
+	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', 'thL20NContext', function FoursquareHome($scope, thFoursquare, $timeout, $q, thL20NContext) {
 		$scope.loading = false;
 		
-		$scope.refresh = function refreshRecentCheckin() {
+		var refreshRecentCheckin = function refreshRecentCheckin() {
 			var deferred = $q.defer();
 			
 			$scope.loading = true;
@@ -421,6 +424,18 @@ require([
 				$scope.loading = false;
 				deferred.resolve();
 			}, deferred.reject);
+			
+			return deferred.promise;
+		};
+		
+		$scope.refresh = function() {
+			var deferred = $q.defer();
+			
+			$scope.loading = true;
+			thL20NContext.ready(function() {
+				$scope.refresh = refreshRecentCheckin;
+				$scope.refresh().then(deferred.resolve, deferred.reject);
+			});
 			
 			return deferred.promise;
 		};

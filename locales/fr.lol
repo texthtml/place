@@ -83,7 +83,6 @@
 <like_summary[plural($likes.count), $likes.summary] {
     zero: "Personne n'aime ça", 
 	one: {
-		You: "❤ Tu aimes ça", 
 		Toi: "❤ Tu aimes ça", 
 		*unknown: "❤ {{$likes.summary}} aime ça"
 	}, 
