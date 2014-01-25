@@ -139,7 +139,7 @@ require([
 								size = attrs.photoSize, 
 								frame_el = el.querySelector('[data-frame-id="'+frame_id+'"]');
 							
-							if(photo !== undefined) {
+							if(photo !== undefined && photo.prefix !== undefined) {
 								if(
 									old_frames === undefined || 
 									frame.photo.id !== old_frames[frame_id].photo.id
@@ -274,7 +274,7 @@ require([
 						var 
 							images = getImages(), 
 							count = images.count, 
-							image = {foo: 'bar'}, 
+							image = {photo: {}}, 
 							offset = images.items.length, 
 							limit = 30;
 						
