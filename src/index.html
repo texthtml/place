@@ -245,14 +245,7 @@
 					<ul gallery="#carousel">
 						<li ng:repeat="photo in checkin.photos.items">
 							<aside>
-								<a 
-									th:fsq-photo="photo" 
-									th:fsq-photo-size="cap480"
-									data-user="{{photo.user}}"
-									data-created-at="{{photo.createdAt}}"
-								>
-									<img th:fsq-photo="photo" th:fsq-photo-size="cap100" />
-								</a>
+								<img th:fsq-photo="photo" th:fsq-photo-size="cap100"/>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -316,7 +309,6 @@
 						<li ng:repeat="photo in group.items">
 							<aside>
 								<img th:fsq-photo="photo" th:fsq-photo-size="cap100"/>
-								</a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -389,6 +381,6 @@
 			</div>
 		</script>
 		
-		<carousel id="carousel" photo-size="cap480">
+		<carousel id="carousel" photo-size="{{fsqCapSize}}">
 	</body>
 </html>

@@ -391,7 +391,7 @@ require([
 			}
 		};
 	}])
-	.controller('FoursquareApp', ['$scope', 'thFoursquare', 'thL20NContext', function FoursquareApp($scope, thFoursquare, thL20NContext) {
+	.controller('FoursquareApp', ['$scope', 'thFoursquare', 'thL20NContext', '$window', function FoursquareApp($scope, thFoursquare, thL20NContext, $window) {
 		$scope.fsq = thFoursquare;
 		
 		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
@@ -410,6 +410,8 @@ require([
 				thL20NContext.updateData({me: $scope.me});
 			});
 		});
+		
+		$scope.fsqCapSize = 'cap' + Math.max($window.screen.width, $window.screen.height);
 	}])
 	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', 'thL20NContext', function FoursquareHome($scope, thFoursquare, $timeout, $q, thL20NContext) {
 		$scope.loading = false;
