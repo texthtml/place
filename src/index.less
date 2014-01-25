@@ -31,6 +31,14 @@ section[data-type="sidebar"] > nav > ul > li > label {
 	white-space: nowrap;
 	overflow: hidden;
 	
+	&.pack-switch span {
+		display: block;
+		line-height: 5rem;
+		width: ~"calc(100% - 9rem)";
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
 	&.pack-switch input ~ span:after {
 		right: 3rem;
 	}
@@ -137,7 +145,6 @@ ul.categories {
 
 #home {
 	[role=main] {
-		width: ~"calc(100% - 2rem)";
 		& > p {
 			text-align: center;
 		}
@@ -212,11 +219,6 @@ ul.categories {
 		[th\:screen="#settings"] {
 			display: none;
 		}
-	}
-	
-	label:not([for]) input + span {
-		left: 3rem;
-		line-height: 2rem;
 	}
 
 	button {
