@@ -516,6 +516,10 @@ require([
 					$scope.checkin.comments.count = 1;
 				}
 				$scope.replaceState();
+			}, function() {
+				$scope.checkin.comments.items.pop();
+				$scope.posting = false;
+				$scope.replaceState();
 			});
 		};
 		
@@ -586,6 +590,8 @@ require([
 				$scope.checkin.photos.items.push(response.data);
 				
 				$scope.replaceState();
+			}, function() {
+				$scope.uploading = false;
 			});
 		};
 	}])
