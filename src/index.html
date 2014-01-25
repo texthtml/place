@@ -257,7 +257,7 @@
 					</ul>
 				</div>
 				<progress  ng:style="{true:{}, false: {visibility: 'hidden'}}[uploading]" value="0" max="100" class="pack-activity"></progress>
-				<form ng:show="checkin.id && canUploadPhoto" ng:submit="uploadPhoto()">
+				<form ng:show="checkin.id && canUploadPhoto && checkin.user.id == me.id" ng:submit="uploadPhoto()">
 					<p>
 						<input type="file" model="photo" required accept="image/*"/>
 						<button type="submit" ng:class="{recommend: !checkin.photos.count}" ng:disabled="uploading" l20n:id="save_photo"></button>
