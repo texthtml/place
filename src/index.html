@@ -15,7 +15,7 @@
 	<body ng:controller="FoursquareApp" role="application">
 		
 		
-		<section role="region" ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
+		<section ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
 				<h1 l20n:id="settings"></h1>
 			</header>
@@ -25,13 +25,13 @@
 				<h2 ng:show="settings.twitter" l20n:id="twitter_settings"></h2>
 				<ul ng:show="settings.twitter">
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendBadgesToTwitter" ng:disabled="!settings.twitter"/>
 							<span l20n:id="twitter_send_badges"></span>
 						</label>
 					</li>
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendMayorshipsToTwitter" ng:disabled="!settings.twitter"/>
 							<span l20n:id="twitter_send_mayorships"></span>
 						</label>
@@ -40,13 +40,13 @@
 				<h2 ng:show="settings.facebook" l20n:id="facebook_settings"></h2>
 				<ul ng:show="settings.facebook">
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendBadgesToFacebook" ng:disabled="!settings.facebook"/>
 							<span l20n:id="facebook_send_badges"></span>
 						</label>
 					</li>
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="settings.sendMayorshipsToFacebook" ng:disabled="!settings.facebook"/>
 							<span l20n:id="facebook_send_mayorships"></span>
 						</label>
@@ -55,13 +55,13 @@
 				<h2 ng:show="geolocationSupported" l20n:id="geolocation_settings"></h2>
 				<ul ng:show="geolocationSupported">
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="geolocationEnabled">
 							<span l20n:id="geolocation_auto"></span>
 						</label>
 					</li>
 					<li>
-						<label class="pack-checkbox">
+						<label class="pack-switch">
 							<input type="checkbox" ng:model="geolocationHighAccuracy" ng:checked="geolocationHighAccuracy">
 							<span l20n:id="geolocation_high_accuracy"></span>
 						</label>
@@ -87,7 +87,8 @@
 		
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
-				<button th:screen="#settings"><span class="icon icon-menu" l20n:id="settings"></span></button>
+				<a href="#content"><span class="icon icon-menu" l20n:id="hide_settings"></span></a>
+				<a href="#home"><span class="icon icon-menu" l20n:id="settings"></span></a>
 				<button th:screen="$home"><span class="icon icon-menu" l20n:id="home"></span></button>
 				<menu type="toolbar">
 					<button hm-tap="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh" l20n:id="refresh"></span></button>
@@ -194,7 +195,7 @@
 				
 				<button ng:show="checkin.id && !checkin.like" hm-tap="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})" l20n:id="like"></button>
 				<button ng:show="checkin.id && checkin.like"  hm-tap="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})" l20n:id="unlike"></button>
-				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes:checkin.likes}"></p>
+				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes: checkin.likes}"></p>
 				
 				<p role="status" ng:show="loading">
 					<span ng:show="" l20n:id="loading_comments_and_photos"></span>
@@ -244,14 +245,7 @@
 					<ul gallery="#carousel">
 						<li ng:repeat="photo in checkin.photos.items">
 							<aside>
-								<a 
-									th:fsq-photo="photo" 
-									th:fsq-photo-size="cap480"
-									data-user="{{photo.user}}"
-									data-created-at="{{photo.createdAt}}"
-								>
-									<img th:fsq-photo="photo" th:fsq-photo-size="cap100" />
-								</a>
+								<img th:fsq-photo="photo" th:fsq-photo-size="cap100"/>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -263,7 +257,7 @@
 					</ul>
 				</div>
 				<progress  ng:style="{true:{}, false: {visibility: 'hidden'}}[uploading]" value="0" max="100" class="pack-activity"></progress>
-				<form ng:show="checkin.id && canUploadPhoto" ng:submit="uploadPhoto()">
+				<form ng:show="checkin.id && canUploadPhoto && checkin.user.id == me.id" ng:submit="uploadPhoto()">
 					<p>
 						<input type="file" model="photo" required accept="image/*"/>
 						<button type="submit" ng:class="{recommend: !checkin.photos.count}" ng:disabled="uploading" l20n:id="save_photo"></button>
@@ -315,7 +309,6 @@
 						<li ng:repeat="photo in group.items">
 							<aside>
 								<img th:fsq-photo="photo" th:fsq-photo-size="cap100"/>
-								</a>
 							</aside>
 							<p>
 								{{ photo.user.firstName }}
@@ -388,6 +381,6 @@
 			</div>
 		</script>
 		
-		<carousel id="carousel" photo-size="cap480">
+		<carousel id="carousel" photo-size="{{fsqCapSize}}">
 	</body>
 </html>

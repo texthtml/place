@@ -16,7 +16,7 @@ require([
 			redirectURI: 'http://' + location.hostname + '/authenticated.html'
 		};
 		
-		thL20NContextProvider.registerLocales('en', ['en', 'fr']);
+		thL20NContextProvider.registerLocales('en', ['en', 'fr', 'pt', 'es', 'de']);
 		
 		thL20NContextProvider.linkResource(function(locale) {
 			return '../locales/' + locale + '.lol';
@@ -28,7 +28,6 @@ require([
 		config.locale = thL20NContextProvider.supportedLocales[0];
 		
 		thFoursquareProvider.config(config);
-		
 		
 		moment.lang(navigator.language);
 	}])
@@ -140,7 +139,7 @@ require([
 								size = attrs.photoSize, 
 								frame_el = el.querySelector('[data-frame-id="'+frame_id+'"]');
 							
-							if(photo !== undefined) {
+							if(photo !== undefined && photo.prefix !== undefined) {
 								if(
 									old_frames === undefined || 
 									frame.photo.id !== old_frames[frame_id].photo.id
@@ -275,7 +274,7 @@ require([
 						var 
 							images = getImages(), 
 							count = images.count, 
-							image = {foo: 'bar'}, 
+							image = {photo: {}}, 
 							offset = images.items.length, 
 							limit = 30;
 						
@@ -392,38 +391,80 @@ require([
 			}
 		};
 	}])
-	.controller('FoursquareApp', ['$scope', 'thFoursquare', 'thL20NContext', function FoursquareApp($scope, thFoursquare, thL20NContext) {
+	.controller('FoursquareApp', ['$scope', 'thFoursquare', 'thL20NContext', '$window', function FoursquareApp($scope, thFoursquare, thL20NContext, $window) {
 		$scope.fsq = thFoursquare;
 		
 		$scope.canUploadPhoto = new XMLHttpRequest({mozSystem: true, mozAnon: true}).mozSystem;
 		
-		$scope.$watch('fsq.logged', function(logged) {
-			if(logged) {
-				$scope.me = thFoursquare.api.users();
-			}
-			else {
-				delete $scope.me;
-			}
+		thL20NContext.ready(function() {
+			thFoursquare.setLocale(thL20NContext.supportedLocales[0]);
 			
-			thL20NContext.updateData({me: $scope.me});
+			$scope.$watch('fsq.logged', function(logged) {
+				if(logged) {
+					$scope.me = thFoursquare.api.users();
+				}
+				else {
+					delete $scope.me;
+				}
+				
+				thL20NContext.updateData({me: $scope.me});
+			});
 		});
+		
+		$scope.fsqCapSize = 'cap' + Math.max($window.screen.width, $window.screen.height);
 	}])
-	.controller('FoursquareHome', ['$scope', 'thFoursquare', function FoursquareHome($scope, thFoursquare) {
+	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', 'thL20NContext', function FoursquareHome($scope, thFoursquare, $timeout, $q, thL20NContext) {
 		$scope.loading = false;
 		
-		$scope.refresh = function refreshRecentCheckin() {
+		var refreshRecentCheckin = function refreshRecentCheckin() {
+			var deferred = $q.defer();
+			
 			$scope.loading = true;
 			thFoursquare.api.checkins.recent(function(response) {
 				$scope.checkins = [];
 				[].push.apply($scope.checkins, response.data);
 				$scope.loading = false;
-			});
+				deferred.resolve();
+			}, deferred.reject);
+			
+			return deferred.promise;
 		};
 		
+		$scope.refresh = function() {
+			var deferred = $q.defer();
+			
+			$scope.loading = true;
+			thL20NContext.ready(function() {
+				$scope.refresh = refreshRecentCheckin;
+				$scope.refresh().then(deferred.resolve, deferred.reject);
+			});
+			
+			return deferred.promise;
+		};
+		
+		var hearbeat = null;
+		
 		$scope.$watch('fsq.logged', function(logged) {
-			$scope.checkins = [];
 			if(logged) {
-				$scope.refresh();
+				var periodic_refresh = function(timeout) {
+					var restart = function() {
+						hearbeat = $timeout(function() {
+							periodic_refresh(timeout);
+						}, timeout);
+					};
+					
+					$scope.refresh().then(restart, restart);
+				}
+				
+				periodic_refresh(15*60*1000);
+			}
+			else {
+				$scope.checkins = [];
+				
+				if(hearbeat !== null) {
+					$timeout.cancel(hearbeat);
+					hearbeat = null;
+				}
 			}
 		});
 		
@@ -475,6 +516,10 @@ require([
 					$scope.checkin.comments.count = 1;
 				}
 				$scope.replaceState();
+			}, function() {
+				$scope.checkin.comments.items.pop();
+				$scope.posting = false;
+				$scope.replaceState();
 			});
 		};
 		
@@ -508,7 +553,7 @@ require([
 					delete $scope.checkin.shout;
 					delete $scope.checkin.createdAt;
 					
-					alert(thL20NContext.get('checkin_failed'));
+					alert(thL20NContext.getSync('checkin_failed'));
 				});
 			}
 			else {
@@ -545,6 +590,8 @@ require([
 				$scope.checkin.photos.items.push(response.data);
 				
 				$scope.replaceState();
+			}, function() {
+				$scope.uploading = false;
 			});
 		};
 	}])
@@ -573,7 +620,7 @@ require([
 							if($scope.locating && last_request_id === current_request) {
 								$scope.located  = true;
 								$scope.locating = false;
-								$scope.position = thL20NContext.get('i_see_you');
+								$scope.position = thL20NContext.getSync('i_see_you');
 							}
 							if($scope.$$phase === null) {
 								$scope.$apply();

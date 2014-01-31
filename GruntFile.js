@@ -59,13 +59,13 @@ module.exports = function(grunt) {
 					processContentExclude: ['**/images/**']
 				}, 
 				files: [
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/headers/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/input_areas/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/buttons/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style/switches/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style_unstable/lists/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style_unstable/progress_activity/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/gaia-ui-building-blocks/style_unstable/drawer/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/headers/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/input_areas/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/buttons/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/switches/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/lists/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/progress_activity/images/**'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/drawer/images/**'}, 
 					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/images/connect-*'}, 
 					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/authenticated.js'}, 
 					{expand: true, dest: 'build/', cwd: '.',    src: 'locales/**'}, 
@@ -137,6 +137,13 @@ module.exports = function(grunt) {
 				}
 			}
 		}, 
+		bower: {
+			install: {
+				options: {
+					copy: false
+				}
+			}
+		}, 
 		clean: {
 			temp:    ['temp'], 
 			build:   ['build'], 
@@ -152,9 +159,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-firefoxos');
+	grunt.loadNpmTasks('grunt-bower-task');
 	
 	grunt.registerTask('angular', ['copy:angular']);
-	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'requirejs']);
+	grunt.registerTask('build',   ['bower:install', 'cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'requirejs']);
 	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
 	grunt.registerTask('default', ['build']);

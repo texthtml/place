@@ -1,7 +1,7 @@
 {
 	"name": "Place",
 	"description": "Simple Foursquare client",
-	"version": "v1.1.1", 
+	"version": "v1.2.0", 
 
 	"launch_path": "/src/index.html",
 
@@ -33,5 +33,28 @@
 			"from": "http://place.texthtml.net/authenticated.html", 
 			"to" : "/src/authenticated.html"
 		}
-	]
+	],
+	
+	"locales": {
+		"en": {
+			"name": "Place",
+			"description": "Simple Foursquare client"
+		},
+		"fr": {
+			"name": "Place",
+			"description": "Simple client Foursquare"
+		},
+		"de": {
+			"name": "Place",
+			"description": "Simple Foursquare client"
+		},
+		"pt": {
+			"name": "Place",
+			"description": "Foursquare para FirefoxOS"
+		},
+		"es": {
+			"name": "Place",
+			"description": "Un cliente simple de Foursquare"
+		}
+	}
 }
