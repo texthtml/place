@@ -413,7 +413,7 @@ require([
 		
 		$scope.fsqCapSize = 'cap' + Math.max($window.screen.width, $window.screen.height);
 	}])
-	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', 'thL20NContext', function FoursquareHome($scope, thFoursquare, $timeout, $q, thL20NContext) {
+	.controller('FoursquareHome', ['$scope', 'thFoursquare', '$timeout', '$q', 'thL20NContext', '$rootScope', function FoursquareHome($scope, thFoursquare, $timeout, $q, thL20NContext, $rootScope) {
 		$scope.loading = false;
 		
 		var refreshRecentCheckin = function refreshRecentCheckin() {
@@ -469,6 +469,10 @@ require([
 		});
 		
 		$scope.$on('fsq:new-checkin', $scope.refresh);
+		
+		$scope.openSettings = function() {
+			$rootScope.$broadcast('open-settings');
+		};
 	}])
 	.controller('FoursquareCheckin', ['$scope', '$rootScope', 'llConfig', 'thFoursquare', 'thL20NContext', 
 	function FoursquareCheckin($scope, $rootScope, llConfig, thFoursquare, thL20NContext) {
@@ -719,8 +723,8 @@ require([
 			}
 		}, true);
 	}])
-	.controller('FoursquareSettings', ['$scope', 'thFoursquare', 'thGeolocation', 
-	function FoursquareSettings($scope, thFoursquare, thGeolocation) {
+	.controller('FoursquareSettings', ['$scope', 'thFoursquare', 'thGeolocation', '$rootScope', 
+	function FoursquareSettings($scope, thFoursquare, thGeolocation, $rootScope) {
 		
 		$scope.geolocationSupported    = thGeolocation.supported;
 		$scope.geolocationEnabled      = localStorage.getItem('geolocationEnabled')      === 'true';
@@ -768,7 +772,7 @@ require([
 			'receivePings'        , 'receiveCommentPings'
 		].forEach(registerSettingHandler);
 		
-		$scope.loadSettings = function() {
+		$rootScope.$on('open-settings', function() {
 			if(thFoursquare.logged) {
 				$scope.loading = true;
 				$scope.settings = thFoursquare.api.settings.all(function(/* response */) {
@@ -779,7 +783,7 @@ require([
 					$scope.$apply();
 				}
 			}
-		};
+		});
 	}])
 	.factory('llConfig', ['thGeolocation', function(thGeolocation) {
 		return function(config) {

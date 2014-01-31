@@ -15,7 +15,7 @@
 	<body ng:controller="FoursquareApp" role="application">
 		
 		
-		<section ng:controller="FoursquareSettings" th:screen-activate="loadSettings()" id="settings" class="skin-organic" data-type="sidebar">
+		<section ng:controller="FoursquareSettings" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
 				<h1 l20n:id="settings"></h1>
 			</header>
@@ -88,7 +88,7 @@
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
 				<a href="#content"><span class="icon icon-menu" l20n:id="hide_settings"></span></a>
-				<a href="#home"><span class="icon icon-menu" l20n:id="settings"></span></a>
+				<a href="#home" ng:click="openSettings()"><span class="icon icon-menu" l20n:id="settings"></span></a>
 				<button th:screen="$home"><span class="icon icon-menu" l20n:id="home"></span></button>
 				<menu type="toolbar">
 					<button hm-tap="refresh()" ng:disabled="loading || !fsq.logged"><span class="icon icon-refresh" l20n:id="refresh"></span></button>
