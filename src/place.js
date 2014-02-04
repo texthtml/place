@@ -247,14 +247,12 @@ require([
 					fsqPhotos, 
 					pending, 
 					pending_id = 0, 
-					getImages = function(el) {
+					getImages = function() {
 						if(images === null) {
-							pending = {}, 
+							pending = {};
 							images = {
 								items: [].map.call(elements, function(el, i) {
-									var 
-										img = el.querySelector('img'), 
-										photo = angular.element(el).scope().photo;
+									var photo = angular.element(el).scope().photo;
 									
 									return {
 										id:    i, 
@@ -284,7 +282,7 @@ require([
 									position: position, 
 									delta: delta, 
 									image: {}
-								}
+								};
 								
 								return pending[pending_id++].image;
 							}
@@ -312,7 +310,7 @@ require([
 								images.items[id] = {
 									id: id, 
 									photo: img
-								}
+								};
 							}
 							
 							if(response.data.items.length !== limit) {
@@ -320,11 +318,11 @@ require([
 							}
 							
 							angular.copy(images.items[position], image);
-							for(var i in pending) {
-								var p = pending[i];
+							for(var j in pending) {
+								var p = pending[j];
 								if(p.position.id !== null) {
 									angular.copy(images.items[p.position.id + p.delta], p.image);
-									delete pending[i];
+									delete pending[j];
 								}
 							}
 						});
@@ -354,7 +352,7 @@ require([
 									offset: offset, 
 									limit : limit
 								}, data, success, failure);
-							}
+							};
 						}) (attrs.gallerySourceType, id);
 					}
 					else {
@@ -454,7 +452,7 @@ require([
 					};
 					
 					$scope.refresh().then(restart, restart);
-				}
+				};
 				
 				periodic_refresh(15*60*1000);
 			}
@@ -599,8 +597,8 @@ require([
 			});
 		};
 	}])
-	.controller('FoursquareSearch', ['$scope', '$timeout', 'thFoursquare', 'thGeolocation', 'llConfig', 'thL20NContext', 
-	function FoursquareSearch($scope, $timeout, thFoursquare, thGeolocation, llConfig, thL20NContext) {
+	.controller('FoursquareSearch', ['$scope', 'thFoursquare', 'thGeolocation', 'llConfig', 'thL20NContext', 
+	function FoursquareSearch($scope, thFoursquare, thGeolocation, llConfig, thL20NContext) {
 		$scope.venues   = [];
 		$scope.geocode  = '';
 		$scope.loading  = false;
@@ -705,8 +703,8 @@ require([
 		$scope.$watch('place', search_venues);
 		$scope.$watch('located', search_venues);
 	}])
-	.controller('FoursquareVenue', ['$scope', '$timeout', 'thFoursquare', 
-	function FoursquareVenue($scope, $timeout, thFoursquare) {
+	.controller('FoursquareVenue', ['$scope', 'thFoursquare', 
+	function FoursquareVenue($scope, thFoursquare) {
 		$scope.loading = false;
 		
 		$scope.$watch('venue', function(venue) {
@@ -799,12 +797,12 @@ require([
 	.filter('moment.format', function() {
 		return function(value, format) {
 			return moment(value).format(format);
-		}
+		};
 	})
 	.filter('moment.fromNow', function() {
 		return function(value) {
 			return moment(value).fromNow();
-		}
+		};
 	});
 	
 	angular.bootstrap(document.documentElement, ['FoursquareApp']);
