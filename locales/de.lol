@@ -32,7 +32,7 @@
 
 <log_out "Abmelden">
 
-<contact "Kontact">
+<contact "Kontakt">
 
 <contact_email "E-mail senden">
 
