@@ -2,24 +2,24 @@
 <html th:app ng:csp ng-csp="">
 	<head>
 		<meta charset="utf-8" />
-		
+
 		<title l20n:id="appname"></title>
-		
-		
+
+
 		<meta name="viewport" content="width=device-width">
-		
+
 		<link rel="stylesheet" type="text/css" href="index.css"/>
-		
+
 		<script data-main="index.js" src="/bower_components/requirejs/require.js"></script>
 	</head>
 	<body ng:controller="FoursquareApp" role="application">
-		
-		
+
+
 		<section ng:controller="FoursquareSettings" id="settings" class="skin-organic" data-type="sidebar">
 			<header>
 				<h1 l20n:id="settings"></h1>
 			</header>
-			
+
 			<nav>
 				<progress class="pack-activity" value="0" max="100" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
 				<h2 ng:show="settings.twitter" l20n:id="twitter_settings"></h2>
@@ -84,7 +84,7 @@
 				</ul>
 			</nav>
 		</section>
-		
+
 		<section role="region" ng:controller="FoursquareHome" id="home" class="background">
 			<header>
 				<a href="#content"><span class="icon icon-menu" l20n:id="hide_settings"></span></a>
@@ -96,14 +96,15 @@
 				</menu>
 				<h1 l20n:id="home_title"></h1>
 			</header>
-			
+
 			<div role="main">
 				<progress ng:show="loading" value="0" max="100" class="pack-activity"></progress>
-				
+
 				<th:fsq-login ng:show="!thFsq.logged" th:fsq-display="touch" th:fsq-color="blue"></th:fsq-login>
-				
+				<p ng:show="!thFsq.logged" l20n:id="trademark_statement"></p>
+
 				<p ng:show="false" l20n:id="loading"></p>
-				
+
 				<p ng:cloak ng:show="loading" l20n:id="loading_recent_checkins"></p>
 				<p ng:cloak ng:show="!loading && fsq.logged && !checkins.length" l20n:id="no_recent_checkin"></p>
 				<div ng:cloak data-type="list">
@@ -123,7 +124,7 @@
 				</div>
 			</div>
 		</section>
-		
+
 		<section role="region" ng:controller="FoursquareSearch" id="search" th:screen-activate="initSearch()" data-viewport="right">
 			<header>
 				<button th:screen="$home"><span class="icon icon-back" l20n:id="back"></span></button>
@@ -132,7 +133,7 @@
 				</menu>
 				<h1 l20n:id="search_title"></h1>
 			</header>
-			
+
 			<div role="main">
 				<form>
 					<p ng:show="!located && !locating">
@@ -146,9 +147,9 @@
 						<input type="search" ng:model="query" ng:model-delay l20n:id="query_placeholder" l20n:target="placeholder"/>
 					</p>
 				</form>
-				
+
 				<progress value="0" max="100" class="pack-activity" ng:style="{true:{}, false: {visibility: 'hidden'}}[loading]"></progress>
-				
+
 				<p ng:show="!loading && !locating && !located && !place.length && query" class="askingForLocationHint">
 					<span l20n:id="need_location" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></span>
 					<label for="placeInput" l20n:id="need_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></label>
@@ -156,12 +157,12 @@
 				<p ng:show="!loading && !locating && !located && !place.length && query && geolocationSupported" class="askingForLocationHint">
 					<button hm-tap="findMe()" l20n:id="geolocation_location_hint" l20n:data="{query: '<em>'+query+'</em>'}" l20n:target="html"></button>
 				</p>
-				
+
 				<div ng:show="(place.length || located)" data-type="list">
 					<p ng-show="!loading && !venues.length && !located && !geocode" l20n:id="unknown_location" l20n:data="{place: '<em>'+place+'</em>'}" l20n:target="html"></p>
 					<p ng-show="!loading && !venues.length && !located && geocode" l20n:id="no_result_near_location" l20n:data="{query:'<em>'+query+'</em>', location:geocode}" l20n:target="html"></p>
 					<p ng-show="!loading && !venues.length && located" l20n:id="no_result_near_you" l20n:data="{query:'<em>'+query+'</em>'}" l20n:target="html"></p>
-					
+
 					<ul ng-show="venues.length">
 						<li ng:repeat="venue in venues">
 							<a th:screen="#venue" th:screen-model="venue">
@@ -176,14 +177,14 @@
 				</div>
 			</div>
 		</section>
-		
+
 		<section role="region" ng:controller="FoursquareCheckin" id="checkin" th:model="checkin" data-viewport="right">
 			<header>
 				<button th:screen="$backOrHome"><span class="icon icon-back" l20n:id="back"></span></button>
 				<h1 ng:show="!checkin.user" l20n:id="anonymous_at_venue" l20n:data="{venue:checkin.venue}"></h1>
 				<h1 ng:show="checkin.user" l20n:id="user_at_venue" l20n:data="{user:checkin.user, venue:checkin.venue}"></h1>
 			</header>
-			
+
 			<div role="main">
 				<progress ng:show="loading || checkingin" class="pack-activity" value="0" max="100"></progress>
 				<ul ng:show="checkin.venue.categories.length" class="categories">
@@ -192,11 +193,11 @@
 					</li>
 				</ul>
 				<h2><a th:screen="#venue" th:screen-model="checkin.venue">{{ checkin.venue.name }}</a></h2>
-				
+
 				<button ng:show="checkin.id && !checkin.like" hm-tap="checkin.like = true ; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 1})" l20n:id="like"></button>
 				<button ng:show="checkin.id && checkin.like"  hm-tap="checkin.like = false; checkin.likes = fsq.api.checkins.like({checkin_id: checkin.id, set: 0})" l20n:id="unlike"></button>
 				<p ng:show="checkin.likes.count" l20n:id="like_summary" l20n:data="{likes: checkin.likes}"></p>
-				
+
 				<p role="status" ng:show="loading">
 					<span ng:show="" l20n:id="loading_comments_and_photos"></span>
 				</p>
@@ -240,7 +241,7 @@
 						<button type="submit" ng:disabled="checkingin" class="recommend" l20n:id="check_in"></button>
 					</p>
 				</form>
-				
+
 				<div data-type="list" ng:show="checkin.photos.count">
 					<ul gallery="#carousel">
 						<li ng:repeat="photo in checkin.photos.items">
@@ -265,7 +266,7 @@
 				</form>
 			</div>
 		</section>
-		
+
 		<section role="region" ng:controller="FoursquareVenue" id="venue" th:model="venue" data-viewport="right">
 			<header>
 				<button th:screen="$backOrHome"><span class="icon icon-back" l20n:id="back"></span></button>
@@ -274,16 +275,16 @@
 				</menu>
 				<h1>{{ venue.name }}</h1>
 			</header>
-			
+
 			<div role="main">
 				<progress ng:show="loading" class="pack-activity" value="0" max="100"></progress>
-				
+
 				<header>
-					<img th:fsq-photo="venue.categories[0].icon" th:fsq-photo-size="bg_44"/> 
+					<img th:fsq-photo="venue.categories[0].icon" th:fsq-photo-size="bg_44"/>
 					<h1>{{ venue.name }}</h1>
 					<h2>{{ venue.categories[0].name }}</h2>
 				</header>
-				
+
 				<div data-type="list" ng:show="!loading && venue.tips.count" ng:repeat="group in venue.tips.groups">
 					<header>{{ group.name }}</header>
 					<ul>
@@ -300,9 +301,9 @@
 						</li>
 					</ul>
 				</div>
-				
+
 				<p ng:show="loading" l20n:id="loading_photos"></p>
-				
+
 				<div data-type="list" ng:show="!loading && venue.photos.count" ng:repeat="group in venue.photos.groups">
 					<header>{{ group.name }}</header>
 					<ul gallery="#carousel" gallery-source-type="venue" gallery-source-id="venue.id">
@@ -319,8 +320,8 @@
 						</li>
 					</ul>
 				</div>
-				
-				
+
+
 				<div class="stats">
 					<dl>
 						<dt l20n:id="total_visitors"></dt>
@@ -333,7 +334,7 @@
 				</div>
 			</div>
 		</section>
-		
+
 		<script type="text/ng-template" id="carousel.html">
 			<div
 				class="carousel-wrapper"
@@ -343,19 +344,19 @@
 				hm:swipe-down="stop()"
 				hm:tap="toggleToolbar()"
 			>\
-				<div 
-					class="carousel-frame previous-frame" 
-					ng:class="{loading: (undefined == frames[0].photo)}" 
+				<div
+					class="carousel-frame previous-frame"
+					ng:class="{loading: (undefined == frames[0].photo)}"
 					data-frame-id="0"
 				></div>
-				<div 
-					class="carousel-frame current-frame"  
-					ng:class="{loading: (undefined == frames[1].photo)}" 
+				<div
+					class="carousel-frame current-frame" 
+					ng:class="{loading: (undefined == frames[1].photo)}"
 					data-frame-id="1"
 				></div>
-				<div 
-					class="carousel-frame next-frame"     
-					ng:class="{loading: (undefined == frames[2].photo)}" 
+				<div
+					class="carousel-frame next-frame"
+					ng:class="{loading: (undefined == frames[2].photo)}"
 					data-frame-id="2"
 				></div>
 			</div>\
@@ -380,7 +381,7 @@
 				</ul>
 			</div>
 		</script>
-		
+
 		<carousel id="carousel" photo-size="{{fsqCapSize}}">
 	</body>
 </html>
