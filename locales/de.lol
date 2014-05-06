@@ -81,11 +81,11 @@
 <unlike "Nicht mehr mögen">
 
 <like_summary[plural($likes.count), $likes.summary] {
-    zero: "Niemandem gefällt das", 
+    zero: "Niemandem gefällt das",
 	one: {
-		Toi: "❤ Du magst das", 
+		Toi: "❤ Du magst das",
 		*unknown: "❤ {{$likes.summary}} mag das"
-	}, 
+	},
 	*many: "❤ {{$likes.summary}} mögen das"
 }>
 
@@ -110,3 +110,5 @@
 <i_see_you "Ich sehe dich!">
 
 <checkin_failed "Der Checkin ist leider fehlgeschlagen. Überprüfe vor dem nächsten Versuch die Verbindung.">
+
+<trademark_statement "Diese Anwendung nutzt die Programmierschnittstelle Foursquare® Application Progamming Interface (API), wird aber nicht von Foursquare Labs, Inc unterstützt oder zertifiziert.">

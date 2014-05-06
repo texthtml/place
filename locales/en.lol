@@ -81,11 +81,11 @@
 <unlike "I don't like it anymore">
 
 <like_summary[plural($likes.count), $likes.summary] {
-    zero: "Nobody like this", 
+    zero: "Nobody like this",
 	one: {
-		You: "❤ You like this", 
+		You: "❤ You like this",
 		*unknown: "❤ {{$likes.summary}} likes this"
-	}, 
+	},
 	*many: "❤ {{$likes.summary}} like this"
 }>
 
@@ -110,3 +110,5 @@
 <i_see_you "I know where you are!">
 
 <checkin_failed "Unfortunately your checkin failed. Check that you are connected and retry in a few seconds.">
+
+<trademark_statement "This app uses the foursquare® application programming interface but is not endorsed or certified by Foursquare Labs, Inc.">
