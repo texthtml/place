@@ -101,3 +101,11 @@
 <checkin_failed "Putz seu checkin falhou. Veja se está conectado e tente novamente.">
 
 <trademark_statement "Este aplicativo usa a interface de programação de aplicativo do Foursquare®, mas não é aprovado ou certificado pelo Foursquare Labs, Inc.">
+
+<timeframes "Horas">
+
+<location "Endereço">
+
+<website "Site">
+
+<directions "Instruções">

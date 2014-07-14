@@ -112,3 +112,11 @@
 <checkin_failed "Unfortunately your checkin failed. Check that you are connected and retry in a few seconds.">
 
 <trademark_statement "This app uses the foursquare® application programming interface but is not endorsed or certified by Foursquare Labs, Inc.">
+
+<timeframes "Hours">
+
+<location "Location">
+
+<website "Web site">
+
+<directions "Directions">

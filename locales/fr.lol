@@ -112,3 +112,11 @@
 <checkin_failed "Malheuresement votre checkin à échoué. Vérifiez que vous êtes bien connecté puis rééssayer.">
 
 <trademark_statement "Ce(tte) [application/site Web] utilise l'interface de programmation d'application Foursquare®, mais n'est ni approuvé(e), ni certifié(e) par Foursquare Labs, Inc.">
+
+<timeframes "Heures">
+
+<location "Adresse">
+
+<website "Site web">
+
+<directions "Itinéraire">
