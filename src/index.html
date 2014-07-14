@@ -283,7 +283,102 @@
 					<img th:fsq-photo="venue.categories[0].icon" th:fsq-photo-size="bg_44"/>
 					<h1>{{ venue.name }}</h1>
 					<h2>{{ venue.categories[0].name }}</h2>
+					<dl ng:repeat="attr in venue.attributes.groups" ng:hide="loading">
+						<dt>{{ attr.name }}</dt>
+						<dd>
+							<span ng:repeat="item in attr.items">
+								{{ item.displayValue }}{{ {true: '', false: ', '}[$last] }}
+							</span>
+						</dd>
+					</dl>
 				</header>
+
+				<div
+					data-type="list"
+					ng:show="!loading && venue.menu"
+				>
+					<header>{{ venue.menu.label }}</header>
+					<ul>
+						<li ng:show="venue.contact.phone">
+							<a ng:href="{{ venue.menu.url }}" target="_blank">
+								<aside class="icon action-icon menu">
+								</aside>
+								<p>{{ venue.menu.anchor }}</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div
+					data-type="list"
+					ng:show="!loading && (venue.contact.phone || venue.contact.twitter)"
+				>
+					<header l20n:id="contact"></header>
+					<ul>
+						<li ng:show="venue.contact.phone">
+							<a ng:href="tel:{{ venue.contact.phone }}">
+								<aside class="icon comms-icon contacts-phone">
+								</aside>
+								<p>{{ venue.contact.formattedPhone }}</p>
+							</a>
+						</li>
+						<li ng:show="venue.contact.twitter">
+							<a
+								target="_activity"
+								ng:href="https://twitter.com/{{ venue.contact.twitter }}"
+							>
+								<aside class="icon comms-icon contacts-twitter">
+								</aside>
+								<p>{{ venue.contact.twitter }}</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div
+					data-type="list"
+					ng:show="!loading && venue.displayedHours"
+					ng:class="{true: 'open', false: ''}[venue.displayedHours.isOpen]"
+				>
+					<header l20n:id="timeframes"></header>
+					<p
+						ng:show="venue.displayedHours.status"
+						class="the-venue-status"
+					>{{ venue.displayedHours.status }}</p>
+					<ul>
+						<li
+							ng:repeat="timeframe in venue.displayedHours.timeframes"
+							ng:class="{today: timeframe.includesToday}"
+						>
+							<p>{{ timeframe.days }}</p>
+							<p>
+								<span ng:repeat="open in timeframe.open">
+									{{ open.renderedTime }}{{ {true: '', false: ', '}[$last] }}
+								</span>
+							</p>
+						</li>
+					</ul>
+				</div>
+
+				<div data-type="list" ng:show="!loading && venue.location">
+					<header l20n:id="location"></header>
+					<address>
+						<p ng:repeat="addressLine in venue.location.formattedAddress">
+							{{ addressLine }}
+						</p>
+					</address>
+					<ul ng:show="venue.location.lat">
+						<li>
+							<a
+								target="_activity"
+								ng:href="http://maps.google.com/maps?daddr={{ venue.location.lat }},{{ venue.location.lng }}"
+							>
+								<aside class="icon comms-icon contacts-location"></aside>
+								<p l20n:id="directions"></p>
+							</a>
+						</li>
+					</ul>
+				</div>
 
 				<div data-type="list" ng:show="!loading && venue.tips.count" ng:repeat="group in venue.tips.groups">
 					<header>{{ group.name }}</header>
@@ -321,15 +416,14 @@
 					</ul>
 				</div>
 
-
-				<div class="stats">
+				<div class="stats" ng:hide="loading">
 					<dl>
 						<dt l20n:id="total_visitors"></dt>
 						<dd>{{ venue.stats.usersCount }}</dd>
-					</dl>
-					<dl>
 						<dt l20n:id="total_checkins"></dt>
 						<dd>{{ venue.stats.checkinsCount }}</dd>
+						<dt ng:show="venue.url" l20n:id="website"></dt>
+						<dd ng:show="venue.url"><a ng:href="{{ venue.url }}" target="_activity">{{ venue.name }}</a></dd>
 					</dl>
 				</div>
 			</div>

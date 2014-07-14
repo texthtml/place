@@ -101,3 +101,11 @@
 <checkin_failed "Desafortunadamente su checkin ha fallado. Compruebe que este conectado y vuelva a intentarlo en unos segundos.">
 
 <trademark_statement "Esta [aplicación/sitio web] utiliza la interfaz de programación de aplicación de Foursquare®, pero no cuenta con la aprobación ni certificación de Foursquare Labs, Inc.">
+
+<timeframes "Horas">
+
+<location "Dirección">
+
+<website "Sitio web">
+
+<directions "Direcciones">

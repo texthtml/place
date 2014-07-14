@@ -112,3 +112,11 @@
 <checkin_failed "Der Checkin ist leider fehlgeschlagen. Überprüfe vor dem nächsten Versuch die Verbindung.">
 
 <trademark_statement "Diese Anwendung nutzt die Programmierschnittstelle Foursquare® Application Progamming Interface (API), wird aber nicht von Foursquare Labs, Inc unterstützt oder zertifiziert.">
+
+<timeframes "Öffnungszeiten">
+
+<location "Adresse">
+
+<website "Webseite">
+
+<directions "Wegbeschreibung">

@@ -2,37 +2,37 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		ffospush: {
 			app: {
-				appId: 'place.texthtml.net', 
+				appId: 'place.texthtml.net',
 				zip: 'temp/place.zip'
 			}
-		}, 
+		},
 		compress: {
 			package: {
 				options: {
 					archive: 'temp/place.zip'
-				}, 
+				},
 				files: [
 					{cwd: 'build/', expand: true, src: '**', dest: '/'}
 					// {expand: true, src: 'build/manifest.webapp', dest: '/', flatten: true}
 				]
 			}
-		}, 
+		},
 		requirejs: {
 			compile: {
 				options: {
-					almond: true, 
-					wrap: true, 
-					baseUrl: 'src', 
-					name: 'bower_components/almond/almond', 
-					include: '../temp/index', 
-					mainConfigFile: 'temp/index.js', 
-					out: 'build/index.js', 
-					optimize: 'uglify2', 
+					almond: true,
+					wrap: true,
+					baseUrl: 'src',
+					name: 'bower_components/almond/almond',
+					include: '../temp/index',
+					mainConfigFile: 'temp/index.js',
+					out: 'build/index.js',
+					optimize: 'uglify2',
 					preserveLicenseComments: false
-					
+
 				}
 			}
-		}, 
+		},
 		copy: {
 			main: {
 				options: {
@@ -55,43 +55,49 @@ module.exports = function(grunt) {
 							return content.replace(/([^.])\/bower_components/g, '$1../components');
 						}
 						return content;
-					}, 
+					},
 					processContentExclude: ['**/images/**']
-				}, 
+				},
 				files: [
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/headers/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/input_areas/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/buttons/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/switches/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/lists/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/progress_activity/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/drawer/images/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/images/connect-*'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/authenticated.js'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'locales/**'}, 
-					{expand: true, dest: 'build/', cwd: '.',    src: 'manifest.webapp'}, 
-					{expand: true, dest: 'build/', cwd: 'src',  src: 'index.html'}, 
-					{expand: true, dest: 'build/', cwd: 'src',  src: 'authenticated.html'}, 
-					{expand: true, dest: 'build/', cwd: 'src',  src: 'images/**'}, 
-					{expand: true, dest: 'build/', cwd: 'temp', src: 'index.css'}, 
-					{expand: true, dest: '.',      cwd: 'src',  src: 'manifest.webapp'}, 
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/images/connect-*'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/authenticated.js'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'locales/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'manifest.webapp'},
+					{expand: true, dest: 'build/', cwd: 'src',  src: 'index.html'},
+					{expand: true, dest: 'build/', cwd: 'src',  src: 'authenticated.html'},
+					{expand: true, dest: 'build/', cwd: 'src',  src: 'images/**'},
+					{expand: true, dest: 'build/', cwd: 'temp', src: 'index.css'},
+					{expand: true, dest: '.',      cwd: 'src',  src: 'manifest.webapp'},
 				]
-			}, 
+			},
+			images: {
+				files: [
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/icons/styles/comms_icons.png'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/icons/styles/action_icons.png'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/headers/images/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/input_areas/images/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/buttons/images/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style/switches/images/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/lists/images/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/progress_activity/images/**'},
+					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/Building-Blocks/style_unstable/drawer/images/**'},
+				]
+			},
 			angular: {
 				options: {
 					processContent: function(content, file) {
 						return content
 							.replace('new XHR()', 'new XHR({mozSystem: true})')
 							.replace(
-								'return isObject(d) && !isFile(d) ? toJson(d) : d;', 
+								'return isObject(d) && !isFile(d) ? toJson(d) : d;',
 								'return isObject(d) && !isFile(d)  && toString.apply(d) !== \'[object FormData]\'? toJson(d) : d;'
 							);
 					}
-				}, 
+				},
 				files: [
 					{expand: true, cwd: 'bower_components', src: 'angular/angular.js', dest: 'temp/'}
 				]
-			}, 
+			},
 			config: {
 				options: {
 					processContent: function(content, file) {
@@ -102,55 +108,55 @@ module.exports = function(grunt) {
 							.replace('require([\'place\']);', 'require([\'../temp/place\']);')
 							.replace(/\.\.\/locales/g, 'locales');
 					}
-				}, 
+				},
 				files: [
-					{expand: true, cwd: 'src', src: 'index.js', dest: 'temp/'}, 
+					{expand: true, cwd: 'src', src: 'index.js', dest: 'temp/'},
 					{expand: true, cwd: 'src', src: 'place.js', dest: 'temp/'}
 				]
 			}
-		}, 
+		},
 		cssmin: {
 			compress: {
 				files: {
 					'temp/index.css' : 'temp/index.all.css'
-				}, 
+				},
 				options: {
 					root: 'src'
 				}
 			}
-		}, 
+		},
 		cssjoin: {
 			join: {
 				files: {
 					'temp/index.all.css' : 'temp/index.urls.css'
 				}
 			}
-		}, 
+		},
 		cssurls: {
 			import: {
 				options: {
-					targetDir: 'build', 
+					targetDir: 'build',
 					importDir: 'temp/import'
-				}, 
+				},
 				files: {
 					'temp/index.urls.css': 'src/index.css'
 				}
 			}
-		}, 
+		},
 		bower: {
 			install: {
 				options: {
 					copy: false
 				}
 			}
-		}, 
+		},
 		clean: {
-			temp:    ['temp'], 
-			build:   ['build'], 
+			temp:    ['temp'],
+			build:   ['build'],
 			package: ['place.zip']
 		}
 	});
-	
+
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-css');
@@ -160,9 +166,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-firefoxos');
 	grunt.loadNpmTasks('grunt-bower-task');
-	
+
 	grunt.registerTask('angular', ['copy:angular']);
-	grunt.registerTask('build',   ['bower:install', 'cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'requirejs']);
+	grunt.registerTask('build',   ['bower:install', 'cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'copy:images', 'requirejs']);
 	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
 	grunt.registerTask('default', ['build']);
