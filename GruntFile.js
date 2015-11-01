@@ -62,12 +62,12 @@ module.exports = function(grunt) {
 					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/images/connect-*'},
 					{expand: true, dest: 'build/', cwd: '.',    src: 'bower_components/angularjs-foursquare/authenticated.js'},
 					{expand: true, dest: 'build/', cwd: '.',    src: 'locales/**'},
+					{expand: true, dest: '.',      cwd: 'src',  src: 'manifest.webapp'},
 					{expand: true, dest: 'build/', cwd: '.',    src: 'manifest.webapp'},
 					{expand: true, dest: 'build/', cwd: 'src',  src: 'index.html'},
 					{expand: true, dest: 'build/', cwd: 'src',  src: 'authenticated.html'},
 					{expand: true, dest: 'build/', cwd: 'src',  src: 'images/**'},
 					{expand: true, dest: 'build/', cwd: 'temp', src: 'index.css'},
-					{expand: true, dest: '.',      cwd: 'src',  src: 'manifest.webapp'},
 				]
 			},
 			images: {
@@ -168,8 +168,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-bower-task');
 
 	grunt.registerTask('angular', ['copy:angular']);
-	grunt.registerTask('build',   ['bower:install', 'cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'copy:images', 'requirejs']);
-	grunt.registerTask('package', ['clean:build', 'build', 'compress']);
+	grunt.registerTask('deps',   ['bower:install']);
+	grunt.registerTask('build',   ['cssurls', 'cssjoin', 'cssmin', 'copy:config', 'angular', 'copy:main', 'copy:images', 'requirejs']);
+	grunt.registerTask('package', ['clean:build', 'deps', 'build', 'compress']);
 	grunt.registerTask('push',    ['package', 'ffospush']);
 	grunt.registerTask('default', ['build']);
 };

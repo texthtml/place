@@ -1,5 +1,5 @@
 <plural($n) {
-    $n == (n==1 ? "one" : (n==0 || (n%100 > 0 && n%100 < 20)) ? "few" : "many)
+    $n == 0 ? "zero" : $n == 1 ? "one" : ($n % 100 > 0 && $n % 100 < 20) ? "few" : "many"
 }>
 
 <user_at_venue "{{$user.firstName}} la {{$venue.name}}">

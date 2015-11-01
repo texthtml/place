@@ -1,7 +1,7 @@
 {
 	"name": "Place",
 	"description": "Simple Foursquare client",
-	"version": "v2.0.0",
+	"version": "v2.0.1",
 
 	"launch_path": "/src/index.html",
 
@@ -55,6 +55,10 @@
 		"es": {
 			"name": "Place",
 			"description": "Un cliente simple de Foursquare"
+		},
+		"ro": {
+			"name": "Place",
+			"description": "Simple Foursquare client"
 		}
 	}
 }

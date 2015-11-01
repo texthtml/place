@@ -1,0 +1,21 @@
+grunt:
+  build: .
+  entrypoint: grunt
+  volumes:
+    - ./GruntFile.js:/app/GruntFile.js:ro
+    - ./manifest.webapp:/app/manifest.webapp:rw
+    - ./src:/app/src:ro
+    - ./build:/app/build:rw
+    - ./bower_components:/app/bower_components:rw
+    - ./authenticated.html:/app/authenticated.html:rw
+    - ./index.html:/app/index.html:rw
+    - ./locales:/app/locales:rw
+    - ./bower.json:/app/bower.json:rw
+    - ./temp:/app/temp:rw
+
+web:
+  image: nginx:1.9
+  environment:
+    VIRTUAL_HOST: place.127.0.0.1.xip.io
+  volumes:
+    - .:/usr/share/nginx/html:ro
